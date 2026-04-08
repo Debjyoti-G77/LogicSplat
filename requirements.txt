@@ -1,5 +1,4 @@
-torch
-nerfstudio
-scipy
-ollama
-tyro
+numpy
+scikit-learn
+streamlit
+plotly

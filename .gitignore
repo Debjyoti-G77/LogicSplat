@@ -205,3 +205,15 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# LogicSplat — exclude large image folders, keep only COLMAP binaries
+data/processed/*/images/
+data/processed/*/images_2/
+data/processed/*/images_4/
+data/processed/*/images_8/
+data/raw/
+data/processed/scene_03/
+data/processed/scene_04/
+data/processed/scene_05/
+outputs/
+*.db
