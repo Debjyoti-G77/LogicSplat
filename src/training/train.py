@@ -29,14 +29,16 @@ from src.relations.schema import NUM_RELATIONS, RELATION_NAMES
 # ── config ────────────────────────────────────────────────────────────────────
 
 CONFIG = {
-    "model_name":  "gat_edge_warmup",
-    "hidden_dim":  128,
-    "dropout":     0.3,
-    "lr":          1e-3,
-    "epochs":      60,
-    "batch_size":  8,
-    "save_dir":    "models",
-    "device":      "cpu",
+    "model_name":    "gat_geo_gpu_b8",
+    "node_feat_dim": 8,
+    "edge_feat_dim": 4,
+    "hidden_dim":    128,
+    "dropout":       0.3,
+    "lr":            1e-3,
+    "epochs":        60,
+    "batch_size":    8,
+    "save_dir":      "models",
+    "device":        "cuda",
 }
 
 
@@ -134,8 +136,8 @@ def train():
 
     # model
     model = RelationGNN(
-        node_feat_dim=8,
-        edge_feat_dim=4,
+        node_feat_dim=CONFIG["node_feat_dim"],
+        edge_feat_dim=CONFIG["edge_feat_dim"],
         hidden_dim=CONFIG["hidden_dim"],
         num_relations=NUM_RELATIONS,
         dropout=CONFIG["dropout"],
