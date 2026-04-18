@@ -220,3 +220,9 @@ outputs/
 
 # trained model weights
 models/*.pt
+
+# Gaussian Splat outputs
+data/processed/*/splat.ply
+data/processed/*/ns_data/
+outputs/
+bin/
