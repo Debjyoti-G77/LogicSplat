@@ -226,3 +226,7 @@ data/processed/*/splat.ply
 data/processed/*/ns_data/
 outputs/
 bin/
+plugins/
+*.bat
+*.dll
+*.pdb
