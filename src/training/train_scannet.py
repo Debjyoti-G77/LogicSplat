@@ -35,7 +35,7 @@ from src.relations.schema import NUM_RELATIONS, RELATION_NAMES
 CONFIG = {
     "model_name":    "gat_scannet_geometry",
     "node_feat_dim": 10,   # geometric node features (up from 8)
-    "edge_feat_dim": 8,    # geometric edge features (up from 4)
+    "edge_feat_dim": 10,   # 8 + delta_x + delta_y (fixes directional relations)
     "hidden_dim":    128,
     "dropout":       0.3,
     "lr":            1e-3,

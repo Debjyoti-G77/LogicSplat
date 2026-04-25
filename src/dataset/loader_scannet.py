@@ -45,7 +45,7 @@ from src.relations.geometry import derive_relations
 # ── constants ─────────────────────────────────────────────────────────────────
 
 NODE_FEATURE_DIM = 10
-EDGE_FEATURE_DIM = 8
+EDGE_FEATURE_DIM = 10
 
 # NYU40 label ID → human-readable name (subset used in ScanNet)
 NYU40_NAMES = {
@@ -171,8 +171,23 @@ def _edge_features(
     scene_extent: np.ndarray,
 ) -> np.ndarray:
     """
-    Compute 8-dim geometric edge features between two objects.
-    Identical feature layout to loader_3rscan.extract_geometric_edge_features.
+    Compute 10-dim geometric edge features between two objects.
+
+    Features [0-1] are the KEY fix for directional relations:
+      [0]  delta_x  — signed X displacement (A centroid - B centroid), normalized
+      [1]  delta_y  — signed Y displacement, normalized
+    These give the model the actual direction vector, not just distance.
+    Without them, left_of/right_of/in_front_of/behind all look identical
+    (same xy_dist, same dist_3d, same near-zero delta_z).
+
+      [2]  delta_z  — signed Z displacement, normalized
+      [3]  xy_distance (unsigned, normalized)
+      [4]  dist_3d (unsigned, normalized)
+      [5]  bbox_overlap_xy (fraction of A's footprint overlapping B)
+      [6]  volume_ratio (min/max, 0-1)
+      [7]  height_ratio (log-normalized)
+      [8]  vertical_gap (a.bottom - b.top, normalized, clamped)
+      [9]  size_ratio_xy (log-normalized)
     """
     if len(pts_a) == 0 or len(pts_b) == 0:
         return np.zeros(EDGE_FEATURE_DIM, dtype=np.float32)
@@ -185,7 +200,11 @@ def _edge_features(
     size_a = np.maximum(max_a - min_a, 1e-6)
     size_b = np.maximum(max_b - min_b, 1e-6)
 
-    delta_z = float((c_a[2] - c_b[2]) / norm[2])
+    # signed displacement — critical for left/right/front/behind
+    delta_x = float(np.clip((c_a[0] - c_b[0]) / norm[0], -1.0, 1.0))
+    delta_y = float(np.clip((c_a[1] - c_b[1]) / norm[1], -1.0, 1.0))
+    delta_z = float(np.clip((c_a[2] - c_b[2]) / norm[2], -1.0, 1.0))
+
     xy_dist = float(np.linalg.norm(c_a[:2] - c_b[:2]) / np.linalg.norm(norm[:2]))
     dist_3d = float(np.linalg.norm(c_a - c_b) / np.linalg.norm(norm))
 
@@ -199,8 +218,6 @@ def _edge_features(
     vol_b = float(np.prod(size_b))
     vol_ratio = min(vol_a, vol_b) / max(vol_a, vol_b)  # already 0-1
 
-    # clamp ratios to [-3, 3] then normalise — prevents extreme values
-    # from dominating when one object is much larger than another
     h_ratio = float(np.clip(np.log1p(size_a[2] / max(size_b[2], 1e-6)), -3.0, 3.0) / 3.0)
     vert_gap = float(np.clip((min_a[2] - max_b[2]) / norm[2], -1.0, 1.0))
     size_ratio_xy = float(np.clip(
@@ -209,8 +226,8 @@ def _edge_features(
     ) / 3.0)
 
     return np.array([
-        delta_z, xy_dist, dist_3d, bbox_overlap,
-        vol_ratio, h_ratio, vert_gap, size_ratio_xy,
+        delta_x, delta_y, delta_z, xy_dist, dist_3d,
+        bbox_overlap, vol_ratio, h_ratio, vert_gap, size_ratio_xy,
     ], dtype=np.float32)
 
 
@@ -458,7 +475,7 @@ class SceneGraphDatasetScanNet(Dataset):
     """
 
     # bump this if the feature schema changes — invalidates old cache files
-    CACHE_VERSION = "v1"
+    CACHE_VERSION = "v2"
 
     def __init__(
         self,
