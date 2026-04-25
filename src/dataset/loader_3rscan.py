@@ -143,9 +143,12 @@ def extract_geometric_edge_features(
     vol_b = float(np.prod(size_b))
     vol_ratio = min(vol_a, vol_b) / max(vol_a, vol_b)
 
-    h_ratio = float(size_a[2] / max(size_b[2], 1e-6))
-    vert_gap = float((min_a[2] - max_b[2]) / norm[2])
-    size_ratio_xy = float(np.linalg.norm(size_a[:2]) / max(np.linalg.norm(size_b[:2]), 1e-6))
+    h_ratio = float(np.clip(np.log1p(size_a[2] / max(size_b[2], 1e-6)), -3.0, 3.0) / 3.0)
+    vert_gap = float(np.clip((min_a[2] - max_b[2]) / norm[2], -1.0, 1.0))
+    size_ratio_xy = float(np.clip(
+        np.log1p(np.linalg.norm(size_a[:2]) / max(np.linalg.norm(size_b[:2]), 1e-6)),
+        -3.0, 3.0,
+    ) / 3.0)
 
     return np.array([
         delta_z, xy_dist, dist_3d, bbox_overlap,

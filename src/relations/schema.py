@@ -3,6 +3,11 @@ LogicSplat Relation Schema.
 
 12 geometrically-derivable spatial relations, organized into 4 groups.
 All relations are derived purely from 3D bounding boxes — no human annotation needed.
+
+REMOVED from earlier version:
+  - SURROUNDING (6): zero training samples in all datasets
+  - OCCLUDES (13):   zero training samples in all datasets
+  Both hurt macro F1 by adding classes the model never learns.
 """
 from enum import IntEnum
 
@@ -15,22 +20,18 @@ class Relation(IntEnum):
     ATTACHED_TO  = 3   # A is fixed/connected to B (wall-mounted, built-in)
     HANGING_FROM = 4   # A is suspended from B above it
 
-    # ── Proximity (how close objects are on the same surface) ─────────────────
+    # ── Proximity ─────────────────────────────────────────────────────────────
     ADJACENT_TO  = 5   # A and B are close, same surface level, not touching
-    SURROUNDING  = 6   # A partially or fully surrounds B in XY plane
 
     # ── Directional (relative position in space) ──────────────────────────────
-    LEFT_OF      = 7   # A is to the left of B (X axis)
-    RIGHT_OF     = 8   # A is to the right of B (X axis)
-    IN_FRONT_OF  = 9   # A is closer to camera than B (Y or Z axis)
-    BEHIND       = 10  # A is further from camera than B
+    LEFT_OF      = 6   # A is to the left of B (X axis)
+    RIGHT_OF     = 7   # A is to the right of B (X axis)
+    IN_FRONT_OF  = 8   # A is closer to camera than B (Y axis)
+    BEHIND       = 9   # A is further from camera than B
 
     # ── Comparative (relative size/height) ───────────────────────────────────
-    HIGHER_THAN  = 11  # A's centroid is significantly above B's centroid
-    LOWER_THAN   = 12  # A's centroid is significantly below B's centroid
-
-    # ── Visibility ────────────────────────────────────────────────────────────
-    OCCLUDES     = 13  # A blocks B from camera view (derived geometrically)
+    HIGHER_THAN  = 10  # A's centroid is significantly above B's centroid
+    LOWER_THAN   = 11  # A's centroid is significantly below B's centroid
 
 
 NUM_RELATIONS = len(Relation)
@@ -44,14 +45,12 @@ RELATION_DESCRIPTIONS = {
     Relation.ATTACHED_TO: "is attached to",
     Relation.HANGING_FROM:"is hanging from",
     Relation.ADJACENT_TO: "is adjacent to",
-    Relation.SURROUNDING: "is surrounding",
     Relation.LEFT_OF:     "is to the left of",
     Relation.RIGHT_OF:    "is to the right of",
     Relation.IN_FRONT_OF: "is in front of",
     Relation.BEHIND:      "is behind",
     Relation.HIGHER_THAN: "is higher than",
     Relation.LOWER_THAN:  "is lower than",
-    Relation.OCCLUDES:    "is blocking from view",
 }
 
 # Map from 3DSSG relation names to our schema

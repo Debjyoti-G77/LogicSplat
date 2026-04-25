@@ -90,11 +90,6 @@ def derive_relations(
             Relation.INSIDE not in relations):
         relations.append(Relation.ADJACENT_TO)
 
-    # SURROUNDING: A's XY footprint contains B's XY footprint
-    if (_xy_contains(a_min, a_max, b_min, b_max) and
-            a_vol > b_vol * 1.5):
-        relations.append(Relation.SURROUNDING)
-
     # ── Directional relations ─────────────────────────────────────────────────
     # Only add if objects are meaningfully separated (not overlapping)
 
