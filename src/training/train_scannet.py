@@ -118,7 +118,11 @@ def train():
 
     # ScanNet data lives at D:/scannet/scans/ (not inside the project folder)
     SCANNET_DIR = "D:/scannet/scans"
-    full_dataset = SceneGraphDatasetScanNet(scannet_dir=SCANNET_DIR)
+    CACHE_DIR   = "data/scannet_cache"
+    full_dataset = SceneGraphDatasetScanNet(
+        scannet_dir=SCANNET_DIR,
+        cache_dir=CACHE_DIR,
+    )
 
     if len(full_dataset) == 0:
         print(f"\nNo ScanNet scenes loaded from: {SCANNET_DIR}")
