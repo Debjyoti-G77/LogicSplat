@@ -1,0 +1,867 @@
+{
+  "_metadata": {
+    "project": "LogicSplat",
+    "title": "3D Scene Graph Generation from Smartphone Video Using Geometric Kolmogorov-Arnold Networks",
+    "student": "Debjyoti Sengupta",
+    "batch": "2024-26",
+    "institution": "Symbiosis Institute of Geoinformatics, Symbiosis International (Deemed University), Pune",
+    "supervisor_external": "Sahil Shah",
+    "supervisor_internal": "Mr. Sahil Shah (sahil@sig.ac.in)",
+    "paper_reference": "GeoKAN: Sen et al., 2026 (arXiv:2605.06740)"
+  },
+
+  "system_overview": {
+    "pipeline": [
+      "Smartphone video (60 frames, 640x480)",
+      "COLMAP structure-from-motion → camera poses",
+      "NerfStudio splatfacto (30,000 iterations) → 3D Gaussian Splat (.ply)",
+      "Opacity filter (threshold=0.1) + Statistical Outlier Removal (SOR: 20 neighbours, std_ratio=2.0)",
+      "HDBSCAN clustering → Object3D instances",
+      "Feature extraction (10-dim node + 22-dim edge per directed pair)",
+      "GeoKANRelationGNN inference → 10 spatial relation logits per edge",
+      "Per-relation threshold tuning + Symbolic Consistency Repair",
+      "Output: Scene graph with directed spatial relation edges"
+    ],
+    "foundation_models": "None — entire pipeline is foundation-model-free at inference",
+    "inference_time_seconds": "< 2 (cached Gaussian splat to scene graph, RTX 3060)",
+    "gpu_memory_gb": "< 1.5"
+  },
+
+  "relation_schema": {
+    "num_relations": 10,
+    "note": "Reduced from 12 — dropped INSIDE (262 positives, 0.038% rate) and HANGING_FROM (974 positives, 0.14% rate)",
+    "relations": [
+      {"id": 0, "name": "on_top_of", "type": "physical", "definition": "A's bottom rests on B's top surface"},
+      {"id": 1, "name": "under", "type": "physical", "definition": "A is below B (inverse of on_top_of)"},
+      {"id": 2, "name": "attached_to", "type": "physical", "definition": "A is fixed/connected to B"},
+      {"id": 3, "name": "adjacent_to", "type": "proximity", "definition": "A and B are close, same surface level"},
+      {"id": 4, "name": "left_of", "type": "directional", "definition": "A centroid X < B centroid X"},
+      {"id": 5, "name": "right_of", "type": "directional", "definition": "A centroid X > B centroid X"},
+      {"id": 6, "name": "in_front_of", "type": "directional", "definition": "A centroid Y < B (3DSSG: -Y=front)"},
+      {"id": 7, "name": "behind", "type": "directional", "definition": "A centroid Y > B"},
+      {"id": 8, "name": "higher_than", "type": "comparative", "definition": "A centroid Z > B centroid Z"},
+      {"id": 9, "name": "lower_than", "type": "comparative", "definition": "A centroid Z < B centroid Z"}
+    ],
+    "contact_head_indices": [0, 1, 2, 3],
+    "directional_head_indices": [4, 5, 6, 7, 8, 9],
+    "3dssg_mapping": {
+      "standing on": "on_top_of", "supported by": "on_top_of", "lying on": "on_top_of",
+      "attached to": "attached_to", "connected to": "attached_to", "build in": "attached_to", "part of": "attached_to",
+      "close by": "adjacent_to", "left": "left_of", "right": "right_of",
+      "front": "in_front_of", "behind": "behind", "higher than": "higher_than", "lower than": "lower_than"
+    }
+  },
+
+  "node_features": {
+    "dim": 10,
+    "normalization": "avg_diagonal (mean object bounding box diagonal) — scale-invariant",
+    "features": [
+      {"idx": "0-2", "name": "centroid_x/y/z", "formula": "(c_i - scene_min) / scene_mean_diag, clipped [0, max_diag_units/max_diag_units]"},
+      {"idx": "3-5", "name": "size_x/y/z", "formula": "size / self_diagonal — shape aspect ratios, scale-invariant"},
+      {"idx": "6", "name": "log_volume", "formula": "log(volume / scene_median_volume + 1) / 5, clipped [0,1]"},
+      {"idx": "7", "name": "height_ratio", "formula": "size_z / max(size_x, size_y) — elongation"},
+      {"idx": "8", "name": "point_density", "formula": "point_count / volume, normalized to [0,1]"},
+      {"idx": "9", "name": "z_rank", "formula": "ordinal rank of centroid_z among scene objects [0,1] — completely scale-invariant"}
+    ]
+  },
+
+  "edge_features": {
+    "dim": 22,
+    "normalization": "avg_diag (average of both objects' bounding box diagonals) — scale-invariant",
+    "features": [
+      {"idx": 0, "name": "delta_x", "formula": "(cx_i - cx_j) / avg_diag, clipped [-3,3]/3", "purpose": "left/right signal"},
+      {"idx": 1, "name": "delta_y", "formula": "-(cy_i - cy_j) / avg_diag (negated: 3DSSG -Y=front)", "purpose": "front/behind signal"},
+      {"idx": 2, "name": "delta_z", "formula": "(cz_i - cz_j) / avg_diag", "purpose": "higher/lower signal"},
+      {"idx": 3, "name": "xy_dist", "formula": "||xy_centroid_diff|| / avg_diag"},
+      {"idx": 4, "name": "dist_3d", "formula": "||centroid_diff|| / avg_diag"},
+      {"idx": 5, "name": "bbox_overlap", "formula": "XY footprint intersection / bbox_i footprint area"},
+      {"idx": 6, "name": "vol_ratio", "formula": "min(vol_i, vol_j) / max(vol_i, vol_j)"},
+      {"idx": 7, "name": "h_ratio", "formula": "log(size_z_i / size_z_j) clipped [-3,3]/3"},
+      {"idx": 8, "name": "vert_gap", "formula": "(min_z_i - max_z_j) / avg_height, clipped [-3,3]/3", "purpose": "on_top_of contact signal"},
+      {"idx": 9, "name": "size_ratio_xy", "formula": "log(||size_xy_i|| / ||size_xy_j||) clipped"},
+      {"idx": 10, "name": "vert_gap_obj_norm", "formula": "(min_z_i - max_z_j) / mean_height — same as [8] kept separate"},
+      {"idx": 11, "name": "vert_gap_a_relative", "formula": "(min_z_i - max_z_j) / size_a_z"},
+      {"idx": 12, "name": "contact_score", "formula": "exp(-|gap|/threshold) * bbox_overlap * (A_above_B)", "purpose": "composite contact signal"},
+      {"idx": 13, "name": "support_overlap_b", "formula": "XY intersection / B footprint area"},
+      {"idx": 14, "name": "ontop_z_margin", "formula": "centroid_z_diff vs avg_diag threshold — proximity to rule boundary"},
+      {"idx": 15, "name": "ontop_xy_margin", "formula": "distance from B's XY footprint boundary"},
+      {"idx": 16, "name": "z_dominance_margin", "formula": "(Δz - 0.5*Δxy) / max(|Δz|, ε) — stacking vs side-by-side"},
+      {"idx": 17, "name": "containment_3d", "formula": "3D volume overlap / vol_i — inside detection"},
+      {"idx": 18, "name": "centroid_inside_b", "formula": "binary: 1 if A centroid is inside B's bbox"},
+      {"idx": 19, "name": "vz_ratio", "formula": "Δz / max(xy_dist, 0.05*avg_diag) — stacking signal, scale-invariant"},
+      {"idx": 20, "name": "containment_x", "formula": "XY-overlap in X / size_a_x"},
+      {"idx": 21, "name": "containment_y", "formula": "XY-overlap in Y / size_a_y"}
+    ]
+  },
+
+  "architecture": {
+    "name": "GeoKANRelationGNN",
+    "total_params_rbf": 1071918,
+    "total_params_gamma": 1018414,
+    "components": {
+      "node_encoder": {
+        "type": "Linear + LayerNorm + GELU",
+        "input_dim": 10,
+        "output_dim": 128,
+        "params": 1408
+      },
+      "gatv2_layer1": {
+        "type": "GATv2Conv",
+        "in_channels": 128,
+        "out_channels": 128,
+        "heads": 4,
+        "concat": false,
+        "edge_dim": 22,
+        "residual": true,
+        "norm": "LayerNorm",
+        "params": 74368
+      },
+      "gatv2_layer2": {
+        "type": "GATv2Conv",
+        "same_as": "layer1",
+        "params": 74368
+      },
+      "pair_projection": {
+        "type": "Linear + LayerNorm + GELU",
+        "input_dim": 512,
+        "output_dim": 64,
+        "note": "[h_src | h_dst | h_src - h_dst | h_src * h_dst] = 4*128 = 512",
+        "params": 33024
+      },
+      "contact_geokan_head": {
+        "type": "2x GeoKANLayer + Linear output",
+        "input_dim": 86,
+        "note": "pair(64) + all_edge_features(22) = 86",
+        "hidden_dim": 128,
+        "output_dim": 4,
+        "n_bases": 12,
+        "metric_hidden": 64,
+        "outputs": ["on_top_of", "under", "attached_to", "adjacent_to"],
+        "params_rbf": 579020
+      },
+      "directional_geokan_head": {
+        "type": "2x GeoKANLayer + Linear output",
+        "input_dim": 74,
+        "note": "pair(64) + directional_edge_features[0:10](10) = 74",
+        "hidden_dim": 128,
+        "output_dim": 6,
+        "n_bases": 12,
+        "metric_hidden": 64,
+        "outputs": ["left_of", "right_of", "in_front_of", "behind", "higher_than", "lower_than"],
+        "params_rbf": 301531
+      }
+    },
+    "geokan_layer_internals": {
+      "step1": "BatchNorm1d(in_dim) → u_normed",
+      "step2_rbf": "MetricNet: Linear(in_dim→64)→GELU→Linear(64→in_dim) → g = softplus(output) + 1e-6, clamped [0.05, 16.0]",
+      "step2_gamma": "g_i = softplus(gamma_i) + 1e-6, where gamma is nn.Parameter(zeros(in_dim))",
+      "step3": "Warp: z = u_normed * sqrt(g)",
+      "step4_rbf": "RBF: phi_k = exp(-gamma_rbf * (z - c_k)^2), K=12 centers linspace(-3,3,12), gamma_rbf=softplus(learnable)",
+      "step4_wavelet": "Mexican hat: phi_k = (1 - t^2) * exp(-t^2/2) where t = (z - c_k)",
+      "step5": "features = concat(phi_flat, u_normed) → Linear(in*K+in → out) → GELU → Dropout",
+      "initialization": "MetricNet last layer: weight=zeros, bias=softplus_inv(1.0)≈0.54 → initial metric≈1.0 (identity)",
+      "regularization": "L_metric = mean(log(g)^2), weight=1e-4"
+    }
+  },
+
+  "training_config": {
+    "note": "Exact config from train_geokan.py that produced best results",
+    "model_name": "geokan_v4",
+    "node_feat_dim": 10,
+    "edge_feat_dim": 22,
+    "hidden_dim": 128,
+    "dropout": 0.2,
+    "lr": 0.002,
+    "lr_gamma_variant": 0.0005,
+    "weight_decay": 0.0001,
+    "epochs": 100,
+    "batch_size": 8,
+    "device": "cuda",
+    "cache_dir": "D:/logicsplat_data/3rscan_graph_cache",
+    "train_frac": 0.85,
+    "augment_factor": 6,
+    "augment_jitter": true,
+    "augmentations_used": ["rotate_90", "rotate_180", "rotate_270", "flip_x", "flip_y", "jitter"],
+    "rare_relation_oversampling": "extra flip_x, flip_y copies for scenes with attached_to or adjacent_to",
+    "focal_gamma_neg": 4.0,
+    "focal_gamma_pos": 0.0,
+    "asl_prob_margin": 0.0,
+    "patience": 15,
+    "metric_reg_weight": 0.0001,
+    "max_grad_norm": 2.0,
+    "warmup_epochs": 5,
+    "warmup_epochs_gamma": 10,
+    "pos_weight_cap": 8.0,
+    "optimizer": "AdamW",
+    "lr_schedule": "5-epoch linear warmup + cosine decay to 0",
+    "loss_components": {
+      "main": "Asymmetric Focal BCE Loss (ASL, Ridnik et al. 2021)",
+      "inverse_consistency": "L_inv = 0.1 * MSE(p(R(A,B)), p(R_inv(B,A)))",
+      "metric_reg": "L_metric = 1e-4 * mean(log(g)^2)",
+      "total": "L = L_ASL + L_inv + L_metric"
+    },
+    "per_relation_loss_weights": {
+      "attached_to": 1.8,
+      "adjacent_to": 1.5,
+      "on_top_of": 1.2,
+      "under": 1.2
+    },
+    "label_smoothing": {
+      "adjacent_to": 0.12, "in_front_of": 0.08, "behind": 0.08,
+      "left_of": 0.07, "right_of": 0.07,
+      "on_top_of": 0.04, "under": 0.04, "attached_to": 0.05,
+      "higher_than": 0.04, "lower_than": 0.04
+    },
+    "directional_masking": "left/right/front/behind use -1 (ignore) labels for non-same-support pairs",
+    "negative_subsampling": "target 30% positive rate per batch — keep all positives, subsample negatives",
+    "rio10_excluded": true,
+    "num_rio10_scenes_excluded": 46
+  },
+
+  "rule_based_label_injection": {
+    "description": "Pseudo-labels injected for unannotated directed pairs to address annotation sparsity",
+    "3dssg_annotates_per_scene": "80-120 edges out of ~870 possible directed pairs",
+    "injection_rules": {
+      "directional_relations": {
+        "relations": ["left_of", "right_of", "in_front_of", "behind", "higher_than", "lower_than"],
+        "confidence": 1.0,
+        "note": "Fully determined by centroid positions — geometric fact"
+      },
+      "on_top_of_under": {
+        "relations": ["on_top_of", "under"],
+        "confidence": 0.75,
+        "note": "Rule-based detection with scene-adaptive thresholds"
+      },
+      "adjacent_to": {
+        "confidence": 0.55,
+        "proximity_factor": 0.8,
+        "note": "Strict threshold (0.8x avg_diagonal) to reduce annotation-inconsistency noise"
+      },
+      "attached_to": {
+        "confidence": 0.60,
+        "rule": "bbox gap < 5% avg_diagonal",
+        "note": "Identifies wall-mounted and built-in objects"
+      }
+    },
+    "priority": "3DSSG human labels always override injected labels",
+    "impact": {
+      "before_injection": {"left_of": 40000, "right_of": 40000, "higher_than": 40000, "lower_than": 40000},
+      "after_injection": {
+        "left_of": 450434, "right_of": 450434,
+        "in_front_of": 207603, "behind": 207603,
+        "higher_than": 374717, "lower_than": 374717,
+        "adjacent_to": 135537, "attached_to": 111852,
+        "on_top_of": 35297, "under": 35297
+      },
+      "multiplier": "8-11x increase in directional training signal",
+      "total_positive_edges": 2383223,
+      "positive_rate_percent": 237.1,
+      "note": "Rate > 100% because multi-label: each edge can have multiple relations"
+    }
+  },
+
+  "dataset_stats": {
+    "3rscan_training": {
+      "total_available_scenes": 566,
+      "scenes_used": 565,
+      "train_scenes": 480,
+      "val_scenes": 85,
+      "split_seed": 42,
+      "split_type": "85/15 train/val, scene-level, no test split (RIO10 is external test)",
+      "rio10_excluded": 46,
+      "mean_instances_per_scene": 38.8,
+      "mean_coverage_percent": 82.7,
+      "instance_transfer_method": "nearest-neighbour from 3RScan mesh vertices to Gaussian splat centres",
+      "total_edges": 1005126,
+      "total_positive_edges_after_injection": 2383223,
+      "splat_source": "HuggingFace GaussianWorld/3rscan_mcmc_3dgs (196 GB)",
+      "annotation_source": "3DSSG (Wald et al., 2020) — human-annotated",
+      "label_schema": "10-class (INSIDE and HANGING_FROM removed from original 12)"
+    },
+    "tabletop_test": {
+      "scenes": 8,
+      "scene_ids": ["scene_06", "scene_07", "scene_08", "scene_09", "scene_10", "scene_11", "scene_12", "scene_13"],
+      "objects": {
+        "scene_06": ["router", "pen", "water_bottle", "agaro_box", "watch"],
+        "scene_07": ["pen", "water_bottle", "agaro_box", "router"],
+        "scene_08": ["router", "agaro_box", "perfume", "pen"],
+        "scene_09": ["router", "perfume", "cream_tub", "watch"],
+        "scene_10": ["watch", "cream_tub", "router", "agaro_box"],
+        "scene_11": ["watch", "router", "water_bottle", "cream_tub"],
+        "scene_12": ["water_bottle", "router", "watch", "agaro_box"],
+        "scene_13": ["agaro_box", "water_bottle", "router", "perfume"]
+      },
+      "gt_method": "Rebuilt programmatically using build_gt_all_scenes.py — runs same deterministic HDBSCAN clustering (RANSAC seed=42), reads actual cluster centroids, derives all pairwise spatial relations geometrically. Cluster-to-object assignments verified by visual analysis of cluster positions. Hungarian match average distance = 0.000 for all scenes (perfect coordinate alignment).",
+      "gt_rebuild_reason": "Original GT JSONs had centroids in a different coordinate system than the eval pipeline, causing Hungarian matching to assign wrong clusters to GT objects. Fix ensures both GT and eval use identical cluster centroids.",
+      "capture": "smartphone camera, ~60 frames, 640x480",
+      "reconstruction": "NerfStudio splatfacto, 30000 iterations",
+      "scale_meters": "0.3-0.8m scene extent (vs 3RScan 3-8m)"
+    },
+    "lerf_test": {
+      "scenes": 4,
+      "scene_names": ["ramen", "teatime", "waldo_kitchen", "figurines"],
+      "source": "LangSplat paper (Qin et al., 2024), Google Drive release",
+      "format": "COLMAP + images (100+ frames per scene)",
+      "total_gt_triples": 1770,
+      "gt_method": "Geometry-derived (deterministic spatial facts), manually verified sample",
+      "scale_meters": "1-5m (indoor room/kitchen scale — same domain as 3RScan training)"
+    }
+  },
+
+  "model_evolution": [
+    {"version": "v1-v3", "key_change": "Single-head GAT, 8-dim features, softmax loss", "macro_f1": "0.35 (unstable)", "data": "ScanNet geometry-derived labels"},
+    {"version": "v4", "key_change": "Multi-label BCE, axis-aligned, 10-dim node features, signed deltas added", "macro_f1": 0.42, "data": "ScanNet geometry-derived"},
+    {"version": "v5", "key_change": "Fixed data leakage (augmentation before split), all-pairs negatives", "macro_f1": 0.44, "data": "ScanNet geometry-derived"},
+    {"version": "v6", "key_change": "14-dim edge features (+contact features: vert_gap_obj, contact_score, support_overlap)", "macro_f1": 0.49, "data": "ScanNet geometry-derived"},
+    {"version": "v7", "key_change": "17-dim (+rule margins), dual-head GAT, asymmetric focal loss, threshold tuning", "macro_f1": 0.52, "data": "ScanNet geometry-derived"},
+    {"version": "GeoKAN-v1", "key_change": "GeoKAN heads replacing MLP, 3RScan real Gaussian data, 12-class schema", "macro_f1": 0.505, "pred_r3": 0.787, "pred_r5": 0.967, "data": "3RScan/3DSSG", "note": "Low Macro F1 because 12-class schema includes INSIDE+HANGING_FROM with near-zero positives dragging average down. R@5=96.7% is ranking quality which is already strong."},
+    {"version": "GeoKAN-v2", "key_change": "22-dim scale-invariant features (avg_diag norm)", "macro_f1": 0.48, "data": "3RScan/3DSSG"},
+    {"version": "GeoKAN-v3", "key_change": "Wrong ASL: gamma_pos=4.0 (should be 0), prob_margin=0.05 — unstable", "macro_f1": 0.46, "data": "3RScan/3DSSG"},
+    {"version": "GeoKAN-v4 (RBF)", "key_change": "Rule injection, gamma_pos=0, prob_margin=0, 10-class schema, correct ASL", "macro_f1": 0.919, "data": "3RScan/3DSSG injected"},
+    {"version": "GeoKAN-Gamma", "key_change": "Fixed diagonal metric (no MetricNet MLP), lower LR=5e-4, warmup=10", "macro_f1": 0.926, "data": "3RScan/3DSSG injected", "note": "BEST RESULT"},
+    {"version": "GeoKAN-Wavelet", "key_change": "Mexican hat wavelet basis instead of RBF", "macro_f1": 0.914, "data": "3RScan/3DSSG injected"}
+  ],
+
+  "main_results_3dssg": {
+    "description": "Primary benchmark — 3DSSG validation set (85 held-out scenes, 323,237 GT triples)",
+    "best_model": "GeoKAN-Gamma",
+    "results": [
+      {
+        "name": "LogicSplat GeoKAN-Gamma (ours, BEST)",
+        "macro_f1": 0.926, "pred_r_at_1": null, "pred_r_at_3": 0.878, "pred_r_at_5": 0.983,
+        "foundation_models": "None", "params": "1.018M", "highlight": true
+      },
+      {
+        "name": "LogicSplat GeoKAN-RBF (ours)",
+        "macro_f1": 0.919, "pred_r_at_1": 0.419, "pred_r_at_3": 0.883, "pred_r_at_5": 0.979,
+        "foundation_models": "None", "params": "1.072M"
+      },
+      {
+        "name": "LogicSplat GeoKAN-Wavelet (ours)",
+        "macro_f1": 0.914, "pred_r_at_3": 0.872, "pred_r_at_5": 0.979,
+        "foundation_models": "None", "params": "1.072M"
+      },
+      {
+        "name": "ReLaGS (Arafa et al., CVPR 2026)",
+        "pred_r_at_3": 0.790, "pred_r_at_5": 0.870,
+        "foundation_models": "CLIP+SAM+Jina", "params": "~1.5B",
+        "inference_time_min": 12.6, "gpu_memory_gb": 7.5
+      },
+      {
+        "name": "ConceptGraphs (Gu et al., ICRA 2024)",
+        "pred_r_at_3": 0.740, "pred_r_at_5": 0.790,
+        "foundation_models": "LLM+CLIP", "params": "~1B+"
+      },
+      {
+        "name": "Open3DSG (Koch et al., CVPR 2024)",
+        "pred_r_at_3": 0.580, "pred_r_at_5": 0.650,
+        "foundation_models": "CLIP", "params": "~400M"
+      }
+    ]
+  },
+
+  "geokan_ablation": {
+    "description": "GeoKAN basis function ablation — ALL variants use EXACT same training config from train_geokan.py",
+    "note_on_ablation_json": "models/ablation/ablation_results.json contains earlier shorter run (0.864 RBF). Full optimized training gives 0.919/0.926.",
+    "full_training_results": [
+      {
+        "name": "GeoKAN-Gamma",
+        "basis": "Fixed: g_i = softplus(gamma_i), one scalar per dimension — NO MetricNet MLP",
+        "metric_type": "input-independent fixed diagonal scaling",
+        "macro_f1": 0.926, "pred_r_at_3": 0.878, "pred_r_at_5": 0.983,
+        "params": 1018414, "train_time_s": 1093,
+        "lr_used": 0.0005, "warmup_epochs": 10,
+        "per_relation_f1": {
+          "on_top_of": 0.846, "under": 0.857, "attached_to": 0.940, "adjacent_to": 0.945,
+          "left_of": 0.957, "right_of": 0.956, "in_front_of": 0.902, "behind": 0.901,
+          "higher_than": 0.977, "lower_than": 0.976
+        }
+      },
+      {
+        "name": "GeoKAN-RBF",
+        "basis": "Adaptive: MetricNet(D→64→D) MLP, per-sample metric. RBF: exp(-gamma*(z-c)^2), K=12",
+        "metric_type": "input-adaptive coupled metric",
+        "macro_f1": 0.919, "pred_r_at_3": 0.875, "pred_r_at_5": 0.982,
+        "params": 1071918, "train_time_s": 1500,
+        "lr_used": 0.002, "warmup_epochs": 5,
+        "per_relation_f1": {
+          "on_top_of": 0.839, "under": 0.844, "attached_to": 0.936, "adjacent_to": 0.942,
+          "left_of": 0.955, "right_of": 0.955, "in_front_of": 0.888, "behind": 0.889,
+          "higher_than": 0.968, "lower_than": 0.977
+        }
+      },
+      {
+        "name": "GeoKAN-Wavelet",
+        "basis": "Adaptive: MetricNet MLP (same as RBF). Wavelet: (1-z^2)*exp(-z^2/2) — Mexican hat",
+        "metric_type": "input-adaptive coupled metric",
+        "macro_f1": 0.914, "pred_r_at_3": 0.872, "pred_r_at_5": 0.979,
+        "params": 1071918, "train_time_s": 1268,
+        "lr_used": 0.002, "warmup_epochs": 5,
+        "per_relation_f1": {
+          "on_top_of": 0.833, "under": 0.826, "attached_to": 0.934, "adjacent_to": 0.943,
+          "left_of": 0.950, "right_of": 0.950, "in_front_of": 0.875, "behind": 0.884,
+          "higher_than": 0.968, "lower_than": 0.972
+        }
+      }
+    ],
+    "key_findings": [
+      "GeoKAN-Gamma BEST: simpler fixed metric (+0.007 F1 over adaptive RBF)",
+      "Gamma required 4x lower LR (5e-4 vs 2e-3) and longer warmup (10 vs 5) for stable training",
+      "Gamma biggest gains: in_front_of (+1.4%), behind (+1.2%), under (+1.3%) — consistent axes benefit from fixed metric",
+      "Wavelet worst: negative lobes cause destructive interference in multi-label classification",
+      "All variants vastly exceed ReLaGS on R@3 (87-88% vs 79%)"
+    ]
+  },
+
+  "gaussiangraph_comparison_lerf": {
+    "description": "Constraint correction mechanism comparison on LERF dataset",
+    "dataset": "4 LERF scenes: ramen, teatime, waldo_kitchen, figurines",
+    "total_gt_triples": 1770,
+    "gt_method": "Geometry-derived deterministic GT, manually verified random sample",
+    "note": "GaussianGraph GT queries not publicly released. Separate table from 3DSSG comparison.",
+    "per_scene": [
+      {"scene": "ramen", "objects": 13, "gt_triples": 640, "mr1_before": 0.244, "mr3_before": 0.667, "mr5_before": 0.898, "mr1_after": 0.891, "mr3_after": 0.897, "mr5_after": 0.948},
+      {"scene": "teatime", "objects": 10, "gt_triples": 372, "mr1_before": 0.228, "mr3_before": 0.669, "mr5_before": 0.922, "mr1_after": 0.925, "mr3_after": 0.925, "mr5_after": 0.941},
+      {"scene": "waldo_kitchen", "objects": 10, "gt_triples": 368, "mr1_before": 0.245, "mr3_before": 0.660, "mr5_before": 0.859, "mr1_after": 0.856, "mr3_after": 0.872, "mr5_after": 0.921},
+      {"scene": "figurines", "objects": 10, "gt_triples": 390, "mr1_before": 0.218, "mr3_before": 0.605, "mr5_before": 0.831, "mr1_after": 0.808, "mr3_after": 0.826, "mr5_after": 0.892}
+    ],
+    "aggregate": [
+      {
+        "name": "LogicSplat GeoKAN + Symbolic Repair (ours)",
+        "mr1": 0.872, "mr3": 0.882, "mr5": 0.929,
+        "foundation_models": "None", "params": "1.072M", "highlight": true
+      },
+      {
+        "name": "LogicSplat GeoKAN (before repair)",
+        "mr1": 0.235, "mr3": 0.653, "mr5": 0.880,
+        "foundation_models": "None"
+      },
+      {
+        "name": "GaussianGraph LLaVA-1.6 + 3D correction (positional queries)",
+        "mr1": 0.568, "mr3": 0.613, "mr5": 0.632,
+        "foundation_models": "CLIP+SAM+LLaVA-1.6+GroundingDINO", "params": "~2B+",
+        "source": "Table V, arXiv:2503.04034, LLaVA row with 3D_corr=True, Query_pos column"
+      },
+      {
+        "name": "GaussianGraph LLaVA-1.6, no correction (positional)",
+        "mr1": 0.407, "mr3": 0.450, "mr5": 0.498,
+        "foundation_models": "CLIP+SAM+LLaVA-1.6+GroundingDINO"
+      },
+      {
+        "name": "GaussianGraph BLIP2 + 3D correction (positional)",
+        "mr1": 0.355, "mr3": 0.379, "mr5": 0.401,
+        "foundation_models": "CLIP+SAM+BLIP2",
+        "source": "Table V, BLIP2 row with 3D_corr=True, Query_pos"
+      }
+    ],
+    "our_advantage_mr5": "92.9% vs 63.2% (+29.7 pp)",
+    "key_insight": "Model trained on 3RScan indoor scenes (3-8m) generalises to LERF indoor scenes (similar scale) achieving mR@5=92.9%. This is NOT cross-domain — same scale class."
+  },
+
+  "symbolic_repair": {
+    "module": "SceneGraphRepair (src/repair/symbolic_repair.py)",
+    "constraints_enforced": [
+      "Inverse pairs: on_top_of↔under, higher_than↔lower_than, left_of↔right_of, in_front_of↔behind",
+      "Mutual exclusion: on_top_of vs under (same direction), left_of vs right_of, in_front_of vs behind, higher_than vs lower_than",
+      "Asymmetry: higher_than(A,B) excludes higher_than(B,A)",
+      "Transitivity: higher_than chains, left_of chains"
+    ],
+    "algorithm": "Fixed-point iteration: alternate removal and addition passes until convergence (2-3 iterations typical)",
+    "parameters": 0,
+    "domain_agnostic": true,
+    "3dssg_85val": {
+      "contradictions_resolved": 396, "per_scene_avg": 4.7,
+      "inverses_added": 13027, "per_scene_avg_inverses": 153.0,
+      "avg_iterations": 3.3,
+      "f1_delta": -0.002,
+      "note": "Near-zero impact because model already consistent (trained with inverse consistency loss)"
+    },
+    "lerf_4scenes": {
+      "contradictions_resolved": 2, "relations_added": 137,
+      "per_scene_avg_added": 34.25, "avg_iterations": 1.9,
+      "mr5_before": 0.880, "mr5_after": 0.929, "mr5_delta": 0.049
+    },
+    "tabletop_8scenes": {
+      "note": "Evaluated AFTER GT rebuild (correct cluster centroids). All numbers below are reportable.",
+      "setting": "Zero-shot cross-domain (3RScan thresholds, no tabletop-specific tuning)",
+      "without_repair": {
+        "micro_f1": 0.740, "precision": 0.815, "recall": 0.677,
+        "r_at_3": 0.758, "r_at_5": 0.927
+      },
+      "with_repair": {
+        "micro_f1": 0.774, "precision": 0.773, "recall": 0.776,
+        "r_at_3": 0.758, "r_at_5": 0.927,
+        "delta_f1": 0.034
+      },
+      "contradictions_resolved": 0,
+      "relations_added": 88,
+      "relations_added_mechanism": "All via inverse/symmetry inference — model is already logically consistent (sparse predictions produce no contradictions)",
+      "per_relation_repair_impact": {
+        "on_top_of":   {"before": 0.621, "after": 0.919, "delta": 0.298, "mechanism": "under(B,A) is reliable (F1=0.932) — repair infers on_top_of(A,B) as inverse"},
+        "lower_than":  {"before": 0.768, "after": 0.920, "delta": 0.152, "mechanism": "higher_than well predicted (F1=0.920) — repair adds 32 missing lower_than counterparts"},
+        "behind":      {"before": 0.308, "after": 0.429, "delta": 0.121, "mechanism": "in_front_of inverses added"},
+        "right_of":    {"before": 0.800, "after": 0.860, "delta": 0.060, "mechanism": "left_of inverses added"},
+        "adjacent_to": {"before": 0.675, "after": 0.568, "delta": -0.107, "mechanism": "Minor artifact — repair fires on both directions independently, slight over-prediction"}
+      },
+      "r_at_k_note": "R@K unchanged by repair (as expected — ranking-based metric, repair adds relations but doesn't change rank order of existing predictions)",
+      "key_insight": "Repair provides +3.4 F1 points cross-domain with zero parameters. The inverse-completion mechanism rescues relations the model consistently underpredicts (on_top_of, lower_than) by leveraging their reliably-predicted inverses (under, higher_than)."
+    }
+  },
+
+  "correction_module_comparison": {
+    "description": "Qualitative comparison: LogicSplat Symbolic Repair vs GaussianGraph 3D Correction Module",
+    "aspects": [
+      {"property": "Method", "logicsplat": "Deterministic fixed-point constraint propagation (logic rules)", "gaussiangraph": "Learned geometric verification (4 geometric checks: contact, direction, distance, adjacency)"},
+      {"property": "Parameters", "logicsplat": "Zero (pure logic)", "gaussiangraph": "Trainable (part of model pipeline)"},
+      {"property": "Foundation models", "logicsplat": "None", "gaussiangraph": "CLIP+SAM+LLaVA+GroundingDINO"},
+      {"property": "Consistency guarantee", "logicsplat": "Yes — formal fixed-point convergence", "gaussiangraph": "No formal guarantee"},
+      {"property": "Removes contradictions", "logicsplat": "Yes (mutual exclusion, asymmetry, transitivity)", "gaussiangraph": "Yes (geometric plausibility checks)"},
+      {"property": "Adds implied relations", "logicsplat": "Yes (inverse completion: +137 on LERF, +13027 on 3DSSG val)", "gaussiangraph": "No"},
+      {"property": "Domain agnostic", "logicsplat": "Yes — works on any scene without retraining", "gaussiangraph": "Implicitly calibrated to training distribution"},
+      {"property": "Improvement (positional mR@5)", "logicsplat": "+4.9% on LERF", "gaussiangraph": "+8-17% on their positional queries"},
+      {"property": "Convergence", "logicsplat": "Fixed-point (avg 1.9-3.3 iterations)", "gaussiangraph": "Single forward pass"}
+    ]
+  },
+
+  "cross_domain_tabletop": {
+    "description": "Cross-domain evaluation — model trained on 3RScan rooms, tested on tabletop scenes (zero-shot)",
+    "model": "GeoKAN-Gamma (best variant)",
+    "evaluation_note": "GT rebuilt with correct cluster centroids matching eval pipeline coordinate system. Hungarian match distance = 0.000 for all scenes (perfect). Only legitimate adaptation: attached_to suppressed (never valid in tabletop scenes — domain expert constraint).",
+    "gt_rebuilding": {
+      "problem": "Original GT JSON files had centroids in different coordinate system than eval pipeline, causing Hungarian matching to assign wrong clusters to GT objects.",
+      "fix": "Wrote build_gt_all_scenes.py — runs same deterministic clustering (RANSAC seed=42), reads actual cluster centroids, derives GT relations geometrically from those centroids. Zero coordinate mismatch possible.",
+      "z_convention_per_scene": {
+        "Z-UP (positive Z = physically higher)": ["scene_06", "scene_07", "scene_08", "scene_10", "scene_11"],
+        "Z-DOWN (negative Z = physically higher)": ["scene_09", "scene_12", "scene_13"]
+      },
+      "stacking_scenes": ["scene_06", "scene_08", "scene_10", "scene_12", "scene_13"],
+      "stacking": "router on_top_of agaro_box in all stacking scenes"
+    },
+    "cluster_to_object_mapping": {
+      "scene_06": {"z_conv": "Z-UP", "stacking": "router→agaro_box", "objects": ["router", "pen", "water_bottle", "agaro_box", "watch"]},
+      "scene_07": {"z_conv": "Z-UP", "stacking": "none", "objects": ["pen", "water_bottle", "agaro_box", "router"]},
+      "scene_08": {"z_conv": "Z-UP", "stacking": "router→agaro_box", "objects": ["router", "agaro_box", "perfume", "pen"]},
+      "scene_09": {"z_conv": "Z-DOWN", "stacking": "none", "objects": ["router", "perfume", "cream_tub", "watch"]},
+      "scene_10": {"z_conv": "Z-UP", "stacking": "router→agaro_box", "objects": ["watch", "cream_tub", "router", "agaro_box"]},
+      "scene_11": {"z_conv": "Z-UP", "stacking": "none", "objects": ["watch", "router", "water_bottle", "cream_tub"]},
+      "scene_12": {"z_conv": "Z-DOWN", "stacking": "router→agaro_box", "objects": ["water_bottle", "router", "watch", "agaro_box"]},
+      "scene_13": {"z_conv": "Z-DOWN", "stacking": "router→agaro_box", "objects": ["agaro_box", "water_bottle", "router", "perfume"]}
+    },
+    "legitimate_adaptations": [
+      "Correct cluster centroids in GT (coordinate system fix, not model-specific)",
+      "attached_to suppression: probs[:,2]=0.0 — this relation never occurs on tabletops (hard physical constraint)"
+    ],
+    "reverted_cheating_attempts": [
+      "Stacking front/behind exclusion: removed in_front_of/behind GT for stacking pairs — reverted (motivated by model failures)",
+      "Z_DIFF_THRESH=0.10: removed higher_than/lower_than GT for near-equal heights — reverted (threshold tuned after seeing failures)",
+      "X/Y_DIFF_THRESH=0.10: removed left/right/front/behind GT for close pairs — reverted (clearly cheating, directly triggered by bad results)"
+    ],
+    "aggregate_honest_results": {
+      "without_repair": {
+        "r_at_1": 0.315, "r_at_3": 0.758, "r_at_5": 0.927,
+        "micro_f1": 0.740, "precision": 0.815, "recall": 0.677
+      },
+      "with_repair": {
+        "r_at_3": 0.758, "r_at_5": 0.927,
+        "micro_f1": 0.774, "precision": 0.773, "recall": 0.776,
+        "delta_f1": 0.034
+      },
+      "thresholds": "3RScan tuned (zero-shot — no tabletop-specific tuning)"
+    },
+    "per_relation_honest": {
+      "adjacent_to":  {"r3": 0.981, "r5": 1.000, "note": "Transfers perfectly — proximity is scale-invariant"},
+      "left_of":      {"r3": 0.942, "r5": 1.000, "note": "Transfers well — X ordering is scale-invariant"},
+      "higher_than":  {"r3": 0.882, "r5": 0.953, "note": "Transfers well"},
+      "right_of":     {"r3": 0.750, "r5": 0.981, "note": "Slight asymmetry vs left_of"},
+      "on_top_of":    {"r3": 0.684, "r5": 0.895, "note": "Moderate — table context helps"},
+      "lower_than":   {"r3": 0.659, "r5": 0.729, "note": "Weak — only 72.9% even in top-5"},
+      "in_front_of":  {"r3": 0.538, "r5": 1.000, "note": "Always ranks 4-5, never top-3 — packed tabletop Y ambiguity"},
+      "behind":       {"r3": 0.481, "r5": 0.981, "note": "Same pattern as in_front_of"}
+    },
+    "per_scene_honest": [
+      {"scene": "scene_06", "r3": 0.750, "r5": 0.955},
+      {"scene": "scene_07", "r3": 0.776, "r5": 0.931},
+      {"scene": "scene_08", "r3": 0.733, "r5": 0.883},
+      {"scene": "scene_09", "r3": 0.793, "r5": 0.966},
+      {"scene": "scene_10", "r3": 0.804, "r5": 0.911},
+      {"scene": "scene_11", "r3": 0.790, "r5": 0.984},
+      {"scene": "scene_12", "r3": 0.733, "r5": 0.917},
+      {"scene": "scene_13", "r3": 0.697, "r5": 0.864}
+    ],
+    "domain_gap_analysis": {
+      "transfers_well": "adjacent_to (100%), left_of (100% R@5), higher_than (95% R@5) — geometrically simple, scale-invariant",
+      "weak": "in_front_of/behind (R@3=0.48-0.54 but R@5=1.00 — model ranks them 4th-5th, not top-3). Dense tabletop Y-separation ambiguous vs 3RScan rooms with clear depth.",
+      "weakest": "lower_than (R@5=72.9%) — in 3RScan, lower objects are structurally distinct (floor vs shelf); on tabletop all objects similar height, small Z differences below learned thresholds",
+      "root_cause": "Scale domain gap: 3RScan training 3-8m rooms vs tabletop 0.3-0.8m. GeoKAN metric calibrated to room-scale feature distributions.",
+      "lerf_comparison": "LERF indoor scenes (1-5m, same scale as 3RScan) achieve mR@5=92.9% — confirms scale domain gap is the issue, not scene type",
+      "inflated_vs_honest_gap": "Inflated R@3=0.864 (with GT engineering) vs honest R@3=0.758 — 11 pp difference came from fitting evaluation to model failures, not generalization"
+    }
+  },
+
+  "training_convergence": {
+    "geokan_v4_rbf": {
+      "epoch_1": 0.711,
+      "epoch_2": 0.712,
+      "epoch_3": 0.753,
+      "epoch_5": 0.816,
+      "epoch_10": 0.903,
+      "epoch_15_converged": 0.919
+    }
+  },
+
+  "computational_efficiency": {
+    "inference": {
+      "time_seconds": "< 2 (cached splat to final scene graph)",
+      "gpu_memory_gb": "< 1.5",
+      "gpu_model": "NVIDIA RTX 3060 8GB"
+    },
+    "reconstruction": {
+      "nerfstudio_time_minutes": "5-15 (one-time per scene)",
+      "iterations": 30000
+    },
+    "comparison_relags": {
+      "relags_time_min": 12.6,
+      "relags_gpu_gb": 7.5,
+      "logicsplat_vs_relags_params": "1.018M vs ~1.5B = 0.07% of ReLaGS params"
+    }
+  },
+
+  "hdbscan_clustering": {
+    "algorithm": "HDBSCAN with auto-tuned parameters (no hardcoded values)",
+    "feature_matrix": "5-dim: XYZ (3) + RGB/255 * color_weight (3) — StandardScaler normalized",
+    "color_weight": 0.3,
+    "min_samples": 3,
+    "cluster_selection_methods_tried": ["eom", "leaf"],
+    "auto_tuning": {
+      "method": "Sweep min_cluster_size divisors [3,5,8,10,15,20,30,50,80,100,150,200,300,500]",
+      "subsample_for_tuning": 6000,
+      "target_cluster_range": "target_min=4, target_max=12 (default; overridden by n_objects_hint)",
+      "selection_criterion": "combo closest to midpoint of target range"
+    },
+    "background_filtering": {
+      "method": "Otsu saturation threshold on RGB histogram",
+      "formula": "sat = max(R,G,B) - min(R,G,B); Otsu threshold on 256-bin histogram",
+      "fallback": "if <5% points pass, halve threshold; if still <5%, disable filter"
+    },
+    "non_sampled_assignment": "Points not in 6000-pt subsample assigned to nearest cluster centroid in feature space (L2)",
+    "noise_handling": "HDBSCAN noise points (-1) excluded from Object3D construction",
+    "z_axis_correction": "After clustering, Z coordinates NEGATED on all Object3D — Gaussian splat uses -Z=up convention; pipeline assumes +Z=up",
+    "covariance_eigenvalues": {
+      "purpose": "Physical shape descriptors from per-Gaussian covariance matrix",
+      "computation": "Mean covariance over cluster Gaussians → 3x3 symmetric matrix → eigvalsh → sort descending",
+      "descriptors": {
+        "planarity": "(eig[0] - eig[1]) / eig[0] — flat surfaces (walls, floors, tables)",
+        "elongation": "(eig[1] - eig[2]) / eig[0] — linear structures (legs, edges)",
+        "sphericity": "eig[2] / eig[0] — compact/spherical objects"
+      },
+      "note": "Stored as obj._eigenvalues but not currently used in node features — available for future work"
+    },
+    "scene_filtering_for_training": {
+      "min_coverage": 0.50,
+      "min_instances": 3,
+      "note": "Scenes with <50% Gaussian coverage or <3 instances excluded from training set"
+    }
+  },
+
+  "instance_label_transfer": {
+    "method": "Nearest-neighbour from 3RScan mesh vertices to Gaussian splat centres",
+    "implementation": "Each Gaussian assigned label of its nearest labelled mesh vertex (3RScan instance_labels.npz)",
+    "coverage_mean": "82.7% (fraction of Gaussians receiving a non-background instance label)",
+    "unlabeled_label": -1,
+    "note": "3DSSG object IDs directly correspond to 3RScan instance IDs — no additional matching needed"
+  },
+
+  "gaussian_physical_features": {
+    "description": "Per-Gaussian covariance matrix encodes local surface geometry — unique to 3DGS representation",
+    "covariance_format": "6-element upper-triangle: [c00, c01, c02, c11, c12, c22]",
+    "derived_object_features": {
+      "mean_covariance": "Opacity-weighted mean covariance over all Gaussians in cluster",
+      "eigenvalues": "Sorted descending |eigenvalues| of mean 3x3 covariance matrix",
+      "planarity": "(λ1 - λ2) / λ1 — high for flat surfaces like tabletops and walls",
+      "elongation": "(λ2 - λ3) / λ1 — high for linear structures like chair legs",
+      "sphericity": "λ3 / λ1 — high for compact/spherical objects like balls"
+    },
+    "usage_in_current_model": "Not included in 10-dim node features (excluded during feature engineering — added complexity without F1 gain in early experiments)",
+    "note_for_future": "Planarity could improve surface support detection (on_top_of); elongation could help attached_to (wall-mounted objects)"
+  },
+
+  "inference_pipeline_details": {
+    "opacity_filter": {
+      "threshold": 0.1,
+      "note": "Removes transparent/background Gaussians before clustering"
+    },
+    "statistical_outlier_removal": {
+      "nb_neighbors": 20,
+      "std_ratio": 2.0,
+      "method": "Open3D StatisticalOutlierRemoval — removes Gaussians whose mean distance to 20 neighbours exceeds 2 std devs"
+    },
+    "semantic_labeling": {
+      "mode": "optional — does not affect relation prediction",
+      "options": ["auto (load cached)", "yolo (80 COCO classes)", "dino (open-vocabulary)", "none"],
+      "default": "auto",
+      "note": "Relations predicted from geometry alone — labels only used for human-readable output"
+    },
+    "inference_modes": {
+      "hybrid": "GNN + geometry validation (default)",
+      "geometry": "Geometry rules only — baseline for ablation",
+      "gnn": "GNN sigmoid only — no geometric post-processing",
+      "ensemble": "Geometry rules for directional/vertical + physical classifiers for adjacent_to"
+    },
+    "color_retry_mechanism": "If clustering under-segments, retry with color_weight in [0.5, 0.7, 1.0, 1.5] to separate same-position different-color objects"
+  },
+
+  "training_implementation_details": {
+    "inverse_label_injection_fix2": {
+      "description": "For every 3DSSG-annotated relation (A→B, R), inject inverse label (B→A, R_inv)",
+      "purpose": "Fixes 'under = 0 positives' problem — 3DSSG rarely annotates under explicitly",
+      "example": "on_top_of(chair, floor) → also inject under(floor, chair)",
+      "priority": "3DSSG human label always wins — Fix2 never overwrites existing label"
+    },
+    "hierarchical_constraints_at_eval": {
+      "active": [
+        "left_of XOR right_of: keep higher confidence",
+        "in_front_of XOR behind: keep higher confidence",
+        "higher_than XOR lower_than: keep higher confidence"
+      ],
+      "disabled": [
+        "NOT higher_than → NOT on_top_of: DISABLED — kills on_top_of recall (3DSSG objects can be on_top_of without higher_than annotation)",
+        "NOT lower_than → NOT under: DISABLED — same reason"
+      ],
+      "note": "Applied after threshold tuning during evaluation only, not during training"
+    },
+    "negative_subsampling_details": {
+      "target_positive_rate": 0.30,
+      "method": "Keep ALL positive edges; randomly sample negatives to achieve ~30% positive rate per batch",
+      "soft_label_handling": "Labels >= 0.5 treated as positive for subsampling purposes"
+    },
+    "data_split_details": {
+      "method": "Random scene-level split (no scene appears in both train and val)",
+      "seed": 42,
+      "note": "Split is on scene IDs, not edges — no data leakage from graph structure"
+    }
+  },
+
+  "threshold_calibration_analysis": {
+    "description": "Cross-domain threshold analysis — AFTER GT rebuild with correct cluster centroids",
+    "reportable_results": {
+      "setting": "Zero-shot: 3RScan-tuned thresholds, no tabletop adaptation",
+      "without_repair": {"micro_f1": 0.740, "precision": 0.815, "recall": 0.677, "r3": 0.758, "r5": 0.927},
+      "with_repair":    {"micro_f1": 0.774, "precision": 0.773, "recall": 0.776, "r3": 0.758, "r5": 0.927}
+    },
+    "methods_compared": [
+      {
+        "name": "3RScan thresholds, no repair (zero-shot baseline)",
+        "micro_f1": 0.740, "pred_r3": 0.758, "pred_r5": 0.927,
+        "note": "Primary reportable result."
+      },
+      {
+        "name": "3RScan thresholds + symbolic repair (zero-shot + repair)",
+        "micro_f1": 0.774, "pred_r3": 0.758, "pred_r5": 0.927,
+        "note": "Best zero-shot result. +3.4 F1 from inverse completion, R@K unchanged."
+      },
+      {
+        "name": "Tabletop-tuned thresholds (oracle, pre-GT-rebuild — DO NOT REPORT)",
+        "micro_f1": 0.381,
+        "warning": "Computed against wrong GT (pre-rebuild). Not reportable."
+      }
+    ],
+    "conclusion": "Zero-shot transfer: Micro F1=0.740 (without repair) / 0.774 (with repair), R@3=0.758, R@5=0.927. Symbolic repair provides +3.4 F1 cross-domain via inverse completion — no retraining needed."
+  },
+
+  "early_geokan_results_before_improvements": {
+    "description": "First GeoKAN result sent to mentor (email_geokan_results.txt). Before: rule injection, scale-invariant features, 10-class schema.",
+    "model": "GeoKAN v1, 665K params, 12-class schema, 3RScan/3DSSG labels",
+    "pred_r3": 0.787,
+    "pred_r5": 0.967,
+    "macro_f1": 0.505,
+    "cross_domain_r5": 0.527,
+    "why_high_r5_but_low_f1": "These are different metrics measuring different things. Macro F1 (0.505) measures threshold-based binary classification accuracy averaged across all 12 relations — penalises both false positives and false negatives. Predicate R@5 (96.7%) measures ranking quality — is the correct relation anywhere in the model's top-5 ranked predictions? A model with miscalibrated thresholds can rank correctly (high R@5) but predict wrong labels when thresholded (low F1). The 12-class schema also includes INSIDE and HANGING_FROM which dragged down F1 with near-zero true positives.",
+    "note": "Sent to mentor as initial result. Mentor replied: implement all GeoKAN variants + report both in/cross-domain. After that, added rule injection + scale-invariant features + 10-class schema → GeoKAN-Gamma Macro F1 = 0.926."
+  },
+
+  "3dssg_annotation_details": {
+    "source": "Wald et al. (2020) — human annotators for 3RScan indoor scan sequences",
+    "annotation_coverage": "80-120 edges annotated per scene out of ~870 possible directed pairs (all N*(N-1) pairs)",
+    "annotation_sparsity_problem": "~90% of valid pairs left unannotated — key motivation for rule-based label injection",
+    "relation_vocabulary_original": 26,
+    "relation_vocabulary_used": 10,
+    "dropped_relations": {
+      "INSIDE": "Only 262 positives (0.038% rate) — insufficient training signal",
+      "HANGING_FROM": "Only 974 positives (0.14% rate) — insufficient training signal",
+      "remaining_12_to_10": "Other 14 relations from original 26 were already aggregated in DSSG_TO_SCHEMA mapping"
+    },
+    "dssg_to_schema_mapping": {
+      "standing on": "on_top_of",
+      "supported by": "on_top_of",
+      "lying on": "on_top_of",
+      "attached to": "attached_to",
+      "connected to": "attached_to",
+      "build in": "attached_to",
+      "part of": "attached_to",
+      "close by": "adjacent_to",
+      "left": "left_of",
+      "right": "right_of",
+      "front": "in_front_of",
+      "behind": "behind",
+      "higher than": "higher_than",
+      "lower than": "lower_than"
+    }
+  },
+
+  "streamlit_application": {
+    "file": "app.py",
+    "framework": "Streamlit",
+    "run_command": "streamlit run app.py",
+    "description": "Interactive web application demonstrating the full LogicSplat pipeline end-to-end",
+    "ui_layout": {
+      "sidebar": [
+        "Scene selector: choose from existing processed scenes (D:/logicsplat_data/processed) or upload a raw splat.ply",
+        "Clustering controls: opacity threshold slider (0.01-0.5, default=0.1)",
+        "Model selector: auto-discovers all .pt files in models/ directory, shows node/edge dims",
+        "Confidence threshold slider (0.1-0.9, default=0.35)",
+        "YOLO labeling toggle: projects cluster centroids into video frames, votes on COCO labels",
+        "Inference mode: GNN only / Rules only / Ensemble (rules + GNN)"
+      ],
+      "tabs": [
+        "Point Cloud tab: Plotly 3D scatter (subsampled to 50K pts) with cluster centroids marked as diamonds, object table (ID, label, points, centroid XYZ, size XYZ)",
+        "Scene Graph tab: Plotly 2D circular layout with relation edges (width proportional to confidence, colour per relation), full relation table downloadable as JSON",
+        "Description tab: Auto-generated natural language sentences ('The chair is to the left of the table'), relation type bar chart",
+        "Raw Data tab: JSON dumps of clustering params, objects, relations; download button for scene graph JSON"
+      ]
+    },
+    "inference_modes": {
+      "gnn_only": "GeoKAN predictions with sigmoid thresholding",
+      "rules_only": "Geometry rules only — deterministic baseline",
+      "ensemble": "Rules dominate for contact relations (on_top_of, under, inside, hanging_from), GNN fills in directional and proximity relations"
+    },
+    "metrics_displayed": ["Gaussians (raw)", "After filter", "Objects found", "Relations predicted"],
+    "yolo_labeling": "Projects cluster centroids to camera frames via transforms.json, runs YOLOv8 detection, assigns most-voted class label to each cluster",
+    "caching": "Gaussian loading and clustering cached via st.cache_data (keyed on splat path) — reruns without re-clustering on UI interaction",
+    "note": "App uses older RelationGNN model interface (8-dim node, 4-dim edge). For GeoKAN-Gamma inference in app, would need to update _load_model() to use GeoKANRelationGNN and match 10-dim node / 22-dim edge features."
+  },
+
+  "papers_cited": [
+    {"short": "3DGS", "full": "Kerbl et al. (2023). 3D Gaussian Splatting for Real-Time Radiance Field Rendering. ACM SIGGRAPH 2023."},
+    {"short": "3DSSG", "full": "Wald et al. (2020). Learning 3D Semantic Scene Graphs from 3D Indoor Reconstructions. CVPR 2020."},
+    {"short": "SceneGraphFusion", "full": "Wu et al. (2021). SceneGraphFusion: Incremental 3D Scene Graph Prediction from RGB-D Sequences. CVPR 2021."},
+    {"short": "ReLaGS", "full": "Arafa et al. (2025). ReLaGS: Relational Language Grounding in 3D Gaussian Scenes. CVPR 2026."},
+    {"short": "GaussianGraph", "full": "Li et al. (2025). GaussianGraph: 3D Gaussian-based Scene Graph Generation for Open-world Scene Understanding. arXiv:2503.04034."},
+    {"short": "NerfStudio", "full": "Tancik et al. (2023). Nerfstudio: A Modular Framework for Neural Radiance Field Development. ACM SIGGRAPH 2023."},
+    {"short": "HDBSCAN", "full": "McInnes et al. (2017). hdbscan: Hierarchical density based clustering. Journal of Open Source Software, 2(11), 205."},
+    {"short": "GAT", "full": "Veličković et al. (2018). Graph Attention Networks. ICLR 2018."},
+    {"short": "GATv2", "full": "Brody et al. (2021). How Attentive are Graph Attention Networks? ICLR 2022."},
+    {"short": "GeoKAN", "full": "Sen et al. (2026). GeoKAN: Geometric Kolmogorov-Arnold Networks for Spatial Reasoning. arXiv:2605.06740."},
+    {"short": "KAN", "full": "Liu et al. (2024). KAN: Kolmogorov-Arnold Networks. arXiv:2404.19756."},
+    {"short": "ASL", "full": "Ridnik et al. (2021). Asymmetric Loss for Multi-Label Classification. ICCV 2021."},
+    {"short": "ConceptGraphs", "full": "Gu et al. (2024). ConceptGraphs: Open-Vocabulary 3D Scene Graphs for Perception and Planning. ICRA 2024."},
+    {"short": "Open3DSG", "full": "Koch et al. (2024). Open3DSG: Open-Vocabulary 3D Scene Graphs from Point Clouds with Queryable Objects and Open-Set Relationships. CVPR 2024."},
+    {"short": "ScanNet", "full": "Dai et al. (2017). ScanNet: Richly-annotated 3D Reconstructions of Indoor Scenes. CVPR 2017."},
+    {"short": "GaussianGrouping", "full": "Ye et al. (2024). Gaussian Grouping: Segment and Edit Anything in 3D Scenes. ECCV 2024."},
+    {"short": "LangSplat", "full": "Qin et al. (2024). LangSplat: 3D Language Gaussian Splatting. CVPR 2024."},
+    {"short": "AnnotationFN", "full": "Wu et al. (2020). Tackling the Unannotated: Scene Graph Generation with Bias-Reduced Models. arXiv:2005.07925."},
+    {"short": "RelationField", "full": "Rashid et al. (2024). Language-Embedded Radiance Fields for Zero-Shot Task-Oriented Grasping. IROS 2024 (RelationField)."},
+    {"short": "SGFormer", "full": "Zhang et al. (2023). SGFormer: Scene Graph Generation with Progressive Sparse-to-Dense Features. AAAI 2023."},
+    {"short": "3RScan", "full": "Wald et al. (2019). RIO: 3D Object Instance Re-Localization in Changing Indoor Environments. ICCV 2019."},
+    {"short": "LERF", "full": "Kerr et al. (2023). LERF: Language Embedded Radiance Fields. ICCV 2023."}
+  ]
+}

@@ -34,12 +34,18 @@ class Object3D:
 
     def __repr__(self) -> str:
         x, y, z = self.centroid
-        return f"<Obj {self.uid} '{self.label}' @ [{x:.2f},{y:.2f},{z:.2f}] pts={self.point_count}>"
+        return (f"<Obj {self.uid} '{self.label}' "
+                f"@ [{x:.2f},{y:.2f},{z:.2f}] pts={self.point_count}>")
 
 
 @dataclass
-class Relation:
-    """A directed spatial/physical relation between two objects."""
+class RelationEdge:
+    """
+    A directed spatial/physical relation between two objects.
+
+    Named RelationEdge to avoid collision with the Relation enum
+    in src.relations.schema.
+    """
     subject_id: int
     relation: str
     object_id: int
@@ -51,16 +57,29 @@ class Relation:
         s = subj.label if subj else f"Object_{self.subject_id}"
         o = obj.label  if obj  else f"Object_{self.object_id}"
         templates = {
-            "on_top_of":  f"{s} is resting on top of {o}.",
-            "inside":     f"{s} is contained inside {o}.",
-            "occludes":   f"{s} is blocking {o} from view.",
-            "adjacent_to":f"{s} is adjacent to {o}.",
-            "supported_by":f"{s} is supported by {o}.",
+            "on_top_of":   f"The {s} is resting on top of the {o}.",
+            "under":       f"The {s} is underneath the {o}.",
+            "inside":      f"The {s} is inside the {o}.",
+            "adjacent_to": f"The {s} is adjacent to the {o}.",
+            "left_of":     f"The {s} is to the left of the {o}.",
+            "right_of":    f"The {s} is to the right of the {o}.",
+            "in_front_of": f"The {s} is in front of the {o}.",
+            "behind":      f"The {s} is behind the {o}.",
+            "higher_than": f"The {s} is higher than the {o}.",
+            "lower_than":  f"The {s} is lower than the {o}.",
+            "attached_to": f"The {s} is attached to the {o}.",
+            "hanging_from":f"The {s} is hanging from the {o}.",
         }
-        return templates.get(self.relation, f"{s} {self.relation} {o}.")
+        return templates.get(self.relation, f"The {s} {self.relation} the {o}.")
 
     def __repr__(self) -> str:
-        return f"Object_{self.subject_id} --[{self.relation}]--> Object_{self.object_id}"
+        return (f"Object_{self.subject_id} "
+                f"--[{self.relation} ({self.confidence:.2f})]--> "
+                f"Object_{self.object_id}")
+
+
+# Keep backward-compatible alias
+Relation = RelationEdge
 
 
 @dataclass
@@ -68,10 +87,15 @@ class SceneGraph:
     """Full scene representation with objects and relations."""
     scene_id: str
     objects: List[Object3D] = field(default_factory=list)
-    relations: List[Relation] = field(default_factory=list)
+    relations: List[RelationEdge] = field(default_factory=list)
 
     def get_object(self, uid: int) -> Optional[Object3D]:
         return next((o for o in self.objects if o.uid == uid), None)
 
+    def summary(self) -> str:
+        """One-line summary for logging."""
+        return (f"SceneGraph '{self.scene_id}': "
+                f"{len(self.objects)} objects, {len(self.relations)} relations")
+
     def __repr__(self) -> str:
-        return f"<SceneGraph '{self.scene_id}': {len(self.objects)} objects, {len(self.relations)} relations>"
+        return f"<{self.summary()}>"

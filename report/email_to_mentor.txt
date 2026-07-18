@@ -1,0 +1,117 @@
+Subject: LogicSplat — Progress Update, Challenges, and Request for Direction
+
+Dear Sir,
+
+I hope this email finds you well. I am writing to give you an honest update on the LogicSplat project, the challenges I am facing, and to seek your guidance on the research direction going forward. I have also attached a detailed progress report for your reference.
+
+---
+
+WHAT HAS BEEN DONE
+---
+
+The core pipeline is functional end-to-end:
+- Smartphone video → NerfStudio → Gaussian Splat → HDBSCAN clustering → Object detection → Relation prediction → Scene graph output
+
+I have trained a dual-head Graph Attention Network (GAT) on ScanNet data with:
+- 17-dimensional edge features (including contact-specific and rule-margin features)
+- Asymmetric focal loss for rare contact relations
+- Per-relation threshold tuning
+- Hierarchical constraint enforcement
+- Honest train/test splits (fixed a data leakage bug from earlier)
+
+The model achieves Macro F1 = 0.894 on ScanNet test data, with all 12 relations above 0.80 F1. This is a strong result on the training distribution.
+
+I also built a proper evaluation protocol following 3D scene graph literature standards (3DSSG, SceneGraphFusion) that separates clustering quality from relation prediction quality.
+
+---
+
+THE PROBLEMS
+---
+
+1. THE DOMAIN GAP (Primary Issue)
+
+The GNN trained on ScanNet (room-scale, 3-8m scenes) completely fails on real tabletop scenes (0.3-0.8m):
+- ScanNet test: Macro F1 = 0.894
+- Real tabletop scenes: Micro F1 = 0.281
+
+I attempted fine-tuning on 200 synthetic tabletop scene graphs (generated with physics-aware placement and noise injection). This improved the GNN to 0.322, but it still does not beat simple hand-crafted geometry rules (0.478).
+
+The geometry rules — which are just if-statements checking centroid positions and bounding box overlaps — outperform the trained neural network on real scenes. This is the core problem I cannot solve.
+
+2. CLUSTERING IS BROKEN WITHOUT GUIDANCE
+
+HDBSCAN consistently over-segments real scenes (finds 7-8 clusters instead of 4-5 objects). When I give it the correct object count as a hint, it works well (96.9% object recall). Without the hint, end-to-end performance drops from 0.478 to 0.163 — a 3x collapse entirely due to clustering errors.
+
+I cannot use foundation models (SAM, Gaussian Grouping) for clustering because the project's identity is "foundation-model-free." But without them, clustering is unreliable.
+
+3. CIRCULAR LABELS
+
+ScanNet does not have spatial relation annotations. I derive them from geometry rules applied to ground truth bounding boxes. This means the GNN is trained to approximate the geometry rules — it can never exceed them on the same distribution. The GNN is learning to mimic rules, not learning spatial understanding.
+
+4. 70% OF THE WORK ALREADY EXISTS
+
+After reviewing the literature, I found:
+- ReLaGS (CVPR 2026) does exactly "Gaussian splat → scene graph" but with CLIP/foundation models
+- GaussianGraph (2025) does the same with 2D foundation models + correction modules
+- 3DSSG, SceneGraphFusion already established GNN-based relation prediction from 3D data
+
+What remains unique about LogicSplat is the "no foundation models" constraint. But this constraint is also what makes the results worse. I am struggling to find a genuine novelty that is both achievable and publishable.
+
+5. EVALUATION IS THIN
+
+I only have 8 manually annotated test scenes. Bootstrap confidence intervals are wide. I have 19 additional OCTScenes processed but cannot annotate them because I cannot reliably identify which cluster corresponds to which physical object without a visualisation tool.
+
+---
+
+WHAT I NEED GUIDANCE ON
+---
+
+1. RESEARCH DIRECTION
+
+I am at a crossroads. The "foundation-model-free" constraint makes the system worse than existing methods. Should I:
+   a) Keep the constraint and frame the paper as "characterising what's achievable without foundation models" (honest but potentially weak for publication)?
+   b) Relax the constraint partially (e.g., use SAM only for clustering, keep relation prediction foundation-model-free)?
+   c) Change the research question entirely — perhaps focus on something that existing papers do NOT do well?
+
+2. NOVELTY
+
+What could make this publishable given that ReLaGS and GaussianGraph exist? Some directions I am considering:
+   a) Focus on the domain gap finding itself — "why room-scale models fail on tabletop and what it takes to fix it"
+   b) Focus on Gaussian physical features (covariance eigenvalues → planarity, support likelihood) as a novel signal source
+   c) Focus on symbolic consistency repair (deterministic constraint propagation) as a lightweight alternative to learned reasoning
+   d) Focus on the evaluation methodology (separating clustering from relation prediction, which existing papers don't do cleanly)
+   e) Something else entirely that I am not seeing
+
+3. ARCHITECTURE CHANGE
+
+I am willing to change the architecture completely if it leads to better results. The current approach (HDBSCAN → bbox features → GNN) may be fundamentally limited. Should I consider:
+   a) Operating directly on Gaussian-level features (not cluster-level) for relation prediction?
+   b) Using a different clustering approach (spectral clustering, learned clustering)?
+   c) A completely different pipeline architecture?
+
+4. FINE-TUNING DATA
+
+You mentioned fine-tuning on 15-20 general tabletop scenes. I tried synthetic feature generation (200 scenes) but the features are too clean — they lack real Gaussian noise. The full BlenderProc pipeline (render → NerfStudio → real splats) would give realistic training data but requires significant setup. Is this worth pursuing, or should I focus elsewhere?
+
+5. PUBLICATION TARGET
+
+Given the current state, what venue and format should I target? A full conference paper seems out of reach given the results. Would a workshop paper (IROS, ICRA, 3DV workshop) be appropriate? Or should I aim for something else?
+
+---
+
+HONEST ASSESSMENT
+---
+
+The system works as a prototype. The pipeline is complete, the code is clean, the evaluation is rigorous. But the results do not yet tell a compelling story:
+- The GNN does not beat geometry rules on real scenes
+- Clustering is unreliable without oracle guidance
+- The "no foundation models" constraint limits both clustering and semantic understanding
+
+I believe there is a publishable contribution somewhere in this work — whether it is the domain gap characterisation, the physical feature analysis, the evaluation methodology, or something I have not yet identified. But I need your guidance on where to focus my energy to get there.
+
+I have attached the full progress report with all technical details, results tables, and the literature review. I am happy to discuss any of this in our next meeting.
+
+Looking forward to your feedback.
+
+Best regards,
+Debjyoti Sengupta

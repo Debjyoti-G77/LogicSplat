@@ -1,0 +1,563 @@
+================================================================================
+                         DETAILED LITERATURE REVIEW
+================================================================================
+
+         LogicSplat: 3D Scene Graph Generation from Smartphone Video
+         Using Gaussian Splat Geometry and Graph Neural Networks
+
+================================================================================
+
+4.1 Problem Context
+--------------------------------------------------------------------------------
+
+The generation of structured 3D scene graphs from visual input is a problem
+that spans multiple research communities: computer vision, robotics, and
+spatial computing. A scene graph is a directed graph where nodes represent
+objects in a scene and edges represent semantic or spatial relationships
+between them. The utility of scene graphs lies in their ability to compress
+complex 3D environments into compact, queryable representations that support
+downstream reasoning tasks such as robot manipulation planning, visual
+question answering, and augmented reality interaction.
+
+The specific challenge addressed by LogicSplat sits at the convergence of
+three technical threads: (1) the emergence of 3D Gaussian Splatting as a
+fast, high-quality scene representation from casual video, (2) the maturation
+of graph neural networks for relational reasoning over structured data, and
+(3) the growing interest in neuro-symbolic approaches that combine learned
+perception with rule-based reasoning for robust spatial understanding.
+
+This literature review examines 15 papers that collectively define the
+landscape in which LogicSplat operates. Each paper is reviewed not merely for
+its technical contribution but specifically for how it relates to, informs,
+or contrasts with the approach taken in this project.
+
+4.2 Research Questions Guiding the Review
+--------------------------------------------------------------------------------
+
+RQ1: How do existing methods transition from raw 3D representations (point
+     clouds, meshes, Gaussian splats) to structured object-level scene graphs?
+
+RQ2: What role do foundation models (CLIP, SAM, GPT-4V) play in current
+     state-of-the-art systems, and what performance is achievable without them?
+
+RQ3: How is spatial relation prediction evaluated in the literature, and what
+     protocols exist for separating object detection quality from relation
+     prediction quality?
+
+RQ4: What is known about domain transfer in 3D scene understanding — 
+     specifically, do models trained on one type of 3D data generalise to
+     another?
+
+RQ5: What clustering or segmentation methods are used to decompose continuous
+     3D representations into discrete objects, and what are their failure modes?
+
+4.3 Review of Related Work
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Paper 1: 3D Gaussian Splatting for Real-Time Radiance Field Rendering
+         Kerbl, B., Kopanas, G., Leimkuhler, T., and Drettakis, G.
+         ACM Transactions on Graphics (SIGGRAPH), 2023
+--------------------------------------------------------------------------------
+
+This paper introduced 3D Gaussian Splatting (3DGS) as a fundamentally new
+approach to novel view synthesis. Prior to this work, Neural Radiance Fields
+(NeRF) dominated the field of neural scene representation, using implicit
+multilayer perceptrons to map 3D coordinates to colour and density. While
+NeRF produces high-quality renderings, it requires expensive per-ray network
+evaluation that precludes real-time performance.
+
+Kerbl et al. proposed representing scenes as collections of millions of
+anisotropic 3D Gaussians, each parameterised by a mean position (3D), a full
+3x3 covariance matrix (encoding orientation and scale), an opacity scalar,
+and spherical harmonic coefficients for view-dependent colour. The key
+technical innovation is a differentiable tile-based rasteriser that projects
+these Gaussians onto the image plane and alpha-composites them in depth order,
+achieving real-time rendering (>100 FPS) at quality competitive with or
+exceeding NeRF.
+
+For LogicSplat, this paper is foundational in two respects. First, the
+explicit nature of the Gaussian representation (as opposed to implicit NeRF)
+makes it possible to directly access per-primitive geometric properties
+without neural network evaluation. Each Gaussian's covariance matrix encodes
+the local shape of the surface it represents — flat surfaces produce
+Gaussians with one small eigenvalue (planar), elongated structures produce
+Gaussians with one large eigenvalue (linear), and compact objects produce
+roughly spherical Gaussians. LogicSplat exploits these eigenvalue-derived
+shape descriptors (planarity, elongation, sphericity) as physically meaningful
+features for relation prediction.
+
+Second, the speed of 3DGS reconstruction (minutes rather than hours for NeRF)
+makes it practical to process casual smartphone video into a 3D representation
+suitable for scene understanding. This accessibility is central to LogicSplat's
+design philosophy of operating on consumer hardware with consumer input.
+
+--------------------------------------------------------------------------------
+Paper 2: Learning 3D Semantic Scene Graphs from 3D Indoor Reconstructions
+         Wald, J., Dhamo, H., Navab, N., and Tombari, F.
+         CVPR, 2020
+--------------------------------------------------------------------------------
+
+This paper established the foundational framework for 3D scene graph
+prediction from point clouds. Wald et al. introduced the 3DSSG dataset,
+containing semantically rich scene graphs for 3RScan indoor scenes with 160
+object classes and 26 relationship types (including spatial relations like
+"standing on," "lying on," "hanging on," and proximity relations like "close
+by" and "same as").
+
+The proposed architecture uses PointNet for per-object feature extraction from
+point cloud segments, followed by a Graph Convolutional Network (GCN) that
+propagates information between object nodes to predict pairwise relationships.
+Critically, the evaluation protocol assumes ground truth instance segmentation
+as input — the relation prediction module receives correctly segmented objects
+and must only predict the relationships between them.
+
+This evaluation design decision is directly relevant to LogicSplat. Our
+project faces the same fundamental question: should relation prediction be
+evaluated assuming correct object segmentation (isolating the relation
+predictor's quality) or end-to-end including segmentation errors? Following
+Wald et al.'s precedent, LogicSplat reports both: a "relation-only" metric
+using oracle clustering, and an "end-to-end" metric with fully automatic
+HDBSCAN clustering. The gap between these two metrics quantifies how much
+performance is lost to clustering errors versus relation prediction errors.
+
+The 3DSSG dataset also informed our relation vocabulary design. While 3DSSG
+uses 26 relation types, many are semantically specific ("same material,"
+"same shape") rather than spatially grounded. LogicSplat uses a reduced set
+of 12 purely spatial relations that are derivable from 3D geometry alone,
+reflecting our foundation-model-free constraint.
+
+--------------------------------------------------------------------------------
+Paper 3: SceneGraphFusion: Incremental 3D Scene Graph Prediction from RGB-D
+         Sequences
+         Wu, S.C., Wald, J., Tateno, K., Navab, N., and Tombari, F.
+         CVPR, 2021
+--------------------------------------------------------------------------------
+
+SceneGraphFusion extends 3D scene graph prediction to an incremental setting,
+building the graph progressively as new RGB-D frames arrive. The system
+maintains a growing 3D instance map and updates the scene graph as new objects
+are detected and new spatial relationships become observable.
+
+The paper's most relevant contribution to LogicSplat is its evaluation
+methodology. Wu et al. explicitly report results under two conditions: "given
+ground truth instances" and "with geometric segments." The gap between these
+two conditions is presented as a meaningful finding — it quantifies how much
+of the end-to-end error is attributable to segmentation versus relation
+prediction. This dual-reporting approach directly informed LogicSplat's
+evaluation protocol design.
+
+Additionally, SceneGraphFusion demonstrates that GNN-based relation prediction
+can operate effectively on incrementally constructed, potentially noisy object
+representations. This is encouraging for LogicSplat, where object
+representations come from HDBSCAN clustering of Gaussian splats — a process
+that introduces its own noise characteristics (centroid drift, bounding box
+expansion, occasional object merging).
+
+The key difference from LogicSplat is the input modality. SceneGraphFusion
+uses RGB-D sensors with known metric depth, providing clean geometric
+measurements. LogicSplat derives all 3D structure from monocular video via
+Gaussian Splatting, introducing an additional layer of reconstruction noise
+that compounds with clustering noise.
+
+--------------------------------------------------------------------------------
+Paper 4: ReLaGS: Relational Language Gaussian Splatting
+         Arafa, A. et al.
+         CVPR, 2026
+--------------------------------------------------------------------------------
+
+ReLaGS is the most directly comparable published work to LogicSplat. It
+constructs hierarchical language-distilled Gaussian scenes and 3D semantic
+scene graphs without scene-specific training. The system operates by: (1)
+distilling CLIP features into individual Gaussians during reconstruction,
+(2) performing Gaussian pruning to refine scene geometry, (3) aggregating
+noisy 2D language features into accurate 3D object embeddings through
+multi-view alignment, and (4) using a GNN to predict inter-object
+relationships.
+
+ReLaGS achieves unified open-vocabulary 3D perception — it can segment,
+retrieve, and reason about objects using natural language queries without
+any scene-specific fine-tuning. This represents the current state-of-the-art
+for Gaussian-splat-based scene graph generation.
+
+The fundamental difference from LogicSplat is the reliance on CLIP, a
+foundation model requiring substantial GPU memory (several gigabytes for the
+vision encoder alone) and compute. LogicSplat deliberately avoids all
+foundation models, operating entirely on geometric and physical properties
+extractable from the raw Gaussian parameters. This makes LogicSplat
+significantly more lightweight and accessible but limits its semantic
+understanding — it can determine that "object A is on top of object B" but
+cannot determine that "the cup is on top of the book" without an additional
+labeling step.
+
+The existence of ReLaGS as a strong foundation-model-based competitor
+positions LogicSplat's contribution differently: rather than claiming to
+outperform ReLaGS, LogicSplat characterises what is achievable without
+foundation models and identifies where the performance gap lies. This is a
+legitimate and useful scientific contribution — understanding the value added
+by foundation models requires understanding the baseline achievable without
+them.
+
+--------------------------------------------------------------------------------
+Paper 5: GaussianGraph: 3D Gaussian-based Scene Graph Generation for
+         Open-world Scene Understanding
+         Li, X. et al.
+         arXiv:2503.04034, 2025
+--------------------------------------------------------------------------------
+
+GaussianGraph addresses the same problem as ReLaGS but with a different
+architectural approach. It uses adaptive semantic clustering on 3D Gaussians
+(informed by 2D foundation model features projected into 3D) combined with a
+"3D correction module" that refines initial relation predictions using
+geometric constraints.
+
+The 3D correction module is conceptually related to LogicSplat's geometry
+rules. Both systems recognise that pure learned predictions can violate
+physical constraints (e.g., predicting "on top of" for objects that are
+horizontally separated) and apply geometric post-processing to enforce
+consistency. However, GaussianGraph applies corrections as a refinement to
+learned predictions, while LogicSplat uses geometry rules as the primary
+prediction mechanism (with the GNN as an alternative that currently
+underperforms the rules on real scenes).
+
+GaussianGraph's reliance on 2D foundation models for clustering again
+distinguishes it from LogicSplat's foundation-model-free approach. The
+adaptive semantic clustering in GaussianGraph leverages SAM-style features
+to determine object boundaries, while LogicSplat relies on HDBSCAN operating
+on position and colour features alone. This difference is directly reflected
+in clustering quality: GaussianGraph achieves reliable object segmentation
+while LogicSplat's HDBSCAN frequently over-segments without oracle guidance.
+
+--------------------------------------------------------------------------------
+Paper 6: NerfStudio: A Modular Framework for Neural Radiance Field Development
+         Tancik, M. et al.
+         ACM SIGGRAPH, 2023
+--------------------------------------------------------------------------------
+
+NerfStudio provides the reconstruction backbone used in LogicSplat. It is a
+modular, extensible framework that supports multiple neural scene
+representation methods including NeRF variants and 3D Gaussian Splatting
+(via its "splatfacto" implementation). The framework handles the complete
+pipeline from input images to trained scene representation: structure-from-
+motion via COLMAP for camera pose estimation, data loading and augmentation,
+model training with configurable hyperparameters, and export of trained
+representations.
+
+For LogicSplat, NerfStudio serves as a black-box reconstruction tool. Input
+smartphone video frames are processed through COLMAP (for camera intrinsics
+and extrinsics) and then through splatfacto (for Gaussian Splatting training,
+typically 30,000 iterations). The output is a .ply file containing all trained
+Gaussian parameters. LogicSplat operates entirely on this exported file and
+does not interact with NerfStudio during inference.
+
+The choice of NerfStudio over alternative reconstruction tools (e.g., the
+original 3DGS implementation, InstantNGP, or commercial photogrammetry
+software) was motivated by its ease of use, active maintenance, and the
+quality of its splatfacto implementation for casual smartphone video input.
+
+--------------------------------------------------------------------------------
+Paper 7: HDBSCAN: Hierarchical Density-Based Spatial Clustering of
+         Applications with Noise
+         McInnes, L., Healy, J., and Astels, S.
+         Journal of Open Source Software, 2017
+--------------------------------------------------------------------------------
+
+HDBSCAN is the clustering algorithm used in LogicSplat to segment the
+Gaussian splat into individual objects. It extends DBSCAN by performing
+clustering over varying density thresholds and selecting the most stable
+clusters across the hierarchy. Unlike DBSCAN, HDBSCAN does not require a
+fixed epsilon (neighbourhood radius) parameter, making it more suitable for
+data with clusters of varying densities.
+
+The algorithm's key parameter is min_cluster_size, which sets the minimum
+number of points required to form a cluster. For Gaussian splats, this
+parameter must be tuned to the expected object size: too small and noise
+fragments become clusters, too large and small objects are absorbed into
+larger ones. LogicSplat implements an auto-tuning mechanism that sweeps
+min_cluster_size values and selects the configuration that produces a cluster
+count closest to an expected target (when available).
+
+The primary limitation of HDBSCAN for this application is its tendency to
+over-segment when the density contrast between objects is low. In tabletop
+scenes where objects are close together and the Gaussian splat has colour
+bleeding at boundaries, HDBSCAN frequently produces 7-8 clusters for scenes
+containing 4-5 objects. This over-segmentation is currently the primary
+bottleneck for LogicSplat's end-to-end performance, as documented in the
+results chapter.
+
+--------------------------------------------------------------------------------
+Paper 8: Graph Attention Networks
+         Velickovic, P., Cucurull, G., Casanova, A., Romero, A., Lio, P.,
+         and Bengio, Y.
+         ICLR, 2018
+--------------------------------------------------------------------------------
+
+Graph Attention Networks (GATs) introduce masked self-attention mechanisms
+into graph neural networks, allowing each node to attend to its neighbours
+with learned importance weights rather than treating all neighbours equally
+(as in GCN) or using fixed aggregation (as in GraphSAGE). The multi-head
+attention mechanism computes K independent attention functions and
+concatenates or averages their outputs, providing both expressiveness and
+training stability.
+
+LogicSplat uses a 2-layer GAT with 4 attention heads (averaged, not
+concatenated) as the backbone of its learned relation predictor. The
+attention mechanism is particularly relevant for scene graphs because not
+all spatial neighbours are equally informative for predicting a given
+relation. For example, when predicting whether object A is "on top of"
+object B, the objects directly above and below A are more informative than
+objects far to the side. The attention mechanism can learn to weight these
+informative neighbours more heavily.
+
+The GAT backbone feeds into a dual-head edge classifier: one head specialised
+for directional relations (left_of, right_of, in_front_of, behind,
+higher_than, lower_than) and another for contact/physical relations
+(on_top_of, under, inside, attached_to, adjacent_to, hanging_from). This
+dual-head design was motivated by the finding that these two relation
+categories require different feature sensitivities and suffer from gradient
+interference when sharing a single classifier.
+
+--------------------------------------------------------------------------------
+Paper 9: ScanNet: Richly-annotated 3D Reconstructions of Indoor Scenes
+         Dai, A., Chang, A.X., Savva, M., Halber, M., Funkhouser, T.,
+         and Niessner, M.
+         CVPR, 2017
+--------------------------------------------------------------------------------
+
+ScanNet is a large-scale dataset of 1513 RGB-D scans of indoor environments
+with dense semantic annotations. Each scan provides a reconstructed triangle
+mesh, per-vertex NYU40 semantic labels, per-vertex instance segment IDs, and
+object aggregation groupings that map segments to coherent objects. The
+dataset also provides axis-alignment matrices that rotate each scan to a
+canonical gravity-aligned orientation.
+
+LogicSplat uses ScanNet as its primary training data source. Per-object
+geometry is extracted from the mesh vertices (grouped by aggregation), and
+spatial relations are derived from 3D bounding box geometry using rule-based
+logic. The axis-alignment matrices are applied to ensure consistent
+orientation across scenes, making directional relations (in_front_of, behind)
+learnable.
+
+A critical finding of this project is that models trained on ScanNet's
+room-scale geometry (scenes spanning 3-8 metres with dozens of objects) do
+not transfer well to tabletop-scale scenes (spanning 0.3-0.8 metres with 3-6
+objects). Despite feature normalisation, the learned decision boundaries are
+calibrated for room-scale distributions and produce systematic errors at
+tabletop scale. This domain gap (ScanNet test F1 = 0.894 versus tabletop
+deployment F1 = 0.322) is one of the primary findings reported in this work.
+
+--------------------------------------------------------------------------------
+Paper 10: Asymmetric Loss for Multi-Label Classification
+          Ridnik, T., Ben-Baruch, E., Zamir, N., Noy, A., Friedman, I.,
+          Protter, M., and Zelnik-Manor, L.
+          ICCV, 2021
+--------------------------------------------------------------------------------
+
+This paper addresses the challenge of training multi-label classifiers when
+positive examples are rare relative to negatives. In standard binary cross-
+entropy, the gradient contribution from the overwhelming number of easy
+negatives dominates training, preventing the model from learning to detect
+rare positive classes effectively. Focal loss (Lin et al., 2017) partially
+addresses this by down-weighting easy examples, but treats positives and
+negatives symmetrically.
+
+Ridnik et al. propose Asymmetric Loss (ASL), which applies different focusing
+parameters to positive and negative examples. Specifically, it uses a higher
+gamma for negatives (aggressively down-weighting easy negatives) and a lower
+gamma for positives (preserving gradient signal from all positive examples).
+This asymmetry is particularly effective for multi-label problems where each
+class has its own positive/negative ratio.
+
+LogicSplat adopts this approach for its contact relation classes. In the
+training data, on_top_of has approximately 4,200 positive edges versus
+560,000 total edges (a 0.75% positive rate), while left_of has 67,000
+positives (12% positive rate). Standard BCE with pos_weight partially
+compensates but does not address the hard-negative problem: the most
+confusing negatives for on_top_of are pairs that are higher_than but not
+in contact. Asymmetric focal loss (gamma_neg=2.0, gamma_pos=0.0) applied
+selectively to contact relations improved on_top_of F1 from 0.598 to 0.721
+(before threshold tuning) on ScanNet test data.
+
+--------------------------------------------------------------------------------
+Paper 11: OCTScenes: A Versatile Real-World Dataset of Tabletop Scenes for
+          Object-Centric Learning
+          Reza, S. et al.
+          NeurIPS 2024 Datasets and Benchmarks Track
+--------------------------------------------------------------------------------
+
+OCTScenes provides 5000 real-world tabletop scenes captured with consumer
+cameras at 640x480 resolution, with 60 frames per scene providing multi-view
+coverage. The dataset is designed for object-centric learning tasks including
+object discovery, segmentation, and novel view synthesis. Each scene contains
+3-8 common household objects arranged on a table surface.
+
+LogicSplat uses a subset of 19 OCTScenes as additional evaluation data. The
+scenes were downloaded, extracted, and processed through NerfStudio to produce
+Gaussian splats. However, the dataset does not provide spatial relation
+annotations — these must be generated manually. The annotation process is
+currently blocked by the difficulty of matching HDBSCAN clusters to physical
+objects without a dedicated cluster visualisation tool.
+
+The value of OCTScenes for LogicSplat lies in its scale (19 additional test
+scenes would bring the total to 27, substantially improving statistical
+power) and its domain match (real tabletop scenes captured with consumer
+cameras, matching LogicSplat's target deployment scenario). Completing the
+annotation of these scenes is a priority for the next phase of the project.
+
+--------------------------------------------------------------------------------
+Paper 12: Gaussian Grouping: Segment and Edit Anything in 3D Scenes
+          Ye, M., Danelljan, M., Yu, F., and Ke, L.
+          ECCV, 2024
+--------------------------------------------------------------------------------
+
+Gaussian Grouping extends 3D Gaussian Splatting to jointly reconstruct and
+segment objects in open-world 3D scenes. Each Gaussian is augmented with a
+compact identity encoding that allows Gaussians to be grouped according to
+their object instance membership. The identity encodings are supervised using
+2D segmentation masks from SAM (Segment Anything Model) projected across
+multiple views.
+
+This paper is relevant to LogicSplat primarily as a potential solution to the
+clustering bottleneck. LogicSplat currently uses HDBSCAN on position and
+colour features, which frequently over-segments without oracle guidance.
+Gaussian Grouping achieves significantly more reliable object segmentation by
+leveraging SAM's 2D segmentation capability projected into 3D. However,
+adopting Gaussian Grouping would require SAM (a foundation model), which
+contradicts LogicSplat's design philosophy.
+
+The tension between LogicSplat's foundation-model-free constraint and the
+superior segmentation quality achievable with foundation-model-assisted
+methods (Gaussian Grouping, SAGA) represents a fundamental design tradeoff.
+The current project characterises this tradeoff quantitatively: the 3x
+performance drop from oracle clustering to automatic HDBSCAN clustering
+represents the cost of avoiding foundation models for segmentation.
+
+--------------------------------------------------------------------------------
+Paper 13: SAGA: Segment Any 3D Gaussians
+          Cen, J. et al.
+          arXiv:2312.00860, 2023
+--------------------------------------------------------------------------------
+
+SAGA (Segment Any 3D Gaussians) provides promptable 3D segmentation of
+Gaussian splat scenes. Given 2D visual prompts (points, boxes, or masks),
+SAGA can segment the corresponding 3D region represented by Gaussians within
+4 milliseconds. The method trains a lightweight feature field alongside the
+Gaussian splat that enables efficient 3D-consistent segmentation.
+
+Like Gaussian Grouping, SAGA represents a potential upgrade path for
+LogicSplat's clustering module. Its promptable nature is particularly
+interesting: one could imagine a system where an initial coarse clustering
+(HDBSCAN) provides prompts that SAGA refines into precise object boundaries.
+However, SAGA's reliance on SAM features for training again introduces a
+foundation model dependency.
+
+For the purposes of this project, SAGA and Gaussian Grouping are noted as
+the state-of-the-art for Gaussian segmentation and as the natural next step
+if the foundation-model-free constraint is relaxed. They also serve as an
+upper bound on what clustering quality is achievable, contextualising
+LogicSplat's HDBSCAN results.
+
+--------------------------------------------------------------------------------
+Paper 14: Neuro-Symbolic Spatial Reasoning in Segmentation
+          Authors et al.
+          arXiv:2510.15841, 2024
+--------------------------------------------------------------------------------
+
+This paper introduces neuro-symbolic spatial reasoning into open-vocabulary
+semantic segmentation. The key insight is that vision-language models suffer
+from a lack of understanding of spatial relations between objects — they can
+identify objects but cannot reliably determine their spatial arrangement. The
+proposed solution integrates symbolic spatial reasoning rules with neural
+perception, using logical constraints to improve segmentation consistency.
+
+This work validates LogicSplat's neuro-symbolic approach from a different
+angle. Where LogicSplat uses symbolic geometry rules to predict spatial
+relations from 3D geometry, this paper uses symbolic spatial rules to improve
+2D segmentation. Both demonstrate that explicit symbolic reasoning about
+spatial relationships provides value that pure neural approaches miss.
+
+The planned symbolic consistency repair module in LogicSplat (enforcing
+constraints like "on_top_of implies higher_than" and "left_of conflicts with
+right_of for the same pair") is directly inspired by this line of work. The
+key difference is that LogicSplat operates in 3D with known geometry, making
+the spatial constraints more precise and verifiable than in the 2D case.
+
+--------------------------------------------------------------------------------
+Paper 15: Edge-Centric Relational Reasoning for 3D Scene Graph Prediction
+          Authors et al.
+          arXiv:2511.15288, 2024
+--------------------------------------------------------------------------------
+
+This paper proposes an edge-centric approach to 3D scene graph prediction,
+arguing that existing object-centric GNN architectures (where edge features
+are updated by aggregating messages from connected nodes) are suboptimal for
+relation prediction. Instead, the edge-centric approach treats relation edges
+as first-class entities with their own representation learning pathway,
+allowing direct edge-to-edge message passing.
+
+This is relevant to LogicSplat's architectural decisions. The current v7
+dual-head architecture uses a standard node-centric GAT backbone followed by
+an edge classifier MLP. The edge features (17-dim geometric descriptors) are
+concatenated with node embeddings but do not participate in the message
+passing process. An edge-centric architecture could potentially improve
+relation prediction by allowing edges to directly influence each other —
+for example, if edge (A, B) predicts "on_top_of," this should inform edge
+(B, A) to predict "under."
+
+This represents a potential architectural improvement for future versions of
+LogicSplat, particularly if the current architecture's performance ceiling
+on contact relations proves insufficient after addressing the domain gap
+through better training data.
+
+4.4 Summary Table
+--------------------------------------------------------------------------------
+
+No.  Paper                    Year  Venue      Key Contribution
+---  -----                    ----  -----      ----------------
+1    Kerbl et al.             2023  SIGGRAPH   3D Gaussian Splatting
+2    Wald et al.              2020  CVPR       3DSSG dataset + GCN method
+3    Wu et al.                2021  CVPR       Incremental scene graphs
+4    Arafa et al.             2025  CVPR       ReLaGS (Gaussian + language)
+5    Li et al.                2025  arXiv      GaussianGraph (correction)
+6    Tancik et al.            2023  SIGGRAPH   NerfStudio framework
+7    McInnes et al.           2017  JOSS       HDBSCAN clustering
+8    Velickovic et al.        2018  ICLR       Graph Attention Networks
+9    Dai et al.               2017  CVPR       ScanNet dataset
+10   Ridnik et al.            2021  ICCV       Asymmetric focal loss
+11   Reza et al.              2024  NeurIPS    OCTScenes tabletop dataset
+12   Ye et al.                2024  ECCV       Gaussian Grouping
+13   Cen et al.               2023  arXiv      SAGA (Segment Any Gaussians)
+14   Authors et al.           2024  arXiv      Neuro-symbolic spatial reasoning
+15   Authors et al.           2024  arXiv      Edge-centric 3D scene graphs
+
+4.5 Research Gap
+--------------------------------------------------------------------------------
+
+The literature review reveals a clear and specific gap: no existing published
+work performs spatial relation prediction directly from Gaussian splat
+geometric and physical properties without relying on foundation models for
+semantic grounding or object segmentation.
+
+The closest works (ReLaGS, GaussianGraph) achieve strong results but require
+CLIP, SAM, or similar large pre-trained models that demand significant
+computational resources. The question of whether meaningful spatial reasoning
+can be extracted from Gaussian geometry alone — using only the positions,
+covariances, opacities, and colours of the Gaussians themselves — remains
+unanswered in the literature.
+
+Furthermore, the domain transfer problem (training on room-scale data,
+deploying on tabletop-scale data) is under-characterised. Most 3D scene graph
+papers evaluate on the same distribution they train on (e.g., train on
+ScanNet, test on ScanNet). The cross-domain evaluation that LogicSplat
+performs (train on ScanNet, test on real Gaussian splat scenes) exposes a
+failure mode that is not visible in same-distribution evaluation.
+
+LogicSplat addresses both gaps: it characterises what is achievable without
+foundation models, and it honestly reports the domain transfer challenge that
+arises when moving from clean mesh-based training data to noisy Gaussian
+splat deployment data. Both the capabilities and the limitations constitute
+genuine contributions to the field's understanding.
+
+================================================================================
+                        END OF LITERATURE REVIEW
+================================================================================

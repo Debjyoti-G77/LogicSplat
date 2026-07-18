@@ -233,3 +233,35 @@ plugins/
 *.bat
 *.dll
 *.pdb
+
+# OCTScenes — large dataset, downloaded separately
+data/octscenes/*/images/
+data/octscenes/*/ns_data/
+data/octscenes/*/splat.ply
+outputs/octscenes/
+logs/octscenes/
+
+# Third-party pretrained foundation-model weights (not ours; also exceed
+# GitHub's 100MB per-file limit without Git LFS)
+*.pth
+
+# Licensed academic dataset content — not ours to redistribute
+data/3DSSG/
+
+# Reference copies of other researchers' codebases, kept locally for reading
+LangSplat/
+lerf/
+
+# A classmate's own report — not mine to publish
+SUjal report.docx
+
+# Personal administrative paperwork, not project code
+Proforma-4 (2) (1).docx
+Undertaking (3) (1).docx
+Six Months Project Guidlines_2026 (1).pdf
+Screenshot 2026-07-04 022640.png
+
+# Word backup copies and lock files
+*.BACKUP*.docx
+*.BACKUP_*.docx
+~$*.docx

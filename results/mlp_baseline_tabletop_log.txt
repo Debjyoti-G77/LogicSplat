@@ -1,0 +1,37 @@
+C:\Users\Debjyoti\Desktop\LogicSplat\eval_geokan_tabletop.py:203: RuntimeWarning: prune_isolated_gaussians: removed 5716 isolated Gaussians (4.7%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+C:\Users\Debjyoti\Desktop\LogicSplat\eval_geokan_tabletop.py:203: RuntimeWarning: prune_isolated_gaussians: removed 1706 isolated Gaussians (1.6%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+C:\Users\Debjyoti\Desktop\LogicSplat\eval_geokan_tabletop.py:203: RuntimeWarning: prune_isolated_gaussians: removed 5683 isolated Gaussians (4.5%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+C:\Users\Debjyoti\Desktop\LogicSplat\eval_geokan_tabletop.py:203: RuntimeWarning: prune_isolated_gaussians: removed 4245 isolated Gaussians (4.2%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+C:\Users\Debjyoti\Desktop\LogicSplat\eval_geokan_tabletop.py:203: RuntimeWarning: prune_isolated_gaussians: removed 4868 isolated Gaussians (3.7%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+C:\Users\Debjyoti\Desktop\LogicSplat\eval_geokan_tabletop.py:203: RuntimeWarning: prune_isolated_gaussians: removed 3995 isolated Gaussians (3.9%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+C:\Users\Debjyoti\Desktop\LogicSplat\eval_geokan_tabletop.py:203: RuntimeWarning: prune_isolated_gaussians: removed 2096 isolated Gaussians (1.9%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+C:\Users\Debjyoti\Desktop\LogicSplat\eval_geokan_tabletop.py:203: RuntimeWarning: prune_isolated_gaussians: removed 3764 isolated Gaussians (3.5%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+MLP-baseline model loaded: 1,570,666 params
+======================================================================
+MLP-BASELINE Cross-Domain Evaluation: Tabletop Scenes 06-13
+======================================================================
+  scene_06: GT=88  F1 before=0.719  after=0.719  R@3=0.784  R@5=0.955  repair(removed=0, added=11)
+  scene_07: GT=58  F1 before=0.655  after=0.656  R@3=0.690  R@5=0.810  repair(removed=0, added=9)
+  scene_08: GT=60  F1 before=0.697  after=0.712  R@3=0.717  R@5=0.800  repair(removed=0, added=9)
+  scene_09: GT=58  F1 before=0.782  after=0.800  R@3=0.793  R@5=0.931  repair(removed=0, added=10)
+  scene_10: GT=56  F1 before=0.716  after=0.724  R@3=0.804  R@5=0.929  repair(removed=0, added=7)
+  scene_11: GT=62  F1 before=0.800  after=0.825  R@3=0.774  R@5=0.968  repair(removed=0, added=11)
+  scene_12: GT=60  F1 before=0.707  after=0.710  R@3=0.717  R@5=0.917  repair(removed=0, added=8)
+  scene_13: GT=66  F1 before=0.638  after=0.625  R@3=0.636  R@5=0.758  repair(removed=0, added=12)
+
+======================================================================
+AGGREGATE RESULTS (8 tabletop scenes) -- MLP-baseline
+======================================================================
+  Total GT triples: 508
+  Before repair: Micro F1=0.7141  P=0.7629  R=0.6713  R@3=0.7402  R@5=0.8858
+  After repair:  Micro F1=0.7209  P=0.7099  R=0.7323  R@3=0.7402  R@5=0.8858
+
+Saved -> results/mlp_baseline_tabletop_results.json

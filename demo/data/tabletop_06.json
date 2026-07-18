@@ -1,0 +1,1657 @@
+{
+  "scene_id": "tabletop_06",
+  "display_name": "Tabletop 06 \u2014 router & desk objects",
+  "dataset": "tabletop",
+  "photo": "tabletop_06.jpg",
+  "objects": [
+    {
+      "id": 0,
+      "label": "router",
+      "box_px": [
+        170,
+        125,
+        275,
+        280
+      ],
+      "anchor_px": [
+        307,
+        265
+      ]
+    },
+    {
+      "id": 1,
+      "label": "pen",
+      "box_px": [
+        1410,
+        695,
+        135,
+        190
+      ],
+      "anchor_px": [
+        1477,
+        790
+      ]
+    },
+    {
+      "id": 2,
+      "label": "water bottle",
+      "box_px": [
+        680,
+        250,
+        150,
+        415
+      ],
+      "anchor_px": [
+        755,
+        457
+      ]
+    },
+    {
+      "id": 3,
+      "label": "agaro box",
+      "box_px": [
+        105,
+        368,
+        395,
+        212
+      ],
+      "anchor_px": [
+        302,
+        474
+      ]
+    },
+    {
+      "id": 4,
+      "label": "watch",
+      "box_px": [
+        815,
+        590,
+        75,
+        80
+      ],
+      "anchor_px": [
+        852,
+        630
+      ]
+    },
+    {
+      "id": 5,
+      "label": "table",
+      "box_px": [
+        0,
+        385,
+        1545,
+        558
+      ],
+      "anchor_px": [
+        772,
+        664
+      ]
+    }
+  ],
+  "relations_before": [
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9996,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "watch",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "water_bottle",
+      "conf": 0.9967,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "behind",
+      "obj_name": "table",
+      "conf": 0.7518,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "behind",
+      "obj_name": "water_bottle",
+      "conf": 0.9977,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "lower_than",
+      "obj_name": "water_bottle",
+      "conf": 0.9983,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.8184,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 0.9319,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.9706,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "higher_than",
+      "obj_name": "agaro_box",
+      "conf": 0.9993,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "table",
+      "conf": 0.7588,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "watch",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "water_bottle",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "watch",
+      "conf": 0.8848,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "water_bottle",
+      "conf": 0.9955,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "water_bottle",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9838,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "watch",
+      "conf": 0.9754,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "water_bottle",
+      "conf": 0.9987,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9408,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "watch",
+      "conf": 0.7554,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9932,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "pen",
+      "conf": 0.9658,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "watch",
+      "conf": 0.9707,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "in_front_of",
+      "obj_name": "agaro_box",
+      "conf": 0.8004,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 0.8339,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "water_bottle",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "agaro_box",
+      "conf": 0.9986,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "pen",
+      "conf": 0.9913,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.9958,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "watch",
+      "conf": 0.9988,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "water_bottle",
+      "conf": 0.9989,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9992,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9997,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "adjacent_to",
+      "obj_name": "water_bottle",
+      "conf": 0.995,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "behind",
+      "obj_name": "water_bottle",
+      "conf": 0.9906,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "higher_than",
+      "obj_name": "agaro_box",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "left_of",
+      "obj_name": "agaro_box",
+      "conf": 0.8063,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "left_of",
+      "obj_name": "water_bottle",
+      "conf": 0.8298,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.7476,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 0.8993,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.8786,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9987,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9993,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "adjacent_to",
+      "obj_name": "watch",
+      "conf": 0.9979,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "higher_than",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "higher_than",
+      "obj_name": "watch",
+      "conf": 0.9968,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "in_front_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9953,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "in_front_of",
+      "obj_name": "watch",
+      "conf": 0.9893,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 0.9913,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "right_of",
+      "obj_name": "watch",
+      "conf": 0.7328,
+      "gt": "correct"
+    }
+  ],
+  "relations_after": [
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9996,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "table",
+      "conf": 0.2179,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "watch",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "water_bottle",
+      "conf": 0.9967,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "behind",
+      "obj_name": "table",
+      "conf": 0.7518,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "behind",
+      "obj_name": "water_bottle",
+      "conf": 0.9977,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "lower_than",
+      "obj_name": "pen",
+      "conf": 0.3488,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "lower_than",
+      "obj_name": "watch",
+      "conf": 0.3599,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "lower_than",
+      "obj_name": "water_bottle",
+      "conf": 0.9983,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.8184,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 0.9319,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "right_of",
+      "obj_name": "watch",
+      "conf": 0.6884,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.9706,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "adjacent_to",
+      "obj_name": "table",
+      "conf": 0.1293,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "higher_than",
+      "obj_name": "agaro_box",
+      "conf": 0.9993,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.3255,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "table",
+      "conf": 0.7588,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "watch",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "water_bottle",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.5694,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "watch",
+      "conf": 0.8848,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "water_bottle",
+      "conf": 0.9955,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "water_bottle",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9838,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "watch",
+      "conf": 0.9754,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "water_bottle",
+      "conf": 0.9987,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9408,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.4766,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "watch",
+      "conf": 0.7554,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9932,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "pen",
+      "conf": 0.9658,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "watch",
+      "conf": 0.9707,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "in_front_of",
+      "obj_name": "agaro_box",
+      "conf": 0.8004,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 0.8339,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "water_bottle",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "agaro_box",
+      "conf": 0.9986,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "pen",
+      "conf": 0.9913,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.9958,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "watch",
+      "conf": 0.9988,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "water_bottle",
+      "conf": 0.9989,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9992,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9997,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "adjacent_to",
+      "obj_name": "table",
+      "conf": 0.1801,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "adjacent_to",
+      "obj_name": "water_bottle",
+      "conf": 0.995,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "behind",
+      "obj_name": "water_bottle",
+      "conf": 0.9906,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "higher_than",
+      "obj_name": "agaro_box",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "left_of",
+      "obj_name": "agaro_box",
+      "conf": 0.8063,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "left_of",
+      "obj_name": "water_bottle",
+      "conf": 0.8298,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "lower_than",
+      "obj_name": "water_bottle",
+      "conf": 0.3141,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.7476,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 0.8993,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.8786,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9987,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9993,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "adjacent_to",
+      "obj_name": "watch",
+      "conf": 0.9979,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "higher_than",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "higher_than",
+      "obj_name": "watch",
+      "conf": 0.9968,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "in_front_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9953,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "in_front_of",
+      "obj_name": "watch",
+      "conf": 0.9893,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.5105,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 0.9913,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "right_of",
+      "obj_name": "watch",
+      "conf": 0.7328,
+      "gt": "correct",
+      "repair_action": "kept"
+    }
+  ],
+  "removed_by_repair": [],
+  "missed_before": [
+    {
+      "subj_name": "agaro_box",
+      "rel": "behind",
+      "obj_name": "pen",
+      "conf": 0.4948,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.5844,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "behind",
+      "obj_name": "watch",
+      "conf": 0.6593,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "water_bottle",
+      "conf": 0.6704,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "lower_than",
+      "obj_name": "pen",
+      "conf": 0.3488,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "lower_than",
+      "obj_name": "watch",
+      "conf": 0.3599,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "right_of",
+      "obj_name": "watch",
+      "conf": 0.6884,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "higher_than",
+      "obj_name": "watch",
+      "conf": 0.384,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "in_front_of",
+      "obj_name": "agaro_box",
+      "conf": 0.6073,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "in_front_of",
+      "obj_name": "router",
+      "conf": 0.4152,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "in_front_of",
+      "obj_name": "watch",
+      "conf": 0.5559,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "in_front_of",
+      "obj_name": "water_bottle",
+      "conf": 0.562,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "lower_than",
+      "obj_name": "water_bottle",
+      "conf": 0.2064,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.3255,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "behind",
+      "obj_name": "pen",
+      "conf": 0.4473,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "behind",
+      "obj_name": "water_bottle",
+      "conf": 0.6097,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "agaro_box",
+      "conf": 0.5211,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "watch",
+      "conf": 0.4927,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.4766,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "behind",
+      "obj_name": "pen",
+      "conf": 0.4751,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.5416,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "in_front_of",
+      "obj_name": "agaro_box",
+      "conf": 0.6444,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "lower_than",
+      "obj_name": "pen",
+      "conf": 0.2791,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "lower_than",
+      "obj_name": "water_bottle",
+      "conf": 0.3141,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "behind",
+      "obj_name": "pen",
+      "conf": 0.5476,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "higher_than",
+      "obj_name": "pen",
+      "conf": 0.3589,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "in_front_of",
+      "obj_name": "router",
+      "conf": 0.7109,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.5105,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 0.5124,
+      "gt": "missed"
+    }
+  ],
+  "missed_after": [
+    {
+      "subj_name": "agaro_box",
+      "rel": "behind",
+      "obj_name": "pen",
+      "conf": 0.4948,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.5844,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "behind",
+      "obj_name": "watch",
+      "conf": 0.6593,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "water_bottle",
+      "conf": 0.6704,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "higher_than",
+      "obj_name": "watch",
+      "conf": 0.384,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "in_front_of",
+      "obj_name": "agaro_box",
+      "conf": 0.6073,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "in_front_of",
+      "obj_name": "router",
+      "conf": 0.4152,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "in_front_of",
+      "obj_name": "watch",
+      "conf": 0.5559,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "in_front_of",
+      "obj_name": "water_bottle",
+      "conf": 0.562,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "lower_than",
+      "obj_name": "water_bottle",
+      "conf": 0.2064,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "behind",
+      "obj_name": "pen",
+      "conf": 0.4473,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "behind",
+      "obj_name": "water_bottle",
+      "conf": 0.6097,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "agaro_box",
+      "conf": 0.5211,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "watch",
+      "conf": 0.4927,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "behind",
+      "obj_name": "pen",
+      "conf": 0.4751,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.5416,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "in_front_of",
+      "obj_name": "agaro_box",
+      "conf": 0.6444,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "lower_than",
+      "obj_name": "pen",
+      "conf": 0.2791,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "behind",
+      "obj_name": "pen",
+      "conf": 0.5476,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "higher_than",
+      "obj_name": "pen",
+      "conf": 0.3589,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "in_front_of",
+      "obj_name": "router",
+      "conf": 0.7109,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "water_bottle",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 0.5124,
+      "gt": "missed"
+    }
+  ],
+  "repair_summary": {
+    "added": 11,
+    "removed": 0,
+    "iterations": 2
+  },
+  "timings_ms": {
+    "inference": 19.84,
+    "repair": 0.91
+  },
+  "model": {
+    "params": 1018414,
+    "name": "GeoKAN-Gamma"
+  },
+  "gt_available": true,
+  "correct_count": 66,
+  "total_count": 84
+}

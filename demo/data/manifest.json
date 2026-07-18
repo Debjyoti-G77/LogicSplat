@@ -1,0 +1,34 @@
+{
+  "scenes": [
+    {
+      "scene_id": "lerf_ramen",
+      "display_name": "LERF \u2014 ramen (public benchmark)",
+      "dataset": "lerf",
+      "photo": "lerf_ramen.jpg"
+    },
+    {
+      "scene_id": "lerf_teatime",
+      "display_name": "LERF \u2014 teatime (public benchmark)",
+      "dataset": "lerf",
+      "photo": "lerf_teatime.jpg"
+    },
+    {
+      "scene_id": "tabletop_06",
+      "display_name": "Tabletop 06 \u2014 router & desk objects",
+      "dataset": "tabletop",
+      "photo": "tabletop_06.jpg"
+    },
+    {
+      "scene_id": "tabletop_08",
+      "display_name": "Tabletop 08 \u2014 router & perfume",
+      "dataset": "tabletop",
+      "photo": "tabletop_08.jpg"
+    },
+    {
+      "scene_id": "tabletop_10",
+      "display_name": "Tabletop 10 \u2014 router & cream tub",
+      "dataset": "tabletop",
+      "photo": "tabletop_10.jpg"
+    }
+  ]
+}

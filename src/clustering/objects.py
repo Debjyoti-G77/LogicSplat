@@ -101,6 +101,7 @@ def cluster_to_objects(
         min_cluster_size=mcs,
         min_samples=min_samples,
         cluster_selection_method="eom",
+        copy=False,
     ).fit_predict(pts)
 
     objects: List[Object3D] = []

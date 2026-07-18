@@ -4,11 +4,11 @@ warnings.filterwarnings('ignore')
 from src.gaussian.loader import load_gaussian_ply, filter_gaussians
 from src.gaussian.clustering import gaussian_to_objects
 
-cloud = load_gaussian_ply('data/processed/scene_01/splat.ply')
+cloud = load_gaussian_ply('D:/logicsplat_data/processed/scene_01/splat.ply')
 cf = filter_gaussians(cloud, opacity_threshold=0.1)
 objects, _ = gaussian_to_objects(cf)
 
-t = json.load(open('data/processed/scene_01/ns_data/transforms.json'))
+t = json.load(open('D:/logicsplat_data/processed/scene_01/ns_data/transforms.json'))
 w, h = t['w'], t['h']
 fx, fy = t['fl_x'], t['fl_y']
 cx, cy = t['cx'], t['cy']

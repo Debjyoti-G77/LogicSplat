@@ -1,0 +1,59 @@
+C:\Users\Debjyoti\Desktop\LogicSplat\results\eval_mlp_baseline_lerf.py:113: RuntimeWarning: prune_isolated_gaussians: removed 11781 isolated Gaussians (4.8%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+C:\Users\Debjyoti\Desktop\LogicSplat\results\eval_mlp_baseline_lerf.py:113: RuntimeWarning: prune_isolated_gaussians: removed 20357 isolated Gaussians (3.3%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+C:\Users\Debjyoti\Desktop\LogicSplat\results\eval_mlp_baseline_lerf.py:113: RuntimeWarning: prune_isolated_gaussians: removed 9523 isolated Gaussians (1.7%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+C:\Users\Debjyoti\Desktop\LogicSplat\results\eval_mlp_baseline_lerf.py:113: RuntimeWarning: prune_isolated_gaussians: removed 3984 isolated Gaussians (1.6%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+Model loaded (MLP-baseline): 1,570,666 params
+======================================================================
+LERF EVALUATION: MLP-baseline + Symbolic Repair
+======================================================================
+
+----------------------------------------------------------------------
+  Scene: ramen
+----------------------------------------------------------------------
+  Objects found: 13
+  GT relations (geometry-derived): 616
+  Before repair: mR@1=25.2%  mR@3=70.8%  mR@5=92.0%  F1=0.8985
+  After repair:  mR@1=89.9%  mR@3=91.2%  mR@5=92.5%  F1=0.8979
+  Repair: contradictions=0 added=12
+
+----------------------------------------------------------------------
+  Scene: teatime
+----------------------------------------------------------------------
+  Objects found: 10
+  GT relations (geometry-derived): 330
+  Before repair: mR@1=24.8%  mR@3=71.5%  mR@5=90.9%  F1=0.7871
+  After repair:  mR@1=75.8%  mR@3=78.5%  mR@5=90.9%  F1=0.7937
+  Repair: contradictions=0 added=10
+
+----------------------------------------------------------------------
+  Scene: waldo_kitchen
+----------------------------------------------------------------------
+  Objects found: 10
+  GT relations (geometry-derived): 334
+  Before repair: mR@1=25.1%  mR@3=73.7%  mR@5=92.5%  F1=0.8954
+  After repair:  mR@1=90.4%  mR@3=91.0%  mR@5=94.3%  F1=0.9069
+  Repair: contradictions=0 added=16
+
+----------------------------------------------------------------------
+  Scene: figurines
+----------------------------------------------------------------------
+  Objects found: 10
+  GT relations (geometry-derived): 364
+  Before repair: mR@1=24.2%  mR@3=64.8%  mR@5=91.5%  F1=0.8871
+  After repair:  mR@1=90.1%  mR@3=90.1%  mR@5=93.4%  F1=0.8925
+  Repair: contradictions=1 added=10
+
+======================================================================
+AGGREGATE RESULTS (4 LERF scenes) -- MLP-baseline
+======================================================================
+
+  Total GT triples: 1644
+  Before repair: mR@1=24.9%  mR@3=70.2%  mR@5=91.8%  Micro F1=0.8738 (P=0.8933 R=0.8552)
+  After repair:  mR@1=87.2%  mR@3=88.4%  mR@5=92.8%  Micro F1=0.8784 (P=0.8846 R=0.8723)
+  Repair stats: 1 contradictions, 48 relations added
+
+Saved -> results/mlp_baseline_lerf_results.json

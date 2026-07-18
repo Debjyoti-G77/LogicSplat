@@ -1,0 +1,1087 @@
+================================================================================
+                              PROGRESS REPORT
+================================================================================
+
+                              LogicSplat:
+     Foundation-Model-Free 3D Scene Graph Generation from Consumer Video
+                    via Gaussian Splatting and Neuro-Symbolic Reasoning
+
+================================================================================
+
+Student:        Debjyoti Sengupta
+Mentor:         Sahil Shah
+Department:     Data Science and Spatial Analytics
+Institution:    Symbiosis Institute of Geoinformatics
+Programme:      MSc Data Science and Spatial Analytics
+
+================================================================================
+                           TABLE OF CONTENTS
+================================================================================
+
+1. ACKNOWLEDGEMENT
+2. PREFACE
+3. INTRODUCTION
+   3.1 Background and Motivation
+   3.2 Problem Statement
+   3.3 Objectives
+   3.4 Scope
+   3.5 Significance of the Study
+   3.6 Structure of the Report
+4. LITERATURE REVIEW
+   4.1 Problem Context
+   4.2 Research Questions
+   4.3 Review of Related Work
+   4.4 Summary Table
+   4.5 Research Gap
+5. METHODOLOGY
+   5.1 Overview
+   5.2 Data Collection
+   5.3 Data Processing
+   5.4 Model Building
+   5.5 System Architecture
+   5.6 Evaluation Protocol
+6. RESULTS
+   6.1 ScanNet Training Results
+   6.2 Cross-Domain Evaluation
+   6.3 Fine-Tuning Experiment
+   6.4 Comparative Analysis
+   6.5 Clustering Quality Analysis
+7. PROBLEMS ENCOUNTERED AND CURRENT LIMITATIONS
+8. PROPOSED NEXT STEPS
+9. CONCLUSION
+10. REFERENCES
+
+================================================================================
+1. ACKNOWLEDGEMENT
+================================================================================
+
+I would like to express my sincere gratitude to my mentor, Mr. Sahil Shah, for
+his continued guidance and support throughout this project. His direction to
+pursue fine-tuning on general tabletop scenes and to build an end-user
+application has been instrumental in shaping the research trajectory. I also
+acknowledge the open-source communities behind NerfStudio, PyTorch Geometric,
+and the ScanNet dataset, without which this work would not have been possible.
+
+================================================================================
+2. PREFACE
+================================================================================
+
+This document is a progress report submitted for mentor review. It presents the
+current state of the LogicSplat project in complete honesty, including what has
+been achieved, what has failed, what problems remain unsolved, and what
+directions are being considered for the next phase. The purpose of this report
+is to provide sufficient technical detail for an informed discussion about the
+project's direction, and to seek guidance on the most productive path forward.
+
+This is not a final report. Several components are incomplete, and the results
+presented here represent intermediate findings that will evolve as the project
+matures.
+
+================================================================================
+3. INTRODUCTION
+================================================================================
+
+3.1 Background and Motivation
+--------------------------------------------------------------------------------
+
+Three-dimensional scene understanding is a fundamental capability for robotics,
+augmented reality, and spatial computing. A robot operating in a kitchen must
+understand not merely that objects exist, but how they relate to one another
+spatially: the cup is on top of the saucer, the knife is to the left of the
+plate, the book is inside the drawer. This structured understanding is
+typically represented as a scene graph, where nodes represent objects and edges
+represent spatial or semantic relationships between them.
+
+Recent advances in Neural Radiance Fields and, more recently, 3D Gaussian
+Splatting (3DGS) have made it possible to reconstruct high-fidelity 3D scenes
+from casual smartphone video in a matter of minutes. A user can walk around a
+table, record a short video, and obtain a dense 3D representation of the scene
+as a collection of millions of oriented Gaussian primitives, each carrying
+position, covariance, opacity, and colour information.
+
+However, a gap exists between 3D reconstruction and 3D understanding. The
+Gaussian splat is a photorealistic representation optimised for rendering, not
+for reasoning. Extracting a structured scene graph from this unstructured
+collection of Gaussians requires solving several sub-problems: identifying
+which Gaussians belong to which object (segmentation/clustering), determining
+the spatial extent and properties of each object, and inferring the spatial
+relationships between all pairs of objects.
+
+The dominant approaches to 3D scene graph generation rely heavily on foundation
+models. Systems such as ReLaGS (Arafa et al., 2025) use CLIP and SAM for
+semantic grounding, while GaussianGraph (Li et al., 2024) employs 2D
+foundation models for adaptive semantic clustering. These approaches achieve
+strong results but require significant computational resources (large GPU
+memory for foundation model inference) and depend on proprietary or
+resource-intensive pre-trained models.
+
+This project, LogicSplat, explores an alternative philosophy: can we build a
+functional 3D scene graph system from consumer video that operates entirely
+without foundation models, runs on consumer hardware (a single RTX GPU), and
+relies instead on the geometric and physical properties inherent in the
+Gaussian representation itself? The motivation is both practical (accessibility
+for robotics researchers without access to large compute) and scientific
+(understanding what information is actually encoded in Gaussian splat geometry
+versus what requires external semantic knowledge).
+
+3.2 Problem Statement
+--------------------------------------------------------------------------------
+
+Given a casually captured smartphone video of a tabletop scene, the system must
+produce a structured 3D scene graph consisting of:
+  (a) identified objects with spatial extent and optional semantic labels, and
+  (b) directed spatial relations between all object pairs from a defined
+      vocabulary of 12 relation types.
+
+The system must operate without any foundation models (no CLIP, SAM, GPT-4V,
+or similar), must run on consumer hardware, and must produce results that are
+accurate enough to be useful for downstream robotic reasoning tasks.
+
+3.3 Objectives
+--------------------------------------------------------------------------------
+
+The primary objectives of this project are:
+
+  1. To develop a complete pipeline from smartphone video to 3D scene graph
+     using only Gaussian splat geometry and learned lightweight models.
+
+  2. To train a Graph Attention Network (GAT) for multi-label spatial relation
+     prediction, initially on ScanNet room-scale data and subsequently
+     fine-tuned on tabletop-scale data.
+
+  3. To investigate whether Gaussian-specific physical features (covariance
+     eigenvalues, opacity distributions, point density) provide discriminative
+     signal for spatial relation prediction beyond what bounding-box geometry
+     alone offers.
+
+  4. To establish a rigorous evaluation protocol that separates clustering
+     quality from relation prediction quality, following standards from the
+     3D scene graph literature.
+
+  5. To build an end-user application (Streamlit interface) that allows
+     natural language queries about spatial arrangements in a scene.
+
+3.4 Scope
+--------------------------------------------------------------------------------
+
+The current scope is limited to static tabletop scenes containing 3 to 8
+rigid objects. The relation vocabulary consists of 12 spatial relations:
+on_top_of, under, inside, attached_to, hanging_from, adjacent_to, left_of,
+right_of, in_front_of, behind, higher_than, and lower_than. Dynamic scenes,
+articulated objects, and outdoor environments are explicitly out of scope.
+
+The system targets workshop-level publication at venues such as IROS, ICRA
+robotics workshops, or 3DV workshops.
+
+3.5 Significance of the Study
+--------------------------------------------------------------------------------
+
+This work contributes to the field in several ways. First, it demonstrates
+that meaningful spatial reasoning can be extracted from Gaussian splat
+representations without relying on foundation models, establishing a baseline
+for lightweight scene understanding. Second, it provides an honest
+characterisation of the domain gap between room-scale training data (ScanNet)
+and tabletop-scale deployment, a problem that is under-reported in the
+literature. Third, it introduces a physically-motivated feature set derived
+from Gaussian covariance eigenvalues (planarity, elongation, sphericity,
+support likelihood) and demonstrates through SHAP analysis that these features
+carry discriminative signal for contact relations. Fourth, it proposes a
+rigorous evaluation protocol that separates clustering quality from relation
+prediction quality, addressing a methodological gap in existing 3D scene graph
+evaluation.
+
+3.6 Structure of the Report
+--------------------------------------------------------------------------------
+
+The remainder of this report is organised as follows. Chapter 4 reviews the
+relevant literature across 3D Gaussian Splatting, scene graph generation, and
+graph neural networks for relation prediction. Chapter 5 describes the
+methodology in detail, including the full pipeline architecture, training
+procedures, and evaluation protocol. Chapter 6 presents the experimental
+results honestly, including both successes and failures. Chapter 7 discusses
+the problems encountered and current limitations. Chapter 8 proposes next
+steps for mentor guidance. Chapter 9 concludes with a summary of the current
+state.
+
+
+================================================================================
+4. LITERATURE REVIEW
+================================================================================
+
+4.1 Problem Context
+--------------------------------------------------------------------------------
+
+The problem addressed by LogicSplat sits at the intersection of three active
+research areas: 3D Gaussian Splatting for scene representation, 3D scene graph
+generation for structured understanding, and graph neural networks for
+relational reasoning. Each of these areas has seen rapid progress in 2023-2025,
+and the relevant works are reviewed below with specific attention to how they
+relate to and differ from the approach taken in this project.
+
+4.2 Research Questions
+--------------------------------------------------------------------------------
+
+The literature review is guided by the following questions:
+
+  RQ1: How do existing 3D scene graph methods handle the transition from raw
+       3D representations to structured object-level graphs?
+
+  RQ2: What role do foundation models play in current state-of-the-art
+       systems, and what alternatives exist for resource-constrained settings?
+
+  RQ3: How is spatial relation prediction evaluated in the literature, and
+       what protocols exist for separating segmentation quality from relation
+       prediction quality?
+
+  RQ4: What is known about the domain gap between training data (typically
+       room-scale indoor scans) and deployment scenarios (tabletop robotics)?
+
+4.3 Review of Related Work
+--------------------------------------------------------------------------------
+
+Paper 1: 3D Gaussian Splatting for Real-Time Radiance Field Rendering
+(Kerbl et al., 2023)
+
+This foundational paper introduced 3D Gaussian Splatting as an alternative to
+Neural Radiance Fields for novel view synthesis. The key innovation is
+representing scenes as collections of anisotropic 3D Gaussians, each
+parameterised by position, covariance matrix, opacity, and spherical harmonic
+colour coefficients. The differentiable rasterisation pipeline enables
+real-time rendering at high quality while maintaining an explicit, editable
+scene representation. For LogicSplat, this work provides the underlying scene
+representation. The explicit nature of Gaussians (as opposed to implicit NeRF
+representations) is what makes direct geometric reasoning possible without
+neural rendering at inference time. We exploit the per-Gaussian covariance
+matrices as a source of physical shape information (planarity, elongation)
+that is not available in mesh-based or point-cloud-based representations.
+
+Paper 2: Learning 3D Semantic Scene Graphs from 3D Indoor Reconstructions
+(Wald et al., 2020 — 3DSSG, CVPR 2020)
+
+This paper introduced the 3DSSG dataset and a PointNet + GCN architecture for
+predicting scene graphs from 3D point clouds. The dataset provides
+semi-automatically generated scene graphs for 3RScan indoor scenes with 160
+object classes and 26 relationship types. Critically, the evaluation protocol
+uses ground truth instance segmentation as input to the relation prediction
+module, establishing the precedent that relation prediction should be evaluated
+separately from object detection. LogicSplat follows this evaluation philosophy
+by reporting relation-only metrics conditioned on successful clustering, in
+addition to end-to-end metrics. However, unlike 3DSSG which operates on
+complete room-scale reconstructions with rich semantic annotations, LogicSplat
+operates on noisy Gaussian splat clusters from casual phone video with no
+semantic labels.
+
+Paper 3: SceneGraphFusion: Incremental 3D Scene Graph Prediction from RGB-D
+Sequences (Wu et al., 2021 — CVPR 2021)
+
+SceneGraphFusion builds scene graphs incrementally from RGB-D video streams,
+using a graph neural network that operates on incrementally constructed 3D
+instance maps. The paper explicitly reports results under two conditions:
+"given ground truth instances" and "with geometric segments," establishing
+that the gap between these two conditions is a meaningful finding rather than
+a limitation to hide. This directly informed our evaluation protocol design.
+The key difference from LogicSplat is the input modality: SceneGraphFusion
+uses RGB-D sensors with known depth, while LogicSplat derives 3D structure
+entirely from monocular video via Gaussian Splatting, introducing additional
+noise from the reconstruction process.
+
+Paper 4: ReLaGS: Relational Language Gaussian Splatting
+(Arafa et al., 2025 — CVPR 2026)
+
+ReLaGS is the most directly comparable recent work. It constructs hierarchical
+language-distilled Gaussian scenes and 3D semantic scene graphs without
+scene-specific training. The system uses CLIP features distilled into Gaussians
+for open-vocabulary object identification and a GNN for relation prediction.
+It represents the current state-of-the-art for Gaussian-splat-based scene
+graph generation. LogicSplat differs fundamentally in its design philosophy:
+where ReLaGS relies on CLIP (a foundation model requiring significant GPU
+memory and compute), LogicSplat operates entirely without foundation models.
+This makes LogicSplat more accessible for consumer hardware but limits its
+semantic understanding capabilities. ReLaGS achieves strong results on
+ScanNet-style benchmarks; LogicSplat's contribution is demonstrating what is
+achievable without such resources and characterising the resulting limitations
+honestly.
+
+Paper 5: GaussianGraph: 3D Gaussian-based Scene Graph Generation for
+Open-world Scene Understanding (Li et al., 2025)
+
+GaussianGraph uses adaptive semantic clustering on 3D Gaussians combined with
+2D foundation model features and spatial correction modules for scene graph
+generation. It introduces a "3D correction module" that refines initial
+relation predictions using geometric constraints. This concept of geometric
+correction is related to LogicSplat's geometry rules, though GaussianGraph
+applies corrections as a post-processing refinement to learned predictions
+rather than as a primary prediction mechanism. The reliance on 2D foundation
+models for clustering again distinguishes it from LogicSplat's
+foundation-model-free approach.
+
+Paper 6: NerfStudio: A Modular Framework for Neural Radiance Field Development
+(Tancik et al., 2023)
+
+NerfStudio provides the reconstruction backbone used in LogicSplat. Its
+splatfacto implementation of 3D Gaussian Splatting, combined with COLMAP for
+structure-from-motion initialisation, enables the conversion of casual phone
+video into Gaussian splat representations. The framework's modular design
+allows straightforward extraction of the trained Gaussian parameters (position,
+covariance, opacity, SH coefficients) for downstream processing. LogicSplat
+uses NerfStudio as a black-box reconstruction tool and operates entirely on
+the output .ply file.
+
+Paper 7: HDBSCAN: Hierarchical Density-Based Spatial Clustering of
+Applications with Noise (McInnes et al., 2017)
+
+HDBSCAN is the clustering algorithm used in LogicSplat to segment the
+Gaussian splat into individual objects. Unlike DBSCAN, HDBSCAN does not
+require a fixed epsilon parameter and can discover clusters of varying
+densities. The algorithm's stability-based cluster selection is particularly
+relevant for Gaussian splats where object densities vary significantly (a
+dense ceramic mug versus a sparse transparent glass). However, as our results
+demonstrate, HDBSCAN's performance is highly sensitive to the min_cluster_size
+parameter and tends to over-segment tabletop scenes without guidance on the
+expected number of objects. This clustering instability is currently the
+primary bottleneck for end-to-end system performance.
+
+Paper 8: Graph Attention Networks (Velickovic et al., 2018 — ICLR 2018)
+
+The Graph Attention Network (GAT) architecture forms the backbone of
+LogicSplat's learned relation predictor. GATs introduce attention mechanisms
+into graph neural networks, allowing nodes to attend to their neighbours with
+learned importance weights. This is particularly relevant for scene graphs
+where not all neighbouring objects are equally informative for predicting a
+given relation. LogicSplat uses a 2-layer GAT with 4 attention heads, followed
+by a dual-head edge classifier that separately processes directional relations
+and contact/physical relations.
+
+Paper 9: ScanNet: Richly-annotated 3D Reconstructions of Indoor Scenes
+(Dai et al., 2017 — CVPR 2017)
+
+ScanNet provides the primary training data for LogicSplat's GNN. The dataset
+contains 1513 RGB-D scans of indoor scenes with dense semantic annotations,
+instance segmentation, and axis-aligned bounding boxes. LogicSplat uses
+ScanNet's per-object geometry (extracted from mesh vertices and aggregation
+files) to train the relation prediction GNN. A critical finding of this
+project is that models trained on ScanNet's room-scale geometry (scenes
+spanning 3-8 metres) do not transfer well to tabletop-scale scenes (spanning
+0.3-0.8 metres), despite normalisation efforts. This domain gap is quantified
+in Chapter 6.
+
+Paper 10: Asymmetric Loss for Multi-Label Classification
+(Ridnik et al., 2021 — ICCV 2021)
+
+This paper introduces asymmetric focal loss for multi-label classification
+problems with severe class imbalance. The key insight is that in multi-label
+settings, negative examples vastly outnumber positives for rare classes, and
+standard focal loss treats positives and negatives symmetrically. Asymmetric
+loss applies different focusing parameters to positive and negative examples,
+effectively down-weighting easy negatives more aggressively. LogicSplat adopts
+this approach for its contact relation classes (on_top_of, under, inside,
+attached_to) which have 10-60x fewer positive samples than directional
+relations (left_of, right_of).
+
+Paper 11: OCTScenes: A Versatile Real-World Dataset of Tabletop Scenes for
+Object-Centric Learning (Reza et al., 2024)
+
+OCTScenes provides 5000 real-world tabletop scenes captured at 640x480
+resolution with 60 frames per scene. The dataset is designed for object-centric
+learning and provides multi-view coverage of tabletop arrangements. LogicSplat
+uses a subset of 19 OCTScenes processed through NerfStudio as additional
+evaluation data. The dataset's tabletop focus makes it directly relevant to
+our deployment scenario, though the lack of spatial relation annotations
+requires manual annotation effort that is currently incomplete.
+
+Paper 12: SGFN: Semantic Scene Graph Generation from Point Clouds
+(Wu et al., 2023)
+
+SGFN extends scene graph prediction to operate directly on point clouds using
+a semantic graph transformer architecture. The paper demonstrates that
+point-level features can be aggregated into object-level representations
+suitable for relation prediction without requiring explicit instance
+segmentation as a preprocessing step. This is conceptually related to
+LogicSplat's approach of extracting object features directly from Gaussian
+clusters, though SGFN uses a transformer architecture rather than GAT and
+operates on semantically labelled point clouds rather than raw Gaussians.
+
+Paper 13: 3D Gaussian Splatting as a New Era: A Survey
+(Fang et al., 2024 — IEEE TVCG)
+
+This comprehensive survey covers the rapid development of 3D Gaussian
+Splatting across reconstruction, rendering, editing, and understanding tasks.
+It identifies scene understanding as an emerging application area for 3DGS
+and notes that most existing approaches rely on distilling features from 2D
+foundation models into the Gaussian representation. The survey does not
+identify any existing work that performs spatial relation prediction directly
+from Gaussian geometric properties without foundation model assistance,
+suggesting that LogicSplat's approach occupies a genuine gap in the literature.
+
+Paper 14: Contrastive Gaussian Clustering for Weakly Supervised 3D Scene
+Segmentation (Yang et al., 2024)
+
+This paper addresses the problem of segmenting 3D Gaussian scenes into
+objects using contrastive learning on Gaussian features. The approach learns
+to cluster Gaussians into semantically meaningful groups without requiring
+dense per-Gaussian labels. This is directly relevant to LogicSplat's
+clustering challenge: our current HDBSCAN approach operates on position and
+colour features only, while contrastive clustering could potentially learn
+more discriminative features for object separation. This represents a
+potential improvement path for our clustering bottleneck.
+
+Paper 15: Building Probabilistic Functional 3D Scene Graphs via Factor-Graph
+Reasoning (Maggio et al., 2025)
+
+This recent work introduces probabilistic reasoning over scene graphs using
+factor graphs, enabling uncertainty-aware relation prediction and constraint
+propagation. The approach is relevant to LogicSplat's planned symbolic
+consistency repair module, which aims to enforce physical constraints
+(e.g., on_top_of implies higher_than) as a post-processing step. The
+factor-graph formulation provides a principled probabilistic framework for
+such constraint enforcement, as opposed to the deterministic rule-based
+approach currently planned for LogicSplat.
+
+4.4 Summary Table
+--------------------------------------------------------------------------------
+
+Paper                          Year  Key Contribution              Relevance
+---------------------------------------------------------------------------
+Kerbl et al. (3DGS)           2023  Gaussian scene representation Foundation
+Wald et al. (3DSSG)           2020  3D scene graph dataset+method Evaluation
+Wu et al. (SceneGraphFusion)  2021  Incremental 3D scene graphs   Protocol
+Arafa et al. (ReLaGS)         2025  Gaussian + language SGG       Competitor
+Li et al. (GaussianGraph)     2025  Gaussian SGG with correction  Competitor
+Tancik et al. (NerfStudio)    2023  Reconstruction framework      Tool
+McInnes et al. (HDBSCAN)      2017  Density-based clustering      Component
+Velickovic et al. (GAT)       2018  Graph attention networks       Architecture
+Dai et al. (ScanNet)          2017  Indoor 3D dataset             Training data
+Ridnik et al. (ASL)           2021  Asymmetric focal loss         Training
+Reza et al. (OCTScenes)       2024  Tabletop scene dataset        Evaluation
+Wu et al. (SGFN)              2023  Point cloud scene graphs      Related
+Fang et al. (3DGS Survey)     2024  Gaussian splatting survey     Context
+Yang et al. (Contrastive GC)  2024  Gaussian clustering           Future work
+Maggio et al. (Factor Graph)  2025  Probabilistic scene graphs    Future work
+
+4.5 Research Gap
+--------------------------------------------------------------------------------
+
+The literature review reveals a clear gap: no existing published work performs
+spatial relation prediction directly from Gaussian splat geometric and physical
+properties without relying on foundation models for semantic grounding. ReLaGS
+and GaussianGraph both achieve strong results but require CLIP, SAM, or similar
+large pre-trained models. The question of whether meaningful spatial reasoning
+can be extracted from Gaussian geometry alone — and what the limitations of
+such an approach are — remains unanswered. LogicSplat addresses this gap
+directly, and the honest characterisation of both capabilities and limitations
+constitutes the primary contribution of this work.
+
+
+================================================================================
+5. METHODOLOGY
+================================================================================
+
+5.1 Overview
+--------------------------------------------------------------------------------
+
+LogicSplat operates as a sequential pipeline with five major stages:
+reconstruction, clustering, feature extraction, relation prediction, and
+evaluation. A smartphone video of a tabletop scene (approximately 60 frames at
+640x480 resolution) is first processed through NerfStudio's splatfacto
+implementation to produce a 3D Gaussian Splat (.ply file containing 200,000 to
+500,000 Gaussians). This splat is then clustered using HDBSCAN to identify
+individual objects. Per-object and per-pair geometric features are extracted
+from the cluster statistics. Finally, spatial relations are predicted using one
+of several methods: hand-crafted geometry rules with dynamic thresholds, a
+trained Graph Attention Network, per-relation logistic regression classifiers
+with physical features, or an ensemble combining multiple approaches.
+
+The system is implemented in Python using PyTorch, PyTorch Geometric, and
+scikit-learn. All training and inference runs on a single NVIDIA RTX GPU.
+
+5.2 Data Collection
+--------------------------------------------------------------------------------
+
+5.2.1 Data Sources
+
+Three data sources are used in this project:
+
+ScanNet (Dai et al., 2017): 1513 indoor RGB-D scans with dense mesh
+reconstructions, per-vertex semantic labels, instance segmentation, and
+axis-alignment matrices. Used for pre-training the GNN. Located on local
+storage (D:/scannet/scans). Each scene provides a triangular mesh (.ply),
+per-vertex NYU40 label IDs, per-vertex segment IDs, and object aggregation
+groupings (JSON). The axis-alignment matrix rotates each scan to a canonical
+gravity-aligned orientation where Z is up and X/Y are consistent across scenes.
+
+Custom Tabletop Scenes: 8 scenes (scene_06 through scene_13) recorded by the
+author using a smartphone camera. Each scene contains 3-5 common tabletop
+objects (router, box, bottle, cup, book, etc.) arranged on a desk surface.
+Videos are approximately 60 frames captured while walking around the scene.
+These scenes are processed through NerfStudio (COLMAP + splatfacto, 30,000
+iterations) to produce Gaussian splats. Ground truth relations are manually
+annotated and verified using a custom verification script.
+
+OCTScenes (Reza et al., 2024): 19 scenes from the OCTScenes dataset (640x480,
+60 frames each) downloaded and processed through NerfStudio. These provide
+additional real-world tabletop evaluation data. Annotation is partially
+complete (annotation templates generated with auto-derived relations, but
+manual verification is blocked by difficulty in identifying which cluster
+corresponds to which physical object in the scene).
+
+5.2.2 Adopted Approaches
+
+For ScanNet processing, per-object geometry is extracted by: (a) reading the
+mesh vertices, (b) applying the axis-alignment matrix for canonical
+orientation, (c) grouping vertices by segment ID and aggregation groupings,
+(d) computing per-object bounding boxes and centroids, and (e) deriving
+spatial relations from 3D bounding box geometry using rule-based logic.
+
+For custom scenes, the pipeline is: (a) record video with smartphone,
+(b) extract frames, (c) run NerfStudio (COLMAP for camera poses, splatfacto
+for Gaussian training), (d) export splat.ply, (e) manually annotate ground
+truth relations by visual inspection of the physical scene.
+
+5.2.3 Challenges
+
+The primary data challenge is the absence of ground truth spatial relation
+annotations for real Gaussian splat scenes. ScanNet provides object geometry
+but not explicit spatial relation labels — these must be derived from geometry
+rules, creating a circular dependency (the GNN is trained on rule-derived
+labels and therefore cannot exceed rule accuracy on the same distribution).
+The custom scenes have manual annotations but only 8 scenes exist, which is
+statistically thin for robust evaluation. The OCTScenes provide additional
+volume but annotation is incomplete due to the difficulty of matching HDBSCAN
+clusters to physical objects without a cluster visualisation tool.
+
+5.2.4 Cleaning and Preprocessing
+
+Gaussian splats are preprocessed by: (a) filtering out Gaussians with opacity
+below 0.1 (removes semi-transparent background), (b) Statistical Outlier
+Removal (SOR) with 20 neighbours and 2.0 standard deviation ratio (removes
+isolated floater Gaussians that are artifacts of the reconstruction process).
+These two steps typically reduce the Gaussian count from 200,000-500,000 to
+150,000-350,000 while preserving all object-relevant Gaussians.
+
+5.3 Data Processing
+--------------------------------------------------------------------------------
+
+The ScanNet cache system processes each scene once and stores the resulting
+graph as a .pt file. The cache is versioned (currently v7_margins) to ensure
+that changes to the feature schema automatically invalidate old cached files.
+Processing 1513 ScanNet scenes takes approximately 35-40 minutes on first run
+and loads in under 30 seconds on subsequent runs.
+
+For each ScanNet scene, the processing pipeline produces a graph dictionary
+containing: node features (N x 10), edge index (2 x E for all directed pairs),
+edge attributes (E x 17), multi-hot edge labels (E x 12), object semantic
+labels, and scene identifier.
+
+5.4 Model Building
+--------------------------------------------------------------------------------
+
+The relation prediction model evolved through seven major versions:
+
+Version 1-3: Single-head GAT with 8-dim node features and 4-dim edge features,
+trained on 3DSSG-derived labels. These early versions used softmax single-label
+classification and achieved poor results due to the multi-label nature of
+spatial relations (an object can simultaneously be on_top_of, higher_than, and
+left_of another object).
+
+Version 4 (axis-aligned): Switched to multi-label BCE loss with per-class
+pos_weight. Applied ScanNet axis-alignment matrices to canonicalise scene
+orientation, making in_front_of/behind learnable. Expanded to 10-dim node
+features and 10-dim edge features with signed directional displacements
+(delta_x, delta_y) that encode left/right/front/behind directly.
+
+Version 5 (honest splits): Fixed critical data leakage bug where augmentation
+was applied before train/test split, allowing augmented versions of the same
+scene to appear in both splits. Added all-pairs negatives (edges with no
+relation get all-zero labels) to teach the model that some pairs have no
+spatial relation. This reduced reported F1 from inflated values but produced
+credible, honest numbers.
+
+Version 6 (contact features): Added 4 contact-specific edge features
+(vert_gap normalised by object height, absolute vert_gap, contact_score
+composite, support_overlap) to address the finding that scene-extent
+normalisation was destroying the contact signal needed for on_top_of/under
+prediction.
+
+Version 7 (dual-head, current): The current architecture uses:
+  - 2-layer GAT backbone with 4 attention heads and residual connections
+  - Dual prediction heads: one for directional relations (left_of, right_of,
+    in_front_of, behind, higher_than, lower_than) using only the first 10
+    edge features, and one for contact/physical relations (on_top_of, under,
+    inside, attached_to, adjacent_to, hanging_from) using all 17 edge features
+    plus a dedicated contact feature encoder
+  - Asymmetric focal loss (gamma_neg=2.0) for contact relations to handle
+    hard negatives
+  - Per-relation threshold tuning on validation set
+  - Hierarchical constraint enforcement at inference (on_top_of implies
+    higher_than, mutual exclusivity of left/right)
+  - 3 rule-margin features that encode proximity to the geometry rule decision
+    boundaries
+
+The 17-dimensional edge feature vector consists of:
+  [0-2]   Signed centroid displacement (delta_x, delta_y, delta_z)
+  [3-4]   Unsigned distances (xy_distance, dist_3d)
+  [5]     XY bounding box overlap fraction
+  [6]     Volume ratio (min/max)
+  [7]     Height ratio (log-normalised)
+  [8]     Vertical gap (scene-extent normalised)
+  [9]     XY size ratio (log-normalised)
+  [10]    Vertical gap normalised by mean object height
+  [11]    Absolute vertical gap in metres (clipped)
+  [12]    Contact score (composite: exp(-|gap|/threshold) * overlap * above)
+  [13]    Support overlap (XY intersection / B's footprint)
+  [14]    On-top-of Z margin (distance to rule threshold)
+  [15]    On-top-of XY margin (distance to footprint boundary)
+  [16]    Z dominance margin (Z diff vs XY distance ratio)
+
+Training uses the Adam optimiser with cosine annealing learning rate schedule,
+warmup for 5 epochs, batch size 8, and early stopping with patience 10 on
+validation macro F1.
+
+5.5 System Architecture
+--------------------------------------------------------------------------------
+
+The complete system architecture consists of the following modules:
+
+  1. Gaussian Loader (src/gaussian/loader.py): Reads .ply files in 3DGS format,
+     extracts per-Gaussian position, opacity, SH colour coefficients, and
+     covariance parameters. Computes eigenvalues from covariance matrices.
+
+  2. Gaussian Filter: Removes low-opacity Gaussians (threshold 0.1) and
+     applies Statistical Outlier Removal to prune isolated floaters.
+
+  3. HDBSCAN Clustering (src/gaussian/clustering.py): Clusters filtered
+     Gaussians into objects using position and colour features. An auto-tuning
+     mechanism sweeps min_cluster_size and cluster selection methods (eom/leaf)
+     to find the configuration closest to an expected object count (when
+     available). Outputs Object3D instances with centroid, bounding box, point
+     count, mean colour, mean opacity, and covariance eigenvalues.
+
+  4. Feature Extraction: Computes 10-dim node features and 17-dim edge features
+     for all directed object pairs, matching the ScanNet training schema.
+
+  5. Relation Prediction: One of four modes:
+     - Geometry: Hand-crafted rules with scene-adaptive dynamic thresholds
+     - Hybrid: GNN prediction with geometry validation
+     - Physical: Per-relation logistic regression on 31-dim features
+     - Ensemble: Geometry for directional, physical classifiers for contact
+
+  6. Semantic Labeling (optional): YOLO or Grounding DINO projection from
+     rendered camera views to assign object labels. Not required for relation
+     prediction but useful for human-readable output.
+
+  7. Evaluation: Hungarian matching of predicted clusters to GT objects,
+     translation to named triples, precision/recall/F1 computation.
+
+5.6 Evaluation Protocol
+--------------------------------------------------------------------------------
+
+Following recommendations from the 3D scene graph literature (Wald et al.,
+2020; Wu et al., 2021) and external code review, the evaluation protocol
+separates clustering quality from relation prediction quality:
+
+Relation-Only Evaluation (Primary Paper Metric):
+  - Clustering with n_objects_hint (oracle object count)
+  - Hungarian matching with distance rejection threshold
+  - Evaluate only GT relations where both subject and object are successfully
+    matched to predicted clusters
+  - Reports: object coverage, pair coverage, relation F1
+
+End-to-End Evaluation (Deployment Metric):
+  - Fully automatic clustering (no hints)
+  - All GT relations involving unmatched objects count as FN
+  - All predictions involving unmatched clusters count as FP
+  - Reports: micro F1, macro F1
+
+Clustering Quality (Diagnostic):
+  - Per-scene: GT object count vs predicted count
+  - Object recall and precision
+  - Mean centroid assignment distance
+  - Merge and split rates
+
+Bootstrap 95% confidence intervals are computed by resampling over scenes
+(n=1000 bootstrap iterations) to account for the small test set size (8
+scenes).
+
+
+================================================================================
+6. RESULTS
+================================================================================
+
+6.1 ScanNet Training Results
+--------------------------------------------------------------------------------
+
+The v7 dual-head model was trained on approximately 700 ScanNet scenes (after
+filtering scenes with missing files or insufficient objects) with honest
+train/val/test splits (no data leakage, augmentation applied only to training
+split, all-pairs negatives included).
+
+Final test set performance (ScanNet, 17-dim features, dual-head + focal loss):
+
+  Relation          Baseline(0.5)  Tuned Threshold  + Constraints
+  ----------------------------------------------------------------
+  on_top_of         0.721          0.847            0.844
+  under             0.695          0.848            0.850
+  inside            0.684          0.814            0.814
+  attached_to       0.712          0.860            0.860
+  hanging_from      0.883          0.950            0.950
+  adjacent_to       0.929          0.949            0.949
+  left_of           0.963          0.964            0.964
+  right_of          0.963          0.964            0.964
+  in_front_of       0.768          0.830            0.829
+  behind            0.767          0.829            0.829
+  higher_than       0.933          0.933            0.933
+  lower_than        0.929          0.936            0.936
+  ----------------------------------------------------------------
+  Macro F1          0.829          0.894            0.894
+  Micro F1          0.889          0.921            0.921
+
+The progression from v5 (Macro F1 = 0.770) to v7 (Macro F1 = 0.894)
+demonstrates that the architectural improvements (dual-head, contact features,
+rule-margin features, focal loss, threshold tuning) substantially improved
+performance on the difficult contact relations. The per-relation threshold
+tuning alone contributed approximately 6.5 percentage points to macro F1.
+
+6.2 Cross-Domain Evaluation (ScanNet Model on Real Tabletop Scenes)
+--------------------------------------------------------------------------------
+
+The v7 model trained on ScanNet was evaluated on the 8 custom tabletop scenes
+using the relation-only protocol (oracle clustering):
+
+  Method                          Obj Cov  Pair Cov  Micro F1  95% CI
+  -------------------------------------------------------------------
+  Geometry Rules                  0.97     0.93      0.478     [0.371, 0.537]
+  GNN v7 (ScanNet pretrained)     0.97     0.93      0.281     [0.213, 0.338]
+  GNN v7 (Tabletop fine-tuned)    0.97     0.93      0.322     [0.233, 0.395]
+
+End-to-end evaluation (fully automatic, no hints):
+
+  Method                          Micro F1  95% CI
+  -------------------------------------------------
+  Geometry Rules                  0.163     [0.105, 0.218]
+  GNN v7 (ScanNet pretrained)     0.088     [0.056, 0.119]
+  GNN v7 (Tabletop fine-tuned)    0.096     [0.054, 0.136]
+
+Key finding: The domain gap between ScanNet training (Macro F1 = 0.894) and
+tabletop deployment (Micro F1 = 0.281 for pretrained, 0.322 for fine-tuned)
+is approximately 0.57-0.61 absolute F1 points. This represents a severe
+failure of cross-domain transfer.
+
+6.3 Fine-Tuning Experiment
+--------------------------------------------------------------------------------
+
+To address the domain gap, 200 synthetic tabletop scene graphs were generated
+with physics-aware placement (stacking, clustering, flat arrangement) and
+realistic noise injection (centroid jitter, bbox expansion, Z drift, object
+merge/drop). The v7 model was fine-tuned on these synthetic scenes with frozen
+GAT backbone and trainable prediction heads.
+
+Results: Fine-tuning improved the GNN from 0.281 to 0.322 Micro F1 on real
+tabletop scenes (a 15% relative improvement). However, this still falls short
+of the geometry rules baseline (0.478). The synthetic training data, while
+correctly scaled for tabletop scenes, lacks the specific noise characteristics
+of real Gaussian splat clusters (covariance distortion, opacity artifacts,
+colour bleeding between adjacent objects).
+
+6.4 Comparative Analysis
+--------------------------------------------------------------------------------
+
+The most significant finding of this project to date is that hand-crafted
+geometry rules with dynamic scene-adaptive thresholds (Micro F1 = 0.478)
+outperform both the ScanNet-pretrained GNN (0.281) and the fine-tuned GNN
+(0.322) on real tabletop scenes. This is despite the GNN achieving 0.894
+macro F1 on ScanNet test data.
+
+Per-relation analysis reveals that the GNN excels at left_of/right_of (F1 =
+0.76 for fine-tuned) but fails on in_front_of/behind and on_top_of. The
+geometry rules achieve consistent performance across directional relations
+(left_of/right_of F1 = 0.725) because they operate on scale-invariant
+geometric principles (signed centroid displacement) rather than learned
+feature distributions.
+
+The GNN's failure on contact relations (on_top_of = 0.121 on tabletop vs
+0.847 on ScanNet) indicates that the contact features and rule-margin features,
+while effective within the ScanNet distribution, do not generalise to the
+different noise characteristics of Gaussian splat clusters.
+
+6.5 Clustering Quality Analysis
+--------------------------------------------------------------------------------
+
+Clustering quality with oracle object count (n_objects_hint):
+  - Object recall: 96.9% (31/32 GT objects matched across 8 scenes)
+  - Only scene_09 under-segments (finds 3 of 4 objects)
+  - Mean centroid assignment distance: varies by scene
+
+Clustering quality without hints (fully automatic):
+  - HDBSCAN typically finds 7-8 clusters instead of 4-5
+  - Over-segmentation is the dominant failure mode
+  - Background noise and table surface fragments create spurious clusters
+  - The 3x drop from relation-only F1 (0.478) to end-to-end F1 (0.163) is
+    entirely attributable to clustering errors
+
+This confirms that clustering is the primary bottleneck for deployment
+performance, not relation prediction.
+
+6.6 SHAP Analysis of Physical Features
+--------------------------------------------------------------------------------
+
+A separate experiment trained per-relation logistic regression classifiers on
+31-dimensional feature vectors (10 geometry + 7 physical features per object x
+3). SHAP analysis revealed that:
+
+  - support_likelihood (derived from Gaussian covariance planarity and height
+    ratio) is the 5th most predictive feature for on_top_of
+  - Physical features contribute 3-13% of total prediction signal depending
+    on relation type (highest for under at 12.9%, on_top_of at 8.4%)
+  - Geometry features (delta_z, bbox_overlap, vert_gap) remain dominant for
+    all relations
+
+This validates the hypothesis that Gaussian covariance eigenvalues encode
+physically meaningful object properties, but the contribution is modest
+compared to basic geometric features.
+
+================================================================================
+7. PROBLEMS ENCOUNTERED AND CURRENT LIMITATIONS
+================================================================================
+
+This section documents the problems encountered during development, presented
+honestly for mentor guidance.
+
+7.1 Data Leakage in Initial Training (Resolved)
+--------------------------------------------------------------------------------
+
+The initial ScanNet training applied geometric augmentation (rotations, flips,
+jitter) to the full dataset before performing the train/test split. This meant
+that augmented versions of the same scene could appear in both training and
+test sets, inflating reported F1 scores. This was identified through external
+code review and fixed by splitting by scene first, then augmenting only the
+training split. The fix reduced reported numbers but produced credible results.
+
+7.2 Circular Label Problem (Partially Resolved)
+--------------------------------------------------------------------------------
+
+ScanNet does not provide explicit spatial relation annotations. Relations are
+derived from geometry rules (derive_relations()) applied to ground truth
+bounding boxes. This creates a fundamental ceiling: the GNN is trained to
+approximate the geometry rules and therefore cannot exceed rule accuracy on
+the same distribution. The addition of all-pairs negatives (teaching the model
+that some pairs have no relation) partially addresses this by providing signal
+that the rules alone do not generate. However, the fundamental circularity
+remains — the GNN's labels come from the same rules it is compared against.
+
+7.3 Domain Gap (Unresolved — Primary Challenge)
+--------------------------------------------------------------------------------
+
+The most significant unresolved problem is the domain gap between ScanNet
+(room-scale, mesh-based, clean geometry) and real tabletop Gaussian splats
+(small-scale, noisy clusters, covariance artifacts). Despite normalisation
+efforts, contact features, rule-margin features, and synthetic fine-tuning,
+the GNN does not outperform geometry rules on real scenes.
+
+Root causes identified:
+  - Scale mismatch: ScanNet rooms span 3-8m, tabletop scenes span 0.3-0.8m
+  - Noise characteristics differ: ScanNet has clean mesh geometry, Gaussian
+    splats have covariance distortion and opacity artifacts
+  - The GNN hallucinates ScanNet-specific relations (attached_to, inside)
+    that rarely occur in tabletop scenes
+  - Tuned thresholds calibrated for ScanNet distributions do not transfer
+
+7.4 Clustering Instability (Unresolved — Deployment Bottleneck)
+--------------------------------------------------------------------------------
+
+Without oracle object count guidance, HDBSCAN consistently over-segments
+tabletop scenes (finding 7-8 clusters instead of 4-5). This creates spurious
+false positives and causes a 3x performance drop from relation-only to
+end-to-end evaluation. The auto-tuning mechanism (sweeping min_cluster_size)
+helps but does not reliably converge to the correct object count.
+
+Potential solutions under consideration:
+  - Post-clustering merge based on colour similarity and spatial adjacency
+  - Stability-based cluster rejection (remove unstable clusters)
+  - Silhouette score or DBCV for automatic parameter selection
+  - Alternative clustering approaches (spectral clustering, learned methods)
+
+7.5 OCTScenes Annotation Blocked
+--------------------------------------------------------------------------------
+
+The 19 OCTScenes have been processed through NerfStudio and annotation
+templates generated. However, manual annotation requires identifying which
+HDBSCAN cluster corresponds to which physical object in the scene. Without a
+cluster visualisation tool (rendering the splat coloured by cluster ID from
+the same viewpoint as a reference image), this identification is unreliable.
+Building this tool is a prerequisite for completing the annotation.
+
+7.6 Synthetic Training Data Insufficient
+--------------------------------------------------------------------------------
+
+The 200 synthetic tabletop scenes generated with direct feature computation
+(no rendering, no real Gaussian noise) improved the GNN by 15% relative but
+did not close the gap to geometry rules. The synthetic features are "too clean"
+— they lack the specific noise patterns of real Gaussian splat clusters
+(covariance distortion from reconstruction errors, opacity bleeding between
+adjacent objects, colour artifacts at object boundaries). A full BlenderProc
+pipeline (render → NerfStudio → real splat) would produce training data with
+matching noise characteristics but requires significant setup and compute time.
+
+7.7 Evaluation with Only 8 Test Scenes
+--------------------------------------------------------------------------------
+
+Eight test scenes provide limited statistical power. Bootstrap confidence
+intervals are wide (e.g., geometry rules: 0.478 [0.371, 0.537]). The
+difference between geometry rules (0.478) and fine-tuned GNN (0.322) is
+statistically significant, but finer distinctions between methods cannot be
+reliably made. Completing the OCTScenes annotation would provide 19 additional
+test scenes (27 total), substantially improving statistical power.
+
+================================================================================
+8. PROPOSED NEXT STEPS (Seeking Mentor Guidance)
+================================================================================
+
+The following directions are under consideration. Mentor guidance is sought on
+prioritisation and feasibility.
+
+8.1 Fix Clustering (High Priority)
+--------------------------------------------------------------------------------
+
+The 3x performance drop from relation-only to end-to-end evaluation indicates
+that clustering is the primary deployment bottleneck. Proposed approaches:
+  - Implement post-clustering merge (colour + spatial proximity)
+  - Add stability-based cluster rejection
+  - Investigate alternative clustering methods
+  - Build an object count estimator from scene statistics
+
+8.2 Full BlenderProc Synthetic Pipeline (High Priority)
+--------------------------------------------------------------------------------
+
+Generate 50-60 synthetic tabletop scenes with the full pipeline: BlenderProc
+physics simulation → rendered frames → NerfStudio → real Gaussian splats.
+This produces training data with real Gaussian noise characteristics, which
+the direct feature generation approach lacks. Expected to close the domain gap
+between synthetic training and real deployment.
+
+8.3 Complete OCTScenes Annotation (Medium Priority)
+--------------------------------------------------------------------------------
+
+Build the cluster visualisation tool (render splat coloured by cluster ID),
+annotate 19 OCTScenes, and use them as additional test data. This would
+provide 27 total test scenes and substantially improve evaluation reliability.
+
+8.4 Symbolic Consistency Repair (Medium Priority)
+--------------------------------------------------------------------------------
+
+Implement deterministic constraint propagation as a post-processing step:
+  - Inverse consistency: on_top_of(A,B) implies under(B,A)
+  - Exclusivity: left_of(A,B) conflicts with right_of(A,B)
+  - Support logic: on_top_of(A,B) implies higher_than(A,B)
+  - Graph repair: remove lower-confidence contradictions
+
+This is a lightweight addition that could improve precision without requiring
+additional training data.
+
+8.5 End-User Application 
+--------------------------------------------------------------------------------
+
+Build a Streamlit application that allows users to:
+  - Upload a video or select a pre-processed scene
+  - View the reconstructed scene graph
+  - Query spatial relations in natural language
+  - Visualise object clusters and their relationships
+
+This is a mentor requirement for the final deliverable.
+
+8.6 Paper Framing Decision
+--------------------------------------------------------------------------------
+
+Based on current results, two paper framings are possible:
+
+  Option A: "We show that geometry rules are a strong baseline for tabletop
+  3DGS scene graphs, and characterise why learned models fail to surpass them
+  due to domain gap. We propose Gaussian-aware physical features and symbolic
+  consistency repair as complementary improvements."
+
+  Option B: "We close the domain gap through real-splat synthetic training
+  (BlenderProc) and demonstrate that a fine-tuned GNN surpasses geometry rules
+  on tabletop scenes." (Requires BlenderProc pipeline to succeed.)
+
+Mentor guidance is sought on which framing to pursue.
+
+================================================================================
+9. CONCLUSION
+================================================================================
+
+This progress report presents the current state of LogicSplat, a
+foundation-model-free system for 3D scene graph generation from consumer
+smartphone video via Gaussian Splatting. The project has achieved a functional
+end-to-end pipeline, a well-trained GNN that achieves Macro F1 = 0.894 on
+ScanNet test data, and a rigorous evaluation protocol that separates clustering
+quality from relation prediction quality.
+
+The primary finding to date is that the domain gap between room-scale training
+data and tabletop deployment remains the central challenge. Geometry rules with
+dynamic thresholds (Micro F1 = 0.478) outperform both the pretrained and
+fine-tuned GNN on real tabletop scenes. This is an honest result that reflects
+the genuine difficulty of cross-domain transfer in 3D scene understanding.
+
+The project has identified two clear bottlenecks: (1) clustering instability
+without oracle guidance, and (2) the noise distribution mismatch between
+synthetic training features and real Gaussian splat clusters. Addressing these
+through improved clustering and real-splat synthetic training (BlenderProc)
+represents the most promising path to publication-worthy results.
+
+Mentor feedback is sought on prioritisation of next steps, paper framing, and
+whether the current results and honest characterisation of limitations
+constitute a viable workshop paper contribution.
+
+================================================================================
+10. REFERENCES
+================================================================================
+
+Arafa, A. et al. (2025). ReLaGS: Relational Language Gaussian Splatting.
+  CVPR 2026. arXiv:2603.17605.
+
+Campello, R.J.G.B., Moulavi, D., and Sander, J. (2013). Density-Based
+  Clustering Based on Hierarchical Density Estimates. PAKDD 2013.
+
+Dai, A. et al. (2017). ScanNet: Richly-annotated 3D Reconstructions of Indoor
+  Scenes. CVPR 2017.
+
+Fang, Z. et al. (2024). 3D Gaussian Splatting as a New Era: A Survey. IEEE
+  Transactions on Visualization and Computer Graphics.
+
+Kerbl, B. et al. (2023). 3D Gaussian Splatting for Real-Time Radiance Field
+  Rendering. ACM Transactions on Graphics (SIGGRAPH 2023).
+
+Li, X. et al. (2025). GaussianGraph: 3D Gaussian-based Scene Graph Generation
+  for Open-world Scene Understanding. arXiv:2503.04034.
+
+Maggio, M. et al. (2025). Building Probabilistic Functional 3D Scene Graphs
+  via Factor-Graph Reasoning. arXiv:2604.03696.
+
+McInnes, L., Healy, J., and Astels, S. (2017). hdbscan: Hierarchical
+  Density-Based Clustering. Journal of Open Source Software, 2(11).
+
+Reza, S. et al. (2024). OCTScenes: A Versatile Real-World Dataset of Tabletop
+  Scenes for Object-Centric Learning. NeurIPS 2024 Datasets Track.
+
+Ridnik, T. et al. (2021). Asymmetric Loss for Multi-Label Classification.
+  ICCV 2021.
+
+Tancik, M. et al. (2023). Nerfstudio: A Modular Framework for Neural Radiance
+  Field Development. ACM SIGGRAPH 2023.
+
+Velickovic, P. et al. (2018). Graph Attention Networks. ICLR 2018.
+
+Wald, J. et al. (2020). Learning 3D Semantic Scene Graphs from 3D Indoor
+  Reconstructions. CVPR 2020.
+
+Wu, S.C. et al. (2021). SceneGraphFusion: Incremental 3D Scene Graph
+  Prediction from RGB-D Sequences. CVPR 2021.
+
+Wu, S.C. et al. (2023). SGFN: Semantic Scene Graph Generation from Point
+  Clouds. IJCV 2023.
+
+Yang, Z. et al. (2024). Contrastive Gaussian Clustering for Weakly Supervised
+  3D Scene Segmentation. arXiv:2404.12784.
+
+================================================================================
+                              END OF REPORT
+================================================================================

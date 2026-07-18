@@ -1,0 +1,259 @@
+eval_geokan_tabletop.py:91: RuntimeWarning: prune_isolated_gaussians: removed 5716 isolated Gaussians (4.7%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+eval_geokan_tabletop.py:91: RuntimeWarning: prune_isolated_gaussians: removed 1706 isolated Gaussians (1.6%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+eval_geokan_tabletop.py:91: RuntimeWarning: prune_isolated_gaussians: removed 5683 isolated Gaussians (4.5%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+eval_geokan_tabletop.py:91: RuntimeWarning: prune_isolated_gaussians: removed 4245 isolated Gaussians (4.2%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+eval_geokan_tabletop.py:91: RuntimeWarning: prune_isolated_gaussians: removed 4868 isolated Gaussians (3.7%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+eval_geokan_tabletop.py:91: RuntimeWarning: prune_isolated_gaussians: removed 3995 isolated Gaussians (3.9%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+eval_geokan_tabletop.py:91: RuntimeWarning: prune_isolated_gaussians: removed 2096 isolated Gaussians (1.9%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+eval_geokan_tabletop.py:91: RuntimeWarning: prune_isolated_gaussians: removed 3764 isolated Gaussians (3.5%)
+  cloud = prune_isolated_gaussians(cloud, nb_neighbors=20, std_ratio=2.0)
+======================================================================
+GeoKAN Cross-Domain Evaluation: Tabletop Scenes 06-13
+  WITH THRESHOLD CALIBRATION ANALYSIS
+======================================================================
+Model: models/geokan_relation_tabletop_adapted.pt
+Thresholds: models/geokan_relation_tabletop_adapted_thresholds.json
+Device: cuda
+Feature extraction: extract_3rscan_edge_features (scene-extent norm)
+
+Model loaded (hidden_dim=128)
+3RScan thresholds: {0: 0.1, 1: 0.1, 2: 0.5, 3: 0.5, 4: 0.45000000000000007, 5: 0.5000000000000001, 6: 0.5500000000000002, 7: 0.5500000000000002, 8: 0.1, 9: 0.1}
+
+======================================================================
+PHASE 1: Per-scene inference and clustering
+======================================================================
+
+--- scene_06 ------------------------------------------
+  GT objects: 5, GT relations: 56
+  Clustered: 5 objects (hint=5)
+  Hungarian match: avg distance = 0.0000
+    cluster 0 â†’ router (d=0.000)
+    cluster 1 â†’ pen (d=0.000)
+    cluster 2 â†’ water_bottle (d=0.000)
+    cluster 3 â†’ agaro_box (d=0.000)
+    cluster 4 â†’ watch (d=0.000)
+  Graph: 5 nodes, 20 edges, edge_feat_dim=22
+  GT relations (matched): 56
+  Predicted (3RScan thresh): 74
+  F1=0.5077  P=0.4459  R=0.5893  R@3=0.5357  R@5=0.6250
+
+--- scene_07 ------------------------------------------
+  GT objects: 4, GT relations: 24
+  Clustered: 4 objects (hint=4)
+  Hungarian match: avg distance = 0.0000
+    cluster 0 â†’ water_bottle (d=0.000)
+    cluster 1 â†’ pen (d=0.000)
+    cluster 2 â†’ agaro_box (d=0.000)
+    cluster 3 â†’ router (d=0.000)
+  Graph: 4 nodes, 12 edges, edge_feat_dim=22
+  GT relations (matched): 24
+  Predicted (3RScan thresh): 85
+  F1=0.2018  P=0.1294  R=0.4583  R@3=0.1250  R@5=0.2500
+
+--- scene_08 ------------------------------------------
+  GT objects: 4, GT relations: 32
+  Clustered: 4 objects (hint=4)
+  Hungarian match: avg distance = 0.0000
+    cluster 0 â†’ perfume (d=0.000)
+    cluster 1 â†’ pen (d=0.000)
+    cluster 2 â†’ agaro_box (d=0.000)
+    cluster 3 â†’ router (d=0.000)
+  Graph: 4 nodes, 12 edges, edge_feat_dim=22
+  GT relations (matched): 32
+  Predicted (3RScan thresh): 57
+  F1=0.5393  P=0.4211  R=0.7500  R@3=0.5625  R@5=0.7500
+
+--- scene_09 ------------------------------------------
+  GT objects: 4, GT relations: 30
+  Clustered: 3 objects (hint=4)
+  Hungarian match: avg distance = 0.0000
+    cluster 0 â†’ router (d=0.000)
+    cluster 1 â†’ perfume (d=0.000)
+    cluster 2 â†’ watch (d=0.000)
+  Graph: 3 nodes, 6 edges, edge_feat_dim=22
+  GT relations (matched): 14
+  Predicted (3RScan thresh): 30
+  F1=0.5909  P=0.4333  R=0.9286  R@3=0.7143  R@5=0.9286
+
+--- scene_10 ------------------------------------------
+  GT objects: 4, GT relations: 24
+  Clustered: 4 objects (hint=4)
+  Hungarian match: avg distance = 0.0000
+    cluster 0 â†’ cream_tub (d=0.000)
+    cluster 1 â†’ watch (d=0.000)
+    cluster 2 â†’ router (d=0.000)
+    cluster 3 â†’ agaro_box (d=0.000)
+  Graph: 4 nodes, 12 edges, edge_feat_dim=22
+  GT relations (matched): 24
+  Predicted (3RScan thresh): 52
+  F1=0.6053  P=0.4423  R=0.9583  R@3=0.6667  R@5=0.7917
+
+--- scene_11 ------------------------------------------
+  GT objects: 4, GT relations: 24
+  Clustered: 4 objects (hint=4)
+  Hungarian match: avg distance = 0.0000
+    cluster 0 â†’ watch (d=0.000)
+    cluster 1 â†’ cream_tub (d=0.000)
+    cluster 2 â†’ water_bottle (d=0.000)
+    cluster 3 â†’ router (d=0.000)
+  Graph: 4 nodes, 12 edges, edge_feat_dim=22
+  GT relations (matched): 24
+  Predicted (3RScan thresh): 58
+  F1=0.5366  P=0.3793  R=0.9167  R@3=0.6667  R@5=0.7500
+
+--- scene_12 ------------------------------------------
+  GT objects: 4, GT relations: 30
+  Clustered: 4 objects (hint=4)
+  Hungarian match: avg distance = 0.0000
+    cluster 0 â†’ agaro_box (d=0.000)
+    cluster 1 â†’ watch (d=0.000)
+    cluster 2 â†’ water_bottle (d=0.000)
+    cluster 3 â†’ router (d=0.000)
+  Graph: 4 nodes, 12 edges, edge_feat_dim=22
+  GT relations (matched): 30
+  Predicted (3RScan thresh): 67
+  F1=0.3918  P=0.2836  R=0.6333  R@3=0.4667  R@5=0.6333
+
+--- scene_13 ------------------------------------------
+  GT objects: 4, GT relations: 22
+  Clustered: 4 objects (hint=4)
+  Hungarian match: avg distance = 0.0000
+    cluster 0 â†’ perfume (d=0.000)
+    cluster 1 â†’ agaro_box (d=0.000)
+    cluster 2 â†’ router (d=0.000)
+    cluster 3 â†’ water_bottle (d=0.000)
+  Graph: 4 nodes, 12 edges, edge_feat_dim=22
+  GT relations (matched): 22
+  Predicted (3RScan thresh): 69
+  F1=0.3956  P=0.2609  R=0.8182  R@3=0.3636  R@5=0.5455
+
+======================================================================
+PHASE 2: Threshold tuning on tabletop scenes (sweep 0.1-0.9)
+======================================================================
+
+Tabletop-tuned thresholds:
+  on_top_of           3RScan=0.10  Tabletop=0.90  (Î”=+0.80)
+  under               3RScan=0.10  Tabletop=0.40  (Î”=+0.30)
+  attached_to         3RScan=0.50  Tabletop=0.50  (Î”=+0.00)
+  adjacent_to         3RScan=0.50  Tabletop=0.10  (Î”=-0.40)
+  left_of             3RScan=0.45  Tabletop=0.60  (Î”=+0.15)
+  right_of            3RScan=0.50  Tabletop=0.50  (Î”=-0.00)
+  in_front_of         3RScan=0.55  Tabletop=0.20  (Î”=-0.35)
+  behind              3RScan=0.55  Tabletop=0.30  (Î”=-0.25)
+  higher_than         3RScan=0.10  Tabletop=0.10  (Î”=+0.00)
+  lower_than          3RScan=0.10  Tabletop=0.10  (Î”=+0.00)
+
+======================================================================
+PHASE 3: Multi-threshold evaluation comparison
+======================================================================
+
+======================================================================
+THRESHOLD CALIBRATION SUMMARY
+======================================================================
+
+Method                              | Micro F1 |    R@3 |    R@5 |   Prec |    Rec
+----------------------------------------------------------------------------------
+  3RScan thresholds                 |   0.4540 | 0.5088 | 0.6460 | 0.3313 | 0.7212
+  Fixed threshold 0.3               |   0.4193 | 0.5088 | 0.6460 | 0.2941 | 0.7301
+  Tabletop-tuned                    |   0.4545 | 0.5088 | 0.6460 | 0.3217 | 0.7743
+  Threshold-free (R@K)              |      N/A | 0.5088 | 0.6460 |    N/A |    N/A
+----------------------------------------------------------------------------------
+
+======================================================================
+PER-RELATION BREAKDOWN (3RScan thresholds)
+======================================================================
+
+Relation                 F1   Prec    Rec   TP   FP   FN  GT#
+----------------------------------------------------------------------
+  on_top_of           0.179  0.098  1.000    5   46    0    5
+  under               0.140  0.077  0.800    4   48    1    5
+  attached_to         0.000  0.000  0.000    0   48    0    0
+  adjacent_to         0.045  0.025  0.250    1   39    3    4
+  left_of             0.735  0.655  0.837   36   19    7   43
+  right_of            0.761  0.714  0.814   35   14    8   43
+  in_front_of         0.186  0.143  0.267    4   24   11   15
+  behind              0.205  0.167  0.267    4   20   11   15
+  higher_than         0.579  0.500  0.688   33   33   15   48
+  lower_than          0.646  0.519  0.854   41   38    7   48
+----------------------------------------------------------------------
+  MACRO (per-rel)     0.386
+
+======================================================================
+PER-RELATION F1 COMPARISON ACROSS METHODS
+======================================================================
+
+Relation              3RScan  Fix0.3   Tuned  GT#
+--------------------------------------------------
+  on_top_of            0.179   0.118   0.222    5
+  under                0.140   0.158   0.207    5
+  adjacent_to          0.045   0.073   0.085    4
+  left_of              0.735   0.724   0.759   43
+  right_of             0.761   0.712   0.761   43
+  in_front_of          0.186   0.253   0.270   15
+  behind               0.205   0.268   0.268   15
+  higher_than          0.579   0.524   0.579   48
+  lower_than           0.646   0.510   0.646   48
+--------------------------------------------------
+
+======================================================================
+PER-SCENE SUMMARY (3RScan thresholds)
+======================================================================
+
+Scene         Obj  GT# Pred#     F1      P      R   R@3   R@5
+-----------------------------------------------------------------
+  scene_06      5   56    74  0.508  0.446  0.589 0.536 0.625
+  scene_07      4   24    85  0.202  0.129  0.458 0.125 0.250
+  scene_08      4   32    57  0.539  0.421  0.750 0.562 0.750
+  scene_09      3   14    30  0.591  0.433  0.929 0.714 0.929
+  scene_10      4   24    52  0.605  0.442  0.958 0.667 0.792
+  scene_11      4   24    58  0.537  0.379  0.917 0.667 0.750
+  scene_12      4   30    67  0.392  0.284  0.633 0.467 0.633
+  scene_13      4   22    69  0.396  0.261  0.818 0.364 0.545
+-----------------------------------------------------------------
+
+======================================================================
+THRESHOLD-FREE RECALL@K PER RELATION
+  (Rank 12 relations by sigmoid score per edge, check if GT in top-K)
+======================================================================
+
+Relation                R@1    R@3    R@5  GT#
+---------------------------------------------
+  on_top_of           0.000  0.200  0.200    5
+  under               0.000  0.000  0.400    5
+  adjacent_to         0.000  0.250  0.500    4
+  left_of             0.442  0.721  0.814   43
+  right_of            0.395  0.651  0.837   43
+  in_front_of         0.067  0.467  0.667   15
+  behind              0.000  0.400  0.533   15
+  higher_than         0.208  0.438  0.562   48
+  lower_than          0.125  0.417  0.521   48
+---------------------------------------------
+  OVERALL             0.235  0.509  0.646  226
+
+======================================================================
+CONCLUSION
+======================================================================
+
+The Recall@K numbers are threshold-independent and show the model's
+ranking quality across domains:
+
+  Recall@1 = 0.2345  (model's top-1 prediction is correct)
+  Recall@3 = 0.5088  (GT relation in top-3 predictions)
+  Recall@5 = 0.6460  (GT relation in top-5 predictions)
+
+Threshold calibration gap:
+  3RScan thresholds â†’ Micro F1 = 0.4540
+  Fixed 0.3         â†’ Micro F1 = 0.4193
+  Tabletop-tuned    â†’ Micro F1 = 0.4545
+
+The gap between 3RScan-tuned and tabletop-tuned F1 quantifies the
+threshold calibration issue for cross-domain transfer.
+
+Done. Evaluated 8 scenes.

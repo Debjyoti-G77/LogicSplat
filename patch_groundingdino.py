@@ -1,0 +1,345 @@
+"""
+Patch groundingdino's bertwarper.py to work with transformers 5.x.
+
+transformers 5.x removed get_head_mask from PreTrainedModel.
+We rewrite the file cleanly with a standalone implementation.
+"""
+import site, os, sys
+
+# Find the file
+fpath = None
+for sp in site.getsitepackages():
+    p = os.path.join(sp, "groundingdino", "models", "GroundingDINO", "bertwarper.py")
+    if os.path.exists(p):
+        fpath = p
+        break
+
+if not fpath:
+    print("ERROR: bertwarper.py not found")
+    sys.exit(1)
+
+print(f"Rewriting: {fpath}")
+
+# Write the complete corrected file from scratch
+PATCHED_CONTENT = '''# ------------------------------------------------------------------------
+# Grounding DINO
+# url: https://github.com/IDEA-Research/GroundingDINO
+# Copyright (c) 2023 IDEA. All Rights Reserved.
+# Licensed under the Apache License, Version 2.0 [see LICENSE for details]
+# Patched for transformers>=5.0 compatibility (get_head_mask removed)
+# ------------------------------------------------------------------------
+
+import torch
+import torch.nn.functional as F
+import torch.utils.checkpoint as checkpoint
+from torch import Tensor, nn
+from torchvision.ops.boxes import nms
+from transformers import BertConfig, BertModel, BertPreTrainedModel
+from transformers.modeling_outputs import BaseModelOutputWithPoolingAndCrossAttentions
+
+
+def _get_head_mask_compat(head_mask, num_hidden_layers, is_attention_chunked=False):
+    """
+    Standalone replacement for PreTrainedModel.get_head_mask,
+    which was removed in transformers>=5.0.
+    """
+    if head_mask is not None:
+        if not isinstance(head_mask, torch.Tensor):
+            head_mask = torch.tensor(head_mask, dtype=torch.float32)
+        if head_mask.dim() == 1:
+            head_mask = head_mask.unsqueeze(0).unsqueeze(0).unsqueeze(-1).unsqueeze(-1)
+            head_mask = head_mask.expand(num_hidden_layers, -1, -1, -1, -1)
+        elif head_mask.dim() == 2:
+            head_mask = head_mask.unsqueeze(1).unsqueeze(-1).unsqueeze(-1)
+        if is_attention_chunked:
+            head_mask = head_mask.unsqueeze(-1)
+    else:
+        head_mask = [None] * num_hidden_layers
+    return head_mask
+
+
+class BertModelWarper(nn.Module):
+    def __init__(self, bert_model):
+        super().__init__()
+
+        self.config = bert_model.config
+        self.embeddings = bert_model.embeddings
+        self.encoder = bert_model.encoder
+        self.pooler = bert_model.pooler
+
+        self.get_extended_attention_mask = bert_model.get_extended_attention_mask
+        self.invert_attention_mask = bert_model.invert_attention_mask
+        # transformers>=5.0 removed get_head_mask; use standalone compat function
+        self.get_head_mask = _get_head_mask_compat
+
+    def forward(
+        self,
+        input_ids=None,
+        attention_mask=None,
+        token_type_ids=None,
+        position_ids=None,
+        head_mask=None,
+        inputs_embeds=None,
+        encoder_hidden_states=None,
+        encoder_attention_mask=None,
+        past_key_values=None,
+        use_cache=None,
+        output_attentions=None,
+        output_hidden_states=None,
+        return_dict=None,
+    ):
+        output_attentions = (
+            output_attentions if output_attentions is not None else self.config.output_attentions
+        )
+        output_hidden_states = (
+            output_hidden_states
+            if output_hidden_states is not None
+            else self.config.output_hidden_states
+        )
+        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+
+        if self.config.is_decoder:
+            use_cache = use_cache if use_cache is not None else self.config.use_cache
+        else:
+            use_cache = False
+
+        if input_ids is not None and inputs_embeds is not None:
+            raise ValueError("You cannot specify both input_ids and inputs_embeds at the same time")
+        elif input_ids is not None:
+            input_shape = input_ids.size()
+            batch_size, seq_length = input_shape
+        elif inputs_embeds is not None:
+            input_shape = inputs_embeds.size()[:-1]
+            batch_size, seq_length = input_shape
+        else:
+            raise ValueError("You have to specify either input_ids or inputs_embeds")
+
+        device = input_ids.device if input_ids is not None else inputs_embeds.device
+
+        past_key_values_length = (
+            past_key_values[0][0].shape[2] if past_key_values is not None else 0
+        )
+
+        if attention_mask is None:
+            attention_mask = torch.ones(
+                ((batch_size, seq_length + past_key_values_length)), device=device
+            )
+        if token_type_ids is None:
+            token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=device)
+
+        extended_attention_mask: torch.Tensor = self.get_extended_attention_mask(
+            attention_mask, input_shape
+        )
+
+        if self.config.is_decoder and encoder_hidden_states is not None:
+            encoder_batch_size, encoder_sequence_length, _ = encoder_hidden_states.size()
+            encoder_hidden_shape = (encoder_batch_size, encoder_sequence_length)
+            if encoder_attention_mask is None:
+                encoder_attention_mask = torch.ones(encoder_hidden_shape, device=device)
+            encoder_extended_attention_mask = self.invert_attention_mask(encoder_attention_mask)
+        else:
+            encoder_extended_attention_mask = None
+
+        head_mask = self.get_head_mask(head_mask, self.config.num_hidden_layers)
+
+        embedding_output = self.embeddings(
+            input_ids=input_ids,
+            position_ids=position_ids,
+            token_type_ids=token_type_ids,
+            inputs_embeds=inputs_embeds,
+            past_key_values_length=past_key_values_length,
+        )
+
+        encoder_outputs = self.encoder(
+            embedding_output,
+            attention_mask=extended_attention_mask,
+            head_mask=head_mask,
+            encoder_hidden_states=encoder_hidden_states,
+            encoder_attention_mask=encoder_extended_attention_mask,
+            past_key_values=past_key_values,
+            use_cache=use_cache,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+        )
+        sequence_output = encoder_outputs[0]
+        pooled_output = self.pooler(sequence_output) if self.pooler is not None else None
+
+        if not return_dict:
+            return (sequence_output, pooled_output) + encoder_outputs[1:]
+
+        return BaseModelOutputWithPoolingAndCrossAttentions(
+            last_hidden_state=sequence_output,
+            pooler_output=pooled_output,
+            past_key_values=encoder_outputs.past_key_values,
+            hidden_states=encoder_outputs.hidden_states,
+            attentions=encoder_outputs.attentions,
+            cross_attentions=encoder_outputs.cross_attentions,
+        )
+
+
+class TextEncoderShell(nn.Module):
+    def __init__(self, text_encoder):
+        super().__init__()
+        self.text_encoder = text_encoder
+        self.config = self.text_encoder.config
+
+    def forward(self, **kw):
+        return self.text_encoder(**kw)
+
+
+def generate_masks_with_special_tokens(tokenized, special_tokens_list, tokenizer):
+    input_ids = tokenized["input_ids"]
+    bs, num_token = input_ids.shape
+    special_tokens_mask = torch.zeros((bs, num_token), device=input_ids.device).bool()
+    for special_token in special_tokens_list:
+        special_tokens_mask |= input_ids == special_token
+
+    idxs = torch.nonzero(special_tokens_mask)
+
+    attention_mask = (
+        torch.eye(num_token, device=input_ids.device).bool().unsqueeze(0).repeat(bs, 1, 1)
+    )
+    position_ids = torch.zeros((bs, num_token), device=input_ids.device)
+    previous_col = 0
+    for i in range(idxs.shape[0]):
+        row, col = idxs[i]
+        if (col == 0) or (col == num_token - 1):
+            attention_mask[row, col, col] = True
+            position_ids[row, col] = 0
+        else:
+            attention_mask[row, previous_col + 1 : col + 1, previous_col + 1 : col + 1] = True
+            position_ids[row, previous_col + 1 : col + 1] = torch.arange(
+                0, col - previous_col, device=input_ids.device
+            )
+        previous_col = col
+
+    return attention_mask, position_ids.to(torch.long)
+
+
+def generate_masks_with_special_tokens_and_transfer_map(tokenized, special_tokens_list, tokenizer):
+    input_ids = tokenized["input_ids"]
+    bs, num_token = input_ids.shape
+    special_tokens_mask = torch.zeros((bs, num_token), device=input_ids.device).bool()
+    for special_token in special_tokens_list:
+        special_tokens_mask |= input_ids == special_token
+
+    idxs = torch.nonzero(special_tokens_mask)
+
+    attention_mask = (
+        torch.eye(num_token, device=input_ids.device).bool().unsqueeze(0).repeat(bs, 1, 1)
+    )
+    position_ids = torch.zeros((bs, num_token), device=input_ids.device)
+    cate_to_token_mask_list = [[] for _ in range(bs)]
+    previous_col = 0
+    for i in range(idxs.shape[0]):
+        row, col = idxs[i]
+        if (col == 0) or (col == num_token - 1):
+            attention_mask[row, col, col] = True
+            position_ids[row, col] = 0
+        else:
+            attention_mask[row, previous_col + 1 : col + 1, previous_col + 1 : col + 1] = True
+            position_ids[row, previous_col + 1 : col + 1] = torch.arange(
+                0, col - previous_col, device=input_ids.device
+            )
+            c2t_maski = torch.zeros((num_token), device=input_ids.device).bool()
+            c2t_maski[previous_col + 1 : col] = True
+            cate_to_token_mask_list[row].append(c2t_maski)
+        previous_col = col
+
+    cate_to_token_mask_list = [
+        torch.stack(cate_to_token_mask_listi, dim=0)
+        for cate_to_token_mask_listi in cate_to_token_mask_list
+    ]
+
+    return attention_mask, position_ids.to(torch.long), cate_to_token_mask_list
+'''
+
+with open(fpath, "w", encoding="utf-8", newline="\n") as f:
+    f.write(PATCHED_CONTENT)
+
+print("File rewritten cleanly.")
+print("Testing import...")
+
+try:
+    # clear any cached .pyc
+    import importlib, groundingdino
+    import groundingdino.models.GroundingDINO.bertwarper as bw
+    importlib.reload(bw)
+
+    from groundingdino.util.inference import load_model
+    m = load_model(
+        "models/GroundingDINO_SwinT_OGC.py",
+        "models/groundingdino_swint_ogc.pth",
+        device="cpu",
+    )
+    print(f"SUCCESS: {type(m).__name__} loaded")
+except Exception as e:
+    print(f"FAILED: {e}")
+    import traceback; traceback.print_exc()
+    sys.exit(1)
+
+
+# Check if already patched correctly
+if "transformers5_compat" in src:
+    print("Already patched.")
+    sys.exit(0)
+
+# Remove any previous broken patch attempts
+broken_patches = [
+    "        # transformers 5.x: get_head_mask is no longer a bound attribute, call via super\n        from transformers.modeling_utils import PreTrainedModel\n        self.get_head_mask = PreTrainedModel.get_head_mask.__get__(bert_model, type(bert_model))",
+    "        # transformers 5.x removed get_head_mask",
+]
+for bp in broken_patches:
+    if bp in src:
+        src = src.replace(bp, "        self.get_head_mask = bert_model.get_head_mask")
+
+# Now apply the correct patch
+OLD = "        self.get_head_mask = bert_model.get_head_mask"
+NEW = """        # transformers5_compat: get_head_mask removed in transformers>=5.0
+        # Provide a standalone implementation that matches the original behaviour.
+        import torch as _torch
+        def _get_head_mask(head_mask, num_hidden_layers, is_attention_chunked=False):
+            if head_mask is not None:
+                head_mask = _torch.tensor(head_mask, dtype=_torch.float32) if not isinstance(head_mask, _torch.Tensor) else head_mask
+                if head_mask.dim() == 1:
+                    head_mask = head_mask.unsqueeze(0).unsqueeze(0).unsqueeze(-1).unsqueeze(-1)
+                    head_mask = head_mask.expand(num_hidden_layers, -1, -1, -1, -1)
+                elif head_mask.dim() == 2:
+                    head_mask = head_mask.unsqueeze(1).unsqueeze(-1).unsqueeze(-1)
+                if is_attention_chunked:
+                    head_mask = head_mask.unsqueeze(-1)
+            else:
+                head_mask = [None] * num_hidden_layers
+            return head_mask
+        self.get_head_mask = _get_head_mask"""
+
+if OLD not in src:
+    print("ERROR: Could not find the target line to patch. File may have changed.")
+    print("Looking for:", repr(OLD))
+    # Show context around get_head_mask
+    for i, line in enumerate(src.splitlines()):
+        if "head_mask" in line:
+            print(f"  Line {i}: {line}")
+    sys.exit(1)
+
+patched = src.replace(OLD, NEW, 1)  # only replace first occurrence (in __init__)
+
+with open(fpath, "w", encoding="utf-8", newline="\n") as f:
+    f.write(patched)
+
+print("Patch applied successfully.")
+print("Testing import...")
+
+# Quick test
+try:
+    from groundingdino.util.inference import load_model
+    m = load_model(
+        "models/GroundingDINO_SwinT_OGC.py",
+        "models/groundingdino_swint_ogc.pth",
+        device="cpu",
+    )
+    print(f"SUCCESS: Model loaded — {type(m).__name__}")
+except Exception as e:
+    print(f"FAILED: {e}")
+    sys.exit(1)

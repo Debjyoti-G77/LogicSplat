@@ -31,7 +31,7 @@ from src.inference.predict import (
     build_full_graph,
 )
 
-DATA_DIR   = "data/processed"
+DATA_DIR   = "D:/logicsplat_data/processed"
 MODEL_PATH = "models/relation_gnn_gat_edge_v2.pt"
 
 # Relations where geometric rules are trusted over GNN

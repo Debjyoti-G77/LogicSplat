@@ -1,0 +1,4643 @@
+{
+  "scene_id": "lerf_teatime",
+  "display_name": "LERF \u2014 teatime (public benchmark)",
+  "dataset": "lerf",
+  "photo": "lerf_teatime.jpg",
+  "objects": [
+    {
+      "id": 1,
+      "label": "stuffed bear",
+      "box_px": [
+        290,
+        32,
+        354,
+        352
+      ],
+      "anchor_px": [
+        467,
+        208
+      ]
+    },
+    {
+      "id": 2,
+      "label": "coffee",
+      "box_px": [
+        450,
+        328,
+        56,
+        70
+      ],
+      "anchor_px": [
+        478,
+        363
+      ]
+    },
+    {
+      "id": 3,
+      "label": "plate",
+      "box_px": [
+        346,
+        436,
+        146,
+        97
+      ],
+      "anchor_px": [
+        419,
+        484
+      ]
+    },
+    {
+      "id": 4,
+      "label": "hooves",
+      "box_px": [
+        450,
+        599,
+        71,
+        108
+      ],
+      "anchor_px": [
+        486,
+        653
+      ]
+    },
+    {
+      "id": 5,
+      "label": "bag of cookies",
+      "box_px": [
+        284,
+        339,
+        52,
+        147
+      ],
+      "anchor_px": [
+        310,
+        412
+      ]
+    },
+    {
+      "id": 6,
+      "label": "three cookies",
+      "box_px": [
+        374,
+        455,
+        81,
+        61
+      ],
+      "anchor_px": [
+        414,
+        486
+      ]
+    },
+    {
+      "id": 7,
+      "label": "paper napkin",
+      "box_px": [
+        572,
+        383,
+        50,
+        49
+      ],
+      "anchor_px": [
+        597,
+        408
+      ]
+    },
+    {
+      "id": 8,
+      "label": "coffee mug",
+      "box_px": [
+        450,
+        327,
+        56,
+        71
+      ],
+      "anchor_px": [
+        478,
+        362
+      ]
+    },
+    {
+      "id": 9,
+      "label": "tea in a glass",
+      "box_px": [
+        524,
+        503,
+        49,
+        103
+      ],
+      "anchor_px": [
+        548,
+        554
+      ]
+    }
+  ],
+  "relations_before": [
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "behind",
+      "obj_name": "coffee mug",
+      "conf": 0.756,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "behind",
+      "obj_name": "hooves",
+      "conf": 0.7597,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "behind",
+      "obj_name": "tea in a glass",
+      "conf": 0.7959,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9581,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9971,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "right_of",
+      "obj_name": "coffee mug",
+      "conf": 0.7426,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "right_of",
+      "obj_name": "hooves",
+      "conf": 0.7693,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "right_of",
+      "obj_name": "paper napkin",
+      "conf": 0.7538,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.7416,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "right_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.7363,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.7913,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9996,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 0.9994,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9992,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9608,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9975,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "coffee mug",
+      "conf": 0.7195,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "hooves",
+      "conf": 0.7472,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "paper napkin",
+      "conf": 0.7217,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.7159,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.7182,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.764,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9996,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 0.9996,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9798,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 0.9992,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 0.9998,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9891,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "higher_than",
+      "obj_name": "tea in a glass",
+      "conf": 0.7234,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "in_front_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7863,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "in_front_of",
+      "obj_name": "paper napkin",
+      "conf": 0.7645,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "left_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7824,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.763,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9922,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9261,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "on_top_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.7774,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.7173,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9996,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "in_front_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7933,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "in_front_of",
+      "obj_name": "paper napkin",
+      "conf": 0.7791,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "left_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.8031,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.7802,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9855,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9987,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9996,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 0.9994,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9995,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9999,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "behind",
+      "obj_name": "tea in a glass",
+      "conf": 0.7589,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "left_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7996,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.7753,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.985,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9813,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9995,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7988,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.7775,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "coffee mug",
+      "conf": 0.7555,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9805,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.7585,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9957,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9958,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9945,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 0.9979,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9976,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9979,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9975,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 0.9999,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9986,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 0.9986,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 0.999,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9987,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9991,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9988,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "bag of cookies",
+      "conf": 0.9966,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "coffee",
+      "conf": 0.997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "coffee mug",
+      "conf": 0.8032,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "hooves",
+      "conf": 0.9798,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "paper napkin",
+      "conf": 0.9684,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.9928,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "tea in a glass",
+      "conf": 0.9994,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "three cookies",
+      "conf": 0.9558,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "coffee",
+      "conf": 0.706,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.9575,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "coffee",
+      "conf": 0.9547,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "coffee mug",
+      "conf": 0.988,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "hooves",
+      "conf": 0.9825,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "paper napkin",
+      "conf": 0.981,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.9777,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.9852,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.9896,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "in_front_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.8368,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "in_front_of",
+      "obj_name": "paper napkin",
+      "conf": 0.8146,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "left_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.775,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.7564,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9888,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "lower_than",
+      "obj_name": "coffee mug",
+      "conf": 0.7951,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.7029,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "under",
+      "obj_name": "coffee mug",
+      "conf": 0.8466,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9985,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9994,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "in_front_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7593,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.824,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.8029,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "coffee mug",
+      "conf": 0.7556,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9941,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.7596,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9907,
+      "gt": "correct"
+    }
+  ],
+  "relations_after": [
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "behind",
+      "obj_name": "coffee mug",
+      "conf": 0.756,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "behind",
+      "obj_name": "hooves",
+      "conf": 0.7597,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "behind",
+      "obj_name": "tea in a glass",
+      "conf": 0.7959,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "behind",
+      "obj_name": "three cookies",
+      "conf": 0.7358,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9581,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9971,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "right_of",
+      "obj_name": "coffee mug",
+      "conf": 0.7426,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "right_of",
+      "obj_name": "hooves",
+      "conf": 0.7693,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "right_of",
+      "obj_name": "paper napkin",
+      "conf": 0.7538,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.7416,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "right_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.7363,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.7913,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9996,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 0.9994,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9992,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9608,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9975,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "coffee mug",
+      "conf": 0.7195,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "hooves",
+      "conf": 0.7472,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "paper napkin",
+      "conf": 0.7217,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.7159,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.7182,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.764,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.7422,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9996,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 0.9996,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9798,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 0.9992,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 0.9998,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9891,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "higher_than",
+      "obj_name": "tea in a glass",
+      "conf": 0.7234,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "in_front_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7863,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "in_front_of",
+      "obj_name": "paper napkin",
+      "conf": 0.7645,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "left_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7824,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.763,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9922,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9261,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "on_top_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.7774,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.6896,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.7173,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9996,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "in_front_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7933,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "in_front_of",
+      "obj_name": "paper napkin",
+      "conf": 0.7791,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "left_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.8031,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.7802,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9855,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9987,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9996,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 0.9994,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9995,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9999,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "behind",
+      "obj_name": "coffee mug",
+      "conf": 0.7196,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "behind",
+      "obj_name": "hooves",
+      "conf": 0.7125,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "behind",
+      "obj_name": "tea in a glass",
+      "conf": 0.7589,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "left_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7996,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.7753,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.985,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9813,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9995,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7988,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.7775,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "coffee mug",
+      "conf": 0.7555,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9805,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.7585,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9957,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9958,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9945,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 0.9979,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9976,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9979,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9975,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 0.9999,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9986,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 0.9986,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 0.999,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9987,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9991,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9988,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "bag of cookies",
+      "conf": 0.9966,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "coffee",
+      "conf": 0.997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "coffee mug",
+      "conf": 0.8032,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "hooves",
+      "conf": 0.9798,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "paper napkin",
+      "conf": 0.9684,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.9928,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "tea in a glass",
+      "conf": 0.9994,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "higher_than",
+      "obj_name": "three cookies",
+      "conf": 0.9558,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "coffee",
+      "conf": 0.706,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.9575,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "coffee",
+      "conf": 0.9547,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "coffee mug",
+      "conf": 0.988,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "hooves",
+      "conf": 0.9825,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "paper napkin",
+      "conf": 0.981,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.9777,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.9852,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.9896,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "adjacent_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "attached_to",
+      "obj_name": "three cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "in_front_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.8368,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "in_front_of",
+      "obj_name": "paper napkin",
+      "conf": 0.8146,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "left_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.775,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.7564,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9888,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "lower_than",
+      "obj_name": "coffee mug",
+      "conf": 0.7951,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.6803,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.7029,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "under",
+      "obj_name": "coffee mug",
+      "conf": 0.8466,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "bag of cookies",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "coffee",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "coffee mug",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "hooves",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "paper napkin",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "adjacent_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9985,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "bag of cookies",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "coffee",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "coffee mug",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "hooves",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "paper napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "stuffed bear",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "attached_to",
+      "obj_name": "tea in a glass",
+      "conf": 0.9994,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "in_front_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7593,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.824,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.8029,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "coffee mug",
+      "conf": 0.7556,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.9941,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.7596,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "lower_than",
+      "obj_name": "stuffed bear",
+      "conf": 0.9907,
+      "gt": "correct",
+      "repair_action": "kept"
+    }
+  ],
+  "removed_by_repair": [],
+  "missed_before": [
+    {
+      "subj_name": "bag of cookies",
+      "rel": "behind",
+      "obj_name": "paper napkin",
+      "conf": 0.626,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "behind",
+      "obj_name": "plate",
+      "conf": 0.7031,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "behind",
+      "obj_name": "three cookies",
+      "conf": 0.7358,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.6743,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "lower_than",
+      "obj_name": "coffee mug",
+      "conf": 0.4367,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.6708,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "behind",
+      "obj_name": "coffee mug",
+      "conf": 0.6621,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "behind",
+      "obj_name": "hooves",
+      "conf": 0.6639,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "behind",
+      "obj_name": "paper napkin",
+      "conf": 0.5477,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "behind",
+      "obj_name": "tea in a glass",
+      "conf": 0.6999,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "behind",
+      "obj_name": "three cookies",
+      "conf": 0.6453,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "lower_than",
+      "obj_name": "coffee mug",
+      "conf": 0.4233,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.6236,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.7422,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "higher_than",
+      "obj_name": "bag of cookies",
+      "conf": 0.4461,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "higher_than",
+      "obj_name": "coffee",
+      "conf": 0.4513,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "higher_than",
+      "obj_name": "hooves",
+      "conf": 0.3358,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "in_front_of",
+      "obj_name": "coffee",
+      "conf": 0.6875,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.665,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "in_front_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.4992,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "on_top_of",
+      "obj_name": "hooves",
+      "conf": 0.53,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.6896,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "right_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.6514,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "in_front_of",
+      "obj_name": "coffee",
+      "conf": 0.7035,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.6911,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "in_front_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.483,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "lower_than",
+      "obj_name": "coffee mug",
+      "conf": 0.4122,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.6426,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "right_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.6416,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.6713,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "under",
+      "obj_name": "coffee mug",
+      "conf": 0.6862,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.372,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "behind",
+      "obj_name": "coffee mug",
+      "conf": 0.7196,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "behind",
+      "obj_name": "hooves",
+      "conf": 0.7125,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "higher_than",
+      "obj_name": "tea in a glass",
+      "conf": 0.3774,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "in_front_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.6606,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "in_front_of",
+      "obj_name": "coffee",
+      "conf": 0.5747,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "on_top_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.4194,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.641,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "right_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.6166,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.6755,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.4939,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "coffee mug",
+      "conf": 0.6527,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "hooves",
+      "conf": 0.6476,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "tea in a glass",
+      "conf": 0.6867,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "three cookies",
+      "conf": 0.6408,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "higher_than",
+      "obj_name": "tea in a glass",
+      "conf": 0.3258,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "in_front_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7461,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "hooves",
+      "conf": 0.7125,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "paper napkin",
+      "conf": 0.7037,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.6679,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.5732,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "behind",
+      "obj_name": "coffee mug",
+      "conf": 0.4856,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "behind",
+      "obj_name": "hooves",
+      "conf": 0.4684,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "behind",
+      "obj_name": "tea in a glass",
+      "conf": 0.49,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.6688,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "hooves",
+      "conf": 0.46,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "paper napkin",
+      "conf": 0.5773,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "plate",
+      "conf": 0.5505,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.4628,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "three cookies",
+      "conf": 0.3433,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "in_front_of",
+      "obj_name": "coffee",
+      "conf": 0.7475,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.7218,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "in_front_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.5043,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "left_of",
+      "obj_name": "coffee mug",
+      "conf": 0.6939,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "left_of",
+      "obj_name": "hooves",
+      "conf": 0.675,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "left_of",
+      "obj_name": "paper napkin",
+      "conf": 0.6608,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "lower_than",
+      "obj_name": "paper napkin",
+      "conf": 0.5222,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "lower_than",
+      "obj_name": "plate",
+      "conf": 0.4714,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "lower_than",
+      "obj_name": "three cookies",
+      "conf": 0.4869,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.6803,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "under",
+      "obj_name": "paper napkin",
+      "conf": 0.5778,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.415,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "under",
+      "obj_name": "three cookies",
+      "conf": 0.6738,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "higher_than",
+      "obj_name": "tea in a glass",
+      "conf": 0.4158,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "in_front_of",
+      "obj_name": "coffee",
+      "conf": 0.6664,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.6537,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "hooves",
+      "conf": 0.7172,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "paper napkin",
+      "conf": 0.7117,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "plate",
+      "conf": 0.7121,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "on_top_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.5786,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.3007,
+      "gt": "missed"
+    }
+  ],
+  "missed_after": [
+    {
+      "subj_name": "bag of cookies",
+      "rel": "behind",
+      "obj_name": "paper napkin",
+      "conf": 0.626,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "behind",
+      "obj_name": "plate",
+      "conf": 0.7031,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "left_of",
+      "obj_name": "coffee",
+      "conf": 0.6743,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "lower_than",
+      "obj_name": "coffee mug",
+      "conf": 0.4367,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "bag of cookies",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.6708,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "behind",
+      "obj_name": "coffee mug",
+      "conf": 0.6621,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "behind",
+      "obj_name": "hooves",
+      "conf": 0.6639,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "behind",
+      "obj_name": "paper napkin",
+      "conf": 0.5477,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "behind",
+      "obj_name": "tea in a glass",
+      "conf": 0.6999,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "behind",
+      "obj_name": "three cookies",
+      "conf": 0.6453,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "lower_than",
+      "obj_name": "coffee mug",
+      "conf": 0.4233,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee",
+      "rel": "right_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.6236,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "higher_than",
+      "obj_name": "bag of cookies",
+      "conf": 0.4461,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "higher_than",
+      "obj_name": "coffee",
+      "conf": 0.4513,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "higher_than",
+      "obj_name": "hooves",
+      "conf": 0.3358,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "in_front_of",
+      "obj_name": "coffee",
+      "conf": 0.6875,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.665,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "in_front_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.4992,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "on_top_of",
+      "obj_name": "hooves",
+      "conf": 0.53,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "coffee mug",
+      "rel": "right_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.6514,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "in_front_of",
+      "obj_name": "coffee",
+      "conf": 0.7035,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.6911,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "in_front_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.483,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "lower_than",
+      "obj_name": "coffee mug",
+      "conf": 0.4122,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.6426,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "right_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.6416,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.6713,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "under",
+      "obj_name": "coffee mug",
+      "conf": 0.6862,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "hooves",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.372,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "higher_than",
+      "obj_name": "tea in a glass",
+      "conf": 0.3774,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "in_front_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.6606,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "in_front_of",
+      "obj_name": "coffee",
+      "conf": 0.5747,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "on_top_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.4194,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.641,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "right_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.6166,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.6755,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "paper napkin",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.4939,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "coffee mug",
+      "conf": 0.6527,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "hooves",
+      "conf": 0.6476,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "tea in a glass",
+      "conf": 0.6867,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "three cookies",
+      "conf": 0.6408,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "higher_than",
+      "obj_name": "tea in a glass",
+      "conf": 0.3258,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "in_front_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.7461,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "hooves",
+      "conf": 0.7125,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "paper napkin",
+      "conf": 0.7037,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "right_of",
+      "obj_name": "three cookies",
+      "conf": 0.6679,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.5732,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "behind",
+      "obj_name": "coffee mug",
+      "conf": 0.4856,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "behind",
+      "obj_name": "hooves",
+      "conf": 0.4684,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "behind",
+      "obj_name": "tea in a glass",
+      "conf": 0.49,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "bag of cookies",
+      "conf": 0.6688,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "hooves",
+      "conf": 0.46,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "paper napkin",
+      "conf": 0.5773,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "plate",
+      "conf": 0.5505,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.4628,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "stuffed bear",
+      "rel": "on_top_of",
+      "obj_name": "three cookies",
+      "conf": 0.3433,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "in_front_of",
+      "obj_name": "coffee",
+      "conf": 0.7475,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.7218,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "in_front_of",
+      "obj_name": "stuffed bear",
+      "conf": 0.5043,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "left_of",
+      "obj_name": "coffee mug",
+      "conf": 0.6939,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "left_of",
+      "obj_name": "hooves",
+      "conf": 0.675,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "left_of",
+      "obj_name": "paper napkin",
+      "conf": 0.6608,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "lower_than",
+      "obj_name": "paper napkin",
+      "conf": 0.5222,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "lower_than",
+      "obj_name": "plate",
+      "conf": 0.4714,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "lower_than",
+      "obj_name": "three cookies",
+      "conf": 0.4869,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "under",
+      "obj_name": "paper napkin",
+      "conf": 0.5778,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.415,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "tea in a glass",
+      "rel": "under",
+      "obj_name": "three cookies",
+      "conf": 0.6738,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "higher_than",
+      "obj_name": "tea in a glass",
+      "conf": 0.4158,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "in_front_of",
+      "obj_name": "coffee",
+      "conf": 0.6664,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.6537,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "hooves",
+      "conf": 0.7172,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "paper napkin",
+      "conf": 0.7117,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "left_of",
+      "obj_name": "plate",
+      "conf": 0.7121,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "on_top_of",
+      "obj_name": "tea in a glass",
+      "conf": 0.5786,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "three cookies",
+      "rel": "under",
+      "obj_name": "stuffed bear",
+      "conf": 0.3007,
+      "gt": "missed"
+    }
+  ],
+  "repair_summary": {
+    "added": 7,
+    "removed": 0,
+    "iterations": 2
+  },
+  "timings_ms": {
+    "inference": 10.09,
+    "repair": 1.6
+  },
+  "model": {
+    "params": 1018414,
+    "name": "GeoKAN-Gamma"
+  },
+  "gt_available": true,
+  "correct_count": 198,
+  "total_count": 228
+}

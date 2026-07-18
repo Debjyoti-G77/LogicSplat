@@ -12,7 +12,7 @@ from src.gaussian.clustering import gaussian_to_objects
 from ultralytics import YOLO
 
 # load scene
-cloud = load_gaussian_ply('data/processed/scene_01/splat.ply')
+cloud = load_gaussian_ply('D:/logicsplat_data/processed/scene_01/splat.ply')
 cf = filter_gaussians(cloud, opacity_threshold=0.1)
 objects, params = gaussian_to_objects(cf)
 
@@ -21,7 +21,7 @@ for o in objects:
     print(f"  Obj {o.uid} centroid={o.centroid.round(3)}")
 
 # load transforms
-with open('data/processed/scene_01/ns_data/transforms.json') as f:
+with open('D:/logicsplat_data/processed/scene_01/ns_data/transforms.json') as f:
     transforms = json.load(f)
 
 print(f"\nTransforms keys: {list(transforms.keys())[:10]}")
@@ -36,7 +36,7 @@ print(f"\nFrame 100: {frame['file_path']}")
 print(f"Transform matrix:\n{np.array(frame['transform_matrix']).round(3)}")
 
 # run YOLO on one frame
-images_dir = 'data/processed/scene_01/ns_data/images'
+images_dir = 'D:/logicsplat_data/processed/scene_01/ns_data/images'
 frames = sorted(os.listdir(images_dir))
 fname = frames[100]
 model = YOLO("yolov8n.pt")

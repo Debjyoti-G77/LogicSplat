@@ -11,7 +11,7 @@ import json
 SCENE_DIR = "D:/scannet/scans/scene0000_00"
 SCENE_ID  = "scene0000_00"
 SCANNET_DIR = "D:/scannet/scans"
-CACHE_DIR   = "data/scannet_cache"
+CACHE_DIR   = "D:/logicsplat_data/scannet_cache"
 
 print(f"=== PLY Reader Benchmark: {SCENE_ID} ===\n")
 

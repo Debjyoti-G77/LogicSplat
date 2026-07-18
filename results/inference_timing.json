@@ -1,0 +1,45 @@
+{
+  "tabletop_scene_06": {
+    "load_ply": 0.08674090000567958,
+    "filter_clean": 1.0380042000033427,
+    "clustering": 4.24053319999075,
+    "feature_extraction": 0.005108299999847077,
+    "model_load": 0.16519050000351854,
+    "gnn_inference_first_call": 0.4097596000065096,
+    "gnn_inference_steady_state_per_call": 0.0034376150004391095,
+    "thresholding": 0.005694899999070913,
+    "symbolic_repair": 0.00022020000324118882,
+    "total_end_to_end": 6.0200066000106744,
+    "total_excl_model_load": 5.854816100007156,
+    "n_raw_gaussians": 134872,
+    "n_objects": 4
+  },
+  "lerf_ramen": {
+    "load_ply": 0.11543079999682959,
+    "filter_clean": 0.23728530001244508,
+    "clustering": 4.691976499991142,
+    "feature_extraction": 0.01014969999960158,
+    "model_load": 0.0198958999972092,
+    "gnn_inference_first_call": 0.0161837000050582,
+    "gnn_inference_steady_state_per_call": 0.004125115000351798,
+    "thresholding": 0.0007901999924797565,
+    "symbolic_repair": 0.0020616999972844496,
+    "total_end_to_end": 5.176277699996717,
+    "total_excl_model_load": 5.156381799999508,
+    "n_raw_gaussians": 258668,
+    "n_objects": 13
+  },
+  "lerf_ramen_cpu": {
+    "load_ply": 0.11417640000581741,
+    "filter_clean": 0.27736510000249837,
+    "clustering": 4.7103729999944335,
+    "feature_extraction": 0.010181400008150376,
+    "model_load": 0.016444799999590032,
+    "gnn_inference_first_call": 0.06293210000148974,
+    "gnn_inference_steady_state_per_call": 0.0028482349996920677,
+    "thresholding": 0.0020255999988876283,
+    "symbolic_repair": 0.0020785000087926164,
+    "total_end_to_end": 5.252543200011132,
+    "total_excl_model_load": 5.236098400011542
+  }
+}

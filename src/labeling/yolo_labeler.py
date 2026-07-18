@@ -139,17 +139,27 @@ def project_point(
 
 def run_yolo_on_frames(
     images_dir: str,
-    frame_indices: List[int],
+    frame_filenames: List[str],
     confidence: float = 0.3,
 ) -> Dict[str, List[Dict]]:
-    """Run YOLO on selected frames. Returns {fname: [detections]}."""
+    """
+    Run YOLO on selected frames. Returns {fname: [detections]}.
+
+    Args:
+        images_dir:      directory containing the video frames
+        frame_filenames: list of filenames (basenames) to run YOLO on —
+                         these must match the filenames in transforms.json
+                         so that camera matrices and images stay in sync.
+        confidence:      minimum detection confidence
+    """
     from ultralytics import YOLO
     model = YOLO("yolov8n.pt")
-    frames = sorted(os.listdir(images_dir))
-    selected = [frames[i] for i in frame_indices if i < len(frames)]
     results = {}
-    for fname in selected:
+    for fname in frame_filenames:
         fpath = os.path.join(images_dir, fname)
+        if not os.path.exists(fpath):
+            results[fname] = []
+            continue
         preds = model(fpath, device="cpu", verbose=False)
         detections = []
         for r in preds:
@@ -190,9 +200,24 @@ def label_objects_with_yolo(
         n_frames:        number of frames to sample for voting
         confidence:      YOLO detection confidence threshold
         scene_dir:       scene root directory — used to find
-                         dataparser_transforms.json for coordinate correction.
+                         dataparser_transforms.json for coordinate correction
+                         and to save/load cached labels.
                          Defaults to the directory containing transforms_path.
     """
+    if scene_dir is None:
+        scene_dir = os.path.dirname(transforms_path)
+
+    # ── load cached labels if available ──────────────────────────────────
+    labels_path = os.path.join(scene_dir, "yolo_labels.json")
+    if os.path.exists(labels_path):
+        with open(labels_path) as f:
+            cached = json.load(f)
+        print(f"  Loaded cached YOLO labels from {labels_path}")
+        for obj in objects:
+            if str(obj.uid) in cached:
+                obj.label = cached[str(obj.uid)]
+                print(f"  Obj {obj.uid}: {obj.label} (cached)")
+        return objects
     transforms = load_transforms(transforms_path)
     frames_data = transforms.get("frames", [])
     if not frames_data:
@@ -208,8 +233,6 @@ def label_objects_with_yolo(
     cy = float(transforms.get("cy", h / 2))
 
     # load dataparser normalisation (may be None)
-    if scene_dir is None:
-        scene_dir = os.path.dirname(transforms_path)
     dataparser_transform = _load_dataparser_transform(scene_dir)
     if dataparser_transform is not None:
         print("  Loaded dataparser_transforms.json — applying coordinate correction")
@@ -217,15 +240,15 @@ def label_objects_with_yolo(
         print("  No dataparser_transforms.json found — assuming centroids are "
               "already in transforms.json world space")
 
-    # sample frames evenly
+    # sample frames evenly — keep filenames in sync with transform matrices
     total = len(frames_data)
     step = max(1, total // n_frames)
     sampled_frames = frames_data[::step][:n_frames]
+    # Use the filename from transforms.json so camera matrix and image match
     frame_names = [os.path.basename(f["file_path"]) for f in sampled_frames]
-    frame_indices = list(range(0, total, step))[:n_frames]
 
     print(f"Running YOLO on {len(sampled_frames)} frames...")
-    yolo_results = run_yolo_on_frames(images_dir, frame_indices, confidence)
+    yolo_results = run_yolo_on_frames(images_dir, frame_names, confidence)
 
     label_votes: Dict[int, Dict[str, int]] = {o.uid: {} for o in objects}
     projection_hits: Dict[int, int] = {o.uid: 0 for o in objects}
@@ -283,6 +306,14 @@ def label_objects_with_yolo(
         else:
             obj.label = "object"
 
+    # ── persist labels so they survive across runs ────────────────────────
+    if scene_dir is not None:
+        labels_path = os.path.join(scene_dir, "yolo_labels.json")
+        label_data = {str(obj.uid): obj.label for obj in objects}
+        with open(labels_path, "w") as f:
+            json.dump(label_data, f, indent=2)
+        print(f"  Labels saved to {labels_path}")
+
     return objects
 
 
@@ -299,7 +330,7 @@ def debug_projection(
 
     Usage:
         from src.labeling.yolo_labeler import debug_projection
-        debug_projection("data/processed/scene_01/ns_data/transforms.json",
+        debug_projection("D:/logicsplat_data/processed/scene_01/ns_data/transforms.json",
                          test_point=np.array([0.0, 0.0, 0.0]))
     """
     transforms = load_transforms(transforms_path)

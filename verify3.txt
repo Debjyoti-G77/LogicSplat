@@ -1,0 +1,5 @@
+agaro_box fix: True
+old agaro_box still present anywhere: False
+old water_bottle still present in 6.4: False
+Gamma carried forward sentence: True
+gamma_rbf definition: True

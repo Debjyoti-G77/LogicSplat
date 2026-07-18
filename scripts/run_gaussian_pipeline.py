@@ -18,7 +18,7 @@ import sys
 import argparse
 
 COLMAP_BIN = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "bin", "colmap.exe")
-DATA_DIR = "data/processed"
+DATA_DIR = "D:/logicsplat_data/processed"
 OUTPUTS_DIR = "outputs"
 
 

@@ -1,0 +1,127 @@
+Subject: LogicSplat — Progress Update Since Last Meeting
+
+Dear Sir,
+
+Following your guidance to focus on symbolic consistency repair and benchmark against ReLaGS/GaussianGraph on the same datasets, here's what has been accomplished:
+
+---
+
+1. SYMBOLIC CONSISTENCY REPAIR — IMPLEMENTED AND TESTED
+
+Built a complete deterministic constraint propagation module that:
+- Enforces inverse consistency (on_top_of(A,B) → under(B,A))
+- Resolves mutual exclusivity (left_of vs right_of for same pair)
+- Adds implied relations (on_top_of → higher_than)
+- Enforces transitivity (higher_than chains)
+- Uses fixed-point iteration until no contradictions remain
+
+Tested on our 8 custom scenes:
+- Geometry rules: 0 contradictions found (already consistent)
+- GNN predictions: +0.036 F1 improvement from inverse completion
+- The module works as designed — zero-parameter, deterministic
+
+---
+
+2. 3RScan DATASET — FULLY ACQUIRED
+
+Successfully obtained access to the official 3RScan dataset. Downloaded:
+- 566 Gaussian splat .ply files (196 GB) from HuggingFace (GaussianWorld/3rscan_mcmc_3dgs)
+- 566 mesh + instance segmentation files (8.65 GB) from the official 3RScan server
+- 3DSSG annotations (relationships.json, objects.json) — already had these
+
+All 566 scenes have complete data: Gaussian splats + mesh instance labels + relation annotations.
+
+---
+
+3. INSTANCE LABEL TRANSFER — COMPLETED
+
+Transferred instance segmentation labels from 3RScan meshes to Gaussian splat centers using nearest-neighbor lookup:
+- 566 scenes processed, 0 failures
+- Mean coverage: 82.7% of Gaussians assigned valid instance labels
+- Average 38.8 object instances per scene
+
+This gives us proper supervised training data — real Gaussian splats with correct instance labels from the official 3RScan annotations.
+
+---
+
+4. GNN TRAINING ON 3RScan GAUSSIAN SPLATS — IN PROGRESS
+
+Trained the dual-head GNN on 565 3RScan scenes with proper instance supervision and 3DSSG human-annotated relation labels.
+
+Current results (held-out 3RScan test split — 86 scenes from our 566, same distribution as training):
+- Macro F1 = 0.45
+- Best relations: on_top_of (0.68), under (0.67), left_of (0.58), right_of (0.58)
+- Weak relations: higher_than (0.25), lower_than (0.26), inside (0.12)
+
+Note: This is NOT the RIO10 benchmark evaluation yet — that requires processing the 46 RIO10 test scenes which we're downloading next.
+
+Key issues identified and partially fixed:
+- Y-axis sign convention was flipped (3DSSG uses -Y=front, not +Y) — fixed, improved front/behind from 0.20 to 0.44
+- Directional supervision masked to same-support pairs only
+- Inverse label injection added (on_top_of → under, etc.)
+
+Still working on improving higher_than/lower_than performance.
+
+---
+
+4b. CROSS-DOMAIN TRANSFER — GNN IS FINALLY LEARNING
+
+Tested the 3RScan-trained model on our 8 custom tabletop scenes (completely unseen domain):
+- Micro F1 = 0.35, Macro F1 = 0.37
+- left_of: 0.734, right_of: 0.753 (excellent cross-domain transfer)
+- Other relations still need improvement on tabletop scale
+
+This is a major improvement from our earlier attempts where the GNN produced F1 = 0.01 on tabletop scenes. Training on real Gaussian splats (3RScan) instead of mesh features (ScanNet) has resolved the fundamental domain gap for directional relations. Further fine-tuning and threshold calibration should improve the remaining relations.
+
+---
+
+5. ReLaGS PAPER — THOROUGHLY ANALYZED
+
+Read the full ReLaGS paper. Key findings for our comparison:
+
+Their results on 3DSSG (RIO10 subset):
+- Predicate Recall@3 = 0.79
+- Predicate Recall@5 = 0.87
+- Uses: CLIP + SAM + Jina embeddings (~1.5B parameters of foundation models)
+- GPU memory: 7.5 GB
+- Processing time: 12.6 minutes per scene
+
+Our lightweight alternative:
+- Uses: 17-dim geometric features + 500K-parameter GNN + symbolic repair
+- No foundation models
+- GPU memory: <2 GB
+- The comparison story: "We achieve X% of their performance with 0.03% of their model parameters"
+
+---
+
+6. BENCHMARK EVALUATION — NEXT STEP
+
+Identified that ReLaGS evaluates on the RIO10 subset (46 specific test scenes from 3RScan). These scenes are NOT in the HuggingFace pre-computed splats — they were intentionally excluded.
+
+Current plan:
+- Download the RGB-D sequences for the 46 RIO10 test scenes from the official 3RScan server
+- Process them through NerfStudio to create Gaussian splats
+- Transfer instance labels
+- Evaluate our model using the same Recall@K metrics as ReLaGS
+- This gives us a direct, fair comparison on the exact same test set
+
+This processing step will take ~1-2 days (download + NerfStudio training for 46 scenes).
+
+---
+
+7. NEXT STEPS (seeking your input)
+
+Once the RIO10 evaluation is complete, I plan to:
+a) Report our Recall@K numbers alongside ReLaGS's published numbers
+b) Show the symbolic repair's impact on the benchmark
+c) Highlight the compute/memory efficiency advantage
+
+Before finalizing the approach, I wanted to ask:
+- Should I also explore additional lightweight techniques to improve our Predicate Recall (currently ~0.45 F1, need to compute R@K)?
+- Is the "lightweight alternative with guaranteed consistency" framing sufficient, or should we aim to close the performance gap further?
+- Any suggestions on what else could strengthen our contribution?
+
+Happy to discuss in our next meeting.
+
+Best regards,
+Debjyoti Sengupta

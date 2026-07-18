@@ -35,7 +35,7 @@ st.set_page_config(
 )
 
 # ── constants ─────────────────────────────────────────────────────────────────
-DATA_DIR   = "data/processed"
+DATA_DIR   = "D:/logicsplat_data/processed"
 MODELS_DIR = "models"
 RELATION_COLORS = {
     "on_top_of":   "#2ecc71",

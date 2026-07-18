@@ -1,0 +1,4869 @@
+{
+  "methods": {
+    "Geometry Rules": {
+      "relation_only": {
+        "scenes": [
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 32,
+            "fp": 14,
+            "fn": 24,
+            "precision": 0.6957,
+            "recall": 0.5714,
+            "f1": 0.6275,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 6,
+                "precision": 1.0,
+                "recall": 0.25,
+                "f1": 0.4
+              },
+              "higher_than": {
+                "tp": 7,
+                "fp": 2,
+                "fn": 3,
+                "precision": 0.7777777777777778,
+                "recall": 0.7,
+                "f1": 0.7368421052631577
+              },
+              "in_front_of": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 6,
+                "precision": 1.0,
+                "recall": 0.25,
+                "f1": 0.4
+              },
+              "left_of": {
+                "tp": 6,
+                "fp": 3,
+                "fn": 2,
+                "precision": 0.6666666666666666,
+                "recall": 0.75,
+                "f1": 0.7058823529411765
+              },
+              "lower_than": {
+                "tp": 7,
+                "fp": 2,
+                "fn": 3,
+                "precision": 0.7777777777777778,
+                "recall": 0.7,
+                "f1": 0.7368421052631577
+              },
+              "on_top_of": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6666666666666666
+              },
+              "right_of": {
+                "tp": 6,
+                "fp": 3,
+                "fn": 2,
+                "precision": 0.6666666666666666,
+                "recall": 0.75,
+                "f1": 0.7058823529411765
+              },
+              "under": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6666666666666666
+              }
+            },
+            "scene_id": "scene_06"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 16,
+            "fp": 14,
+            "fn": 8,
+            "precision": 0.5333,
+            "recall": 0.6667,
+            "f1": 0.5926,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 2,
+                "precision": 0.8,
+                "recall": 0.6666666666666666,
+                "f1": 0.7272727272727272
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 4,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.6666666666666666,
+                "recall": 0.6666666666666666,
+                "f1": 0.6666666666666666
+              },
+              "lower_than": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 2,
+                "precision": 0.8,
+                "recall": 0.6666666666666666,
+                "f1": 0.7272727272727272
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 4,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.6666666666666666,
+                "recall": 0.6666666666666666,
+                "f1": 0.6666666666666666
+              },
+              "under": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_07"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 10,
+            "fp": 16,
+            "fn": 22,
+            "precision": 0.3846,
+            "recall": 0.3125,
+            "f1": 0.3448,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 5,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.8333333333333334,
+                "recall": 1.0,
+                "f1": 0.9090909090909091
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 5,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.8333333333333334,
+                "recall": 1.0,
+                "f1": 0.9090909090909091
+              },
+              "under": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_08"
+          },
+          {
+            "obj_coverage": 0.75,
+            "pair_coverage": 0.467,
+            "tp": 4,
+            "fp": 8,
+            "fn": 10,
+            "precision": 0.3333,
+            "recall": 0.2857,
+            "f1": 0.3077,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.6666666666666666,
+                "f1": 0.8
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.6666666666666666,
+                "f1": 0.8
+              }
+            },
+            "scene_id": "scene_09"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 12,
+            "fp": 16,
+            "fn": 12,
+            "precision": 0.4286,
+            "recall": 0.5,
+            "f1": 0.4615,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.4,
+                "recall": 0.3333333333333333,
+                "f1": 0.3636363636363636
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.8,
+                "recall": 0.8,
+                "f1": 0.8000000000000002
+              },
+              "lower_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.4,
+                "recall": 0.3333333333333333,
+                "f1": 0.3636363636363636
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.8,
+                "recall": 0.8,
+                "f1": 0.8000000000000002
+              },
+              "under": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_10"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 14,
+            "fp": 14,
+            "fn": 10,
+            "precision": 0.5,
+            "recall": 0.5833,
+            "f1": 0.5385,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.4,
+                "recall": 0.3333333333333333,
+                "f1": 0.3636363636363636
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 5,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.8333333333333334,
+                "f1": 0.9090909090909091
+              },
+              "lower_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.4,
+                "recall": 0.3333333333333333,
+                "f1": 0.3636363636363636
+              },
+              "right_of": {
+                "tp": 5,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.8333333333333334,
+                "f1": 0.9090909090909091
+              }
+            },
+            "scene_id": "scene_11"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 8,
+            "fp": 20,
+            "fn": 22,
+            "precision": 0.2857,
+            "recall": 0.2667,
+            "f1": 0.2759,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 2,
+                "precision": 1.0,
+                "recall": 0.3333333333333333,
+                "f1": 0.5
+              },
+              "higher_than": {
+                "tp": 0,
+                "fp": 5,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "in_front_of": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 2,
+                "precision": 1.0,
+                "recall": 0.3333333333333333,
+                "f1": 0.5
+              },
+              "left_of": {
+                "tp": 3,
+                "fp": 3,
+                "fn": 2,
+                "precision": 0.5,
+                "recall": 0.6,
+                "f1": 0.5454545454545454
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 5,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 3,
+                "fp": 3,
+                "fn": 2,
+                "precision": 0.5,
+                "recall": 0.6,
+                "f1": 0.5454545454545454
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_12"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 12,
+            "fp": 16,
+            "fn": 10,
+            "precision": 0.4286,
+            "recall": 0.5455,
+            "f1": 0.48,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 2,
+                "fn": 3,
+                "precision": 0.5,
+                "recall": 0.4,
+                "f1": 0.4444444444444445
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 4,
+                "fp": 2,
+                "fn": 1,
+                "precision": 0.6666666666666666,
+                "recall": 0.8,
+                "f1": 0.7272727272727272
+              },
+              "lower_than": {
+                "tp": 2,
+                "fp": 2,
+                "fn": 3,
+                "precision": 0.5,
+                "recall": 0.4,
+                "f1": 0.4444444444444445
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 4,
+                "fp": 2,
+                "fn": 1,
+                "precision": 0.6666666666666666,
+                "recall": 0.8,
+                "f1": 0.7272727272727272
+              },
+              "under": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_13"
+          }
+        ],
+        "aggregate": {
+          "micro_f1": 0.4779,
+          "macro_f1": 0.4536,
+          "micro_precision": 0.4779,
+          "micro_recall": 0.4779,
+          "avg_obj_coverage": 0.969,
+          "avg_pair_coverage": 0.933,
+          "ci_95": [
+            0.371,
+            0.5366
+          ],
+          "per_relation": {
+            "adjacent_to": {
+              "tp": 0,
+              "fp": 18,
+              "fn": 4,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "behind": {
+              "tp": 3,
+              "fp": 13,
+              "fn": 12,
+              "precision": 0.1875,
+              "recall": 0.2,
+              "f1": 0.19354838709677422
+            },
+            "higher_than": {
+              "tp": 17,
+              "fp": 20,
+              "fn": 31,
+              "precision": 0.4594594594594595,
+              "recall": 0.3541666666666667,
+              "f1": 0.4000000000000001
+            },
+            "in_front_of": {
+              "tp": 3,
+              "fp": 13,
+              "fn": 12,
+              "precision": 0.1875,
+              "recall": 0.2,
+              "f1": 0.19354838709677422
+            },
+            "left_of": {
+              "tp": 33,
+              "fp": 12,
+              "fn": 10,
+              "precision": 0.7333333333333333,
+              "recall": 0.7674418604651163,
+              "f1": 0.7499999999999999
+            },
+            "lower_than": {
+              "tp": 17,
+              "fp": 20,
+              "fn": 31,
+              "precision": 0.4594594594594595,
+              "recall": 0.3541666666666667,
+              "f1": 0.4000000000000001
+            },
+            "on_top_of": {
+              "tp": 1,
+              "fp": 5,
+              "fn": 4,
+              "precision": 0.16666666666666666,
+              "recall": 0.2,
+              "f1": 0.1818181818181818
+            },
+            "right_of": {
+              "tp": 33,
+              "fp": 12,
+              "fn": 10,
+              "precision": 0.7333333333333333,
+              "recall": 0.7674418604651163,
+              "f1": 0.7499999999999999
+            },
+            "under": {
+              "tp": 1,
+              "fp": 5,
+              "fn": 4,
+              "precision": 0.16666666666666666,
+              "recall": 0.2,
+              "f1": 0.1818181818181818
+            }
+          }
+        }
+      },
+      "end_to_end": {
+        "scenes": [
+          {
+            "tp": 30,
+            "fp": 90,
+            "fn": 26,
+            "precision": 0.25,
+            "recall": 0.5357,
+            "f1": 0.3409,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 2,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 6,
+                "precision": 1.0,
+                "recall": 0.25,
+                "f1": 0.4
+              },
+              "higher_than": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 4,
+                "precision": 0.75,
+                "recall": 0.6,
+                "f1": 0.6666666666666665
+              },
+              "in_front_of": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 6,
+                "precision": 1.0,
+                "recall": 0.25,
+                "f1": 0.4
+              },
+              "left_of": {
+                "tp": 6,
+                "fp": 3,
+                "fn": 2,
+                "precision": 0.6666666666666666,
+                "recall": 0.75,
+                "f1": 0.7058823529411765
+              },
+              "lower_than": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 4,
+                "precision": 0.75,
+                "recall": 0.6,
+                "f1": 0.6666666666666665
+              },
+              "on_top_of": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6666666666666666
+              },
+              "right_of": {
+                "tp": 6,
+                "fp": 3,
+                "fn": 2,
+                "precision": 0.6666666666666666,
+                "recall": 0.75,
+                "f1": 0.7058823529411765
+              },
+              "under": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6666666666666666
+              }
+            },
+            "pred_unmatched_fp": 78,
+            "scene_id": "scene_06"
+          },
+          {
+            "tp": 4,
+            "fp": 110,
+            "fn": 20,
+            "precision": 0.0351,
+            "recall": 0.1667,
+            "f1": 0.058,
+            "per_relation": {
+              "behind": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 4,
+                "precision": 0.6666666666666666,
+                "recall": 0.3333333333333333,
+                "f1": 0.4444444444444444
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "lower_than": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 4,
+                "precision": 0.6666666666666666,
+                "recall": 0.3333333333333333,
+                "f1": 0.4444444444444444
+              },
+              "right_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 98,
+            "scene_id": "scene_07"
+          },
+          {
+            "tp": 6,
+            "fp": 86,
+            "fn": 26,
+            "precision": 0.0652,
+            "recall": 0.1875,
+            "f1": 0.0968,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.5,
+                "recall": 0.16666666666666666,
+                "f1": 0.25
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 3,
+                "precision": 0.6666666666666666,
+                "recall": 0.4,
+                "f1": 0.5
+              },
+              "lower_than": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.5,
+                "recall": 0.16666666666666666,
+                "f1": 0.25
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 3,
+                "precision": 0.6666666666666666,
+                "recall": 0.4,
+                "f1": 0.5
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 80,
+            "scene_id": "scene_08"
+          },
+          {
+            "tp": 10,
+            "fp": 92,
+            "fn": 20,
+            "precision": 0.098,
+            "recall": 0.3333,
+            "f1": 0.1515,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 4,
+                "precision": 0.6666666666666666,
+                "recall": 0.3333333333333333,
+                "f1": 0.4444444444444444
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 3,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6666666666666666
+              },
+              "lower_than": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 4,
+                "precision": 0.6666666666666666,
+                "recall": 0.3333333333333333,
+                "f1": 0.4444444444444444
+              },
+              "right_of": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 3,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6666666666666666
+              }
+            },
+            "pred_unmatched_fp": 88,
+            "scene_id": "scene_09"
+          },
+          {
+            "tp": 12,
+            "fp": 116,
+            "fn": 12,
+            "precision": 0.0938,
+            "recall": 0.5,
+            "f1": 0.1579,
+            "per_relation": {
+              "higher_than": {
+                "tp": 1,
+                "fp": 3,
+                "fn": 5,
+                "precision": 0.25,
+                "recall": 0.16666666666666666,
+                "f1": 0.2
+              },
+              "left_of": {
+                "tp": 5,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.8333333333333334,
+                "recall": 1.0,
+                "f1": 0.9090909090909091
+              },
+              "lower_than": {
+                "tp": 1,
+                "fp": 3,
+                "fn": 5,
+                "precision": 0.25,
+                "recall": 0.16666666666666666,
+                "f1": 0.2
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 5,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.8333333333333334,
+                "recall": 1.0,
+                "f1": 0.9090909090909091
+              },
+              "under": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 104,
+            "scene_id": "scene_10"
+          },
+          {
+            "tp": 12,
+            "fp": 118,
+            "fn": 12,
+            "precision": 0.0923,
+            "recall": 0.5,
+            "f1": 0.1558,
+            "per_relation": {
+              "behind": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.4,
+                "recall": 0.3333333333333333,
+                "f1": 0.3636363636363636
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 2,
+                "precision": 0.8,
+                "recall": 0.6666666666666666,
+                "f1": 0.7272727272727272
+              },
+              "lower_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.4,
+                "recall": 0.3333333333333333,
+                "f1": 0.3636363636363636
+              },
+              "right_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 2,
+                "precision": 0.8,
+                "recall": 0.6666666666666666,
+                "f1": 0.7272727272727272
+              }
+            },
+            "pred_unmatched_fp": 104,
+            "scene_id": "scene_11"
+          },
+          {
+            "tp": 6,
+            "fp": 102,
+            "fn": 24,
+            "precision": 0.0556,
+            "recall": 0.2,
+            "f1": 0.087,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 3,
+                "fp": 3,
+                "fn": 2,
+                "precision": 0.5,
+                "recall": 0.6,
+                "f1": 0.5454545454545454
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 3,
+                "fp": 3,
+                "fn": 2,
+                "precision": 0.5,
+                "recall": 0.6,
+                "f1": 0.5454545454545454
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 88,
+            "scene_id": "scene_12"
+          },
+          {
+            "tp": 12,
+            "fp": 80,
+            "fn": 10,
+            "precision": 0.1304,
+            "recall": 0.5455,
+            "f1": 0.2105,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 3,
+                "precision": 0.4,
+                "recall": 0.4,
+                "f1": 0.4000000000000001
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.8,
+                "recall": 0.8,
+                "f1": 0.8000000000000002
+              },
+              "lower_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 3,
+                "precision": 0.4,
+                "recall": 0.4,
+                "f1": 0.4000000000000001
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.8,
+                "recall": 0.8,
+                "f1": 0.8000000000000002
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 64,
+            "scene_id": "scene_13"
+          }
+        ],
+        "aggregate": {
+          "micro_f1": 0.1631,
+          "macro_f1": 0.1573,
+          "micro_precision": 0.1038,
+          "micro_recall": 0.3802,
+          "ci_95": [
+            0.1049,
+            0.2184
+          ],
+          "per_relation": {
+            "adjacent_to": {
+              "tp": 0,
+              "fp": 6,
+              "fn": 8,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "behind": {
+              "tp": 2,
+              "fp": 10,
+              "fn": 13,
+              "precision": 0.16666666666666666,
+              "recall": 0.13333333333333333,
+              "f1": 0.14814814814814814
+            },
+            "higher_than": {
+              "tp": 16,
+              "fp": 17,
+              "fn": 35,
+              "precision": 0.48484848484848486,
+              "recall": 0.3137254901960784,
+              "f1": 0.380952380952381
+            },
+            "in_front_of": {
+              "tp": 2,
+              "fp": 10,
+              "fn": 13,
+              "precision": 0.16666666666666666,
+              "recall": 0.13333333333333333,
+              "f1": 0.14814814814814814
+            },
+            "left_of": {
+              "tp": 27,
+              "fp": 12,
+              "fn": 19,
+              "precision": 0.6923076923076923,
+              "recall": 0.5869565217391305,
+              "f1": 0.6352941176470588
+            },
+            "lower_than": {
+              "tp": 16,
+              "fp": 17,
+              "fn": 35,
+              "precision": 0.48484848484848486,
+              "recall": 0.3137254901960784,
+              "f1": 0.380952380952381
+            },
+            "on_top_of": {
+              "tp": 1,
+              "fp": 3,
+              "fn": 4,
+              "precision": 0.25,
+              "recall": 0.2,
+              "f1": 0.22222222222222224
+            },
+            "right_of": {
+              "tp": 27,
+              "fp": 12,
+              "fn": 19,
+              "precision": 0.6923076923076923,
+              "recall": 0.5869565217391305,
+              "f1": 0.6352941176470588
+            },
+            "under": {
+              "tp": 1,
+              "fp": 3,
+              "fn": 4,
+              "precision": 0.25,
+              "recall": 0.2,
+              "f1": 0.22222222222222224
+            }
+          }
+        }
+      },
+      "clustering": {
+        "scenes": [
+          {
+            "n_gt": 5,
+            "n_pred": 5,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_06"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_07"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_08"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 3,
+            "count_error": 1,
+            "obj_recall": 0.75,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_09"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_10"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_11"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_12"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_13"
+          }
+        ]
+      }
+    },
+    "GNN v7 (ScanNet pretrained)": {
+      "relation_only": {
+        "scenes": [
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 22,
+            "fp": 46,
+            "fn": 34,
+            "precision": 0.3235,
+            "recall": 0.3929,
+            "f1": 0.3548,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 2,
+                "fp": 14,
+                "fn": 0,
+                "precision": 0.125,
+                "recall": 1.0,
+                "f1": 0.2222222222222222
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 17,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 8,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 7,
+                "fp": 2,
+                "fn": 3,
+                "precision": 0.7777777777777778,
+                "recall": 0.7,
+                "f1": 0.7368421052631577
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 8,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.75,
+                "recall": 0.75,
+                "f1": 0.75
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 10,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 1,
+                "fp": 7,
+                "fn": 0,
+                "precision": 0.125,
+                "recall": 1.0,
+                "f1": 0.2222222222222222
+              },
+              "right_of": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.75,
+                "recall": 0.75,
+                "f1": 0.75
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_06"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 11,
+            "fp": 27,
+            "fn": 13,
+            "precision": 0.2895,
+            "recall": 0.4583,
+            "f1": 0.3548,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 7,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 2,
+                "precision": 0.8,
+                "recall": 0.6666666666666666,
+                "f1": 0.7272727272727272
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 5,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 3,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6666666666666666
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 4,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.6666666666666666,
+                "recall": 0.6666666666666666,
+                "f1": 0.6666666666666666
+              }
+            },
+            "scene_id": "scene_07"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 8,
+            "fp": 29,
+            "fn": 24,
+            "precision": 0.2162,
+            "recall": 0.25,
+            "f1": 0.2319,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 8,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 4,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.8,
+                "f1": 0.888888888888889
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 4,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.8,
+                "f1": 0.888888888888889
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_08"
+          },
+          {
+            "obj_coverage": 0.75,
+            "pair_coverage": 0.467,
+            "tp": 6,
+            "fp": 10,
+            "fn": 8,
+            "precision": 0.375,
+            "recall": 0.4286,
+            "f1": 0.4,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.4,
+                "recall": 1.0,
+                "f1": 0.5714285714285715
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 6,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 2,
+                "precision": 1.0,
+                "recall": 0.3333333333333333,
+                "f1": 0.5
+              }
+            },
+            "scene_id": "scene_09"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 10,
+            "fp": 26,
+            "fn": 14,
+            "precision": 0.2778,
+            "recall": 0.4167,
+            "f1": 0.3333,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 9,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 9,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.4,
+                "recall": 0.3333333333333333,
+                "f1": 0.3636363636363636
+              },
+              "left_of": {
+                "tp": 4,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.8,
+                "f1": 0.888888888888889
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.8,
+                "recall": 0.8,
+                "f1": 0.8000000000000002
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_10"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 7,
+            "fp": 28,
+            "fn": 17,
+            "precision": 0.2,
+            "recall": 0.2917,
+            "f1": 0.2373,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.4,
+                "recall": 0.3333333333333333,
+                "f1": 0.3636363636363636
+              },
+              "left_of": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 3,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6666666666666666
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 4,
+                "precision": 1.0,
+                "recall": 0.3333333333333333,
+                "f1": 0.5
+              }
+            },
+            "scene_id": "scene_11"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 3,
+            "fp": 29,
+            "fn": 27,
+            "precision": 0.0938,
+            "recall": 0.1,
+            "f1": 0.0968,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 7,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 7,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 0,
+                "fp": 5,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 5,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 3,
+                "fp": 3,
+                "fn": 2,
+                "precision": 0.5,
+                "recall": 0.6,
+                "f1": 0.5454545454545454
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_12"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 7,
+            "fp": 32,
+            "fn": 15,
+            "precision": 0.1795,
+            "recall": 0.3182,
+            "f1": 0.2295,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 9,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 11,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 2,
+                "fn": 3,
+                "precision": 0.5,
+                "recall": 0.4,
+                "f1": 0.4444444444444445
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 3,
+                "precision": 0.6666666666666666,
+                "recall": 0.4,
+                "f1": 0.5
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 5,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 1,
+                "fp": 5,
+                "fn": 0,
+                "precision": 0.16666666666666666,
+                "recall": 1.0,
+                "f1": 0.2857142857142857
+              },
+              "right_of": {
+                "tp": 2,
+                "fp": 2,
+                "fn": 3,
+                "precision": 0.5,
+                "recall": 0.4,
+                "f1": 0.4444444444444445
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_13"
+          }
+        ],
+        "aggregate": {
+          "micro_f1": 0.2808,
+          "macro_f1": 0.2798,
+          "micro_precision": 0.2458,
+          "micro_recall": 0.3274,
+          "avg_obj_coverage": 0.969,
+          "avg_pair_coverage": 0.933,
+          "ci_95": [
+            0.2132,
+            0.3383
+          ],
+          "per_relation": {
+            "adjacent_to": {
+              "tp": 4,
+              "fp": 67,
+              "fn": 0,
+              "precision": 0.056338028169014086,
+              "recall": 1.0,
+              "f1": 0.10666666666666667
+            },
+            "attached_to": {
+              "tp": 0,
+              "fp": 80,
+              "fn": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "behind": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 15,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "higher_than": {
+              "tp": 17,
+              "fp": 20,
+              "fn": 31,
+              "precision": 0.4594594594594595,
+              "recall": 0.3541666666666667,
+              "f1": 0.4000000000000001
+            },
+            "in_front_of": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 15,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "inside": {
+              "tp": 0,
+              "fp": 17,
+              "fn": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "left_of": {
+              "tp": 25,
+              "fp": 6,
+              "fn": 18,
+              "precision": 0.8064516129032258,
+              "recall": 0.5813953488372093,
+              "f1": 0.6756756756756758
+            },
+            "lower_than": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 48,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "on_top_of": {
+              "tp": 2,
+              "fp": 26,
+              "fn": 3,
+              "precision": 0.07142857142857142,
+              "recall": 0.4,
+              "f1": 0.12121212121212122
+            },
+            "right_of": {
+              "tp": 26,
+              "fp": 10,
+              "fn": 17,
+              "precision": 0.7222222222222222,
+              "recall": 0.6046511627906976,
+              "f1": 0.6582278481012659
+            },
+            "under": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 5,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          }
+        }
+      },
+      "end_to_end": {
+        "scenes": [
+          {
+            "tp": 20,
+            "fp": 147,
+            "fn": 36,
+            "precision": 0.1198,
+            "recall": 0.3571,
+            "f1": 0.1794,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 1,
+                "fp": 14,
+                "fn": 1,
+                "precision": 0.06666666666666667,
+                "recall": 0.5,
+                "f1": 0.11764705882352941
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 13,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 8,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 4,
+                "precision": 0.75,
+                "recall": 0.6,
+                "f1": 0.6666666666666665
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 8,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.75,
+                "recall": 0.75,
+                "f1": 0.75
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 10,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 1,
+                "fp": 5,
+                "fn": 0,
+                "precision": 0.16666666666666666,
+                "recall": 1.0,
+                "f1": 0.2857142857142857
+              },
+              "right_of": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.75,
+                "recall": 0.75,
+                "f1": 0.75
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 108,
+            "scene_id": "scene_06"
+          },
+          {
+            "tp": 3,
+            "fp": 160,
+            "fn": 21,
+            "precision": 0.0184,
+            "recall": 0.125,
+            "f1": 0.0321,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.5,
+                "recall": 0.16666666666666666,
+                "f1": 0.25
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "lower_than": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 4,
+                "precision": 0.6666666666666666,
+                "recall": 0.3333333333333333,
+                "f1": 0.4444444444444444
+              },
+              "right_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "under": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 148,
+            "scene_id": "scene_07"
+          },
+          {
+            "tp": 5,
+            "fp": 128,
+            "fn": 27,
+            "precision": 0.0376,
+            "recall": 0.1562,
+            "f1": 0.0606,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 5,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 5,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.5,
+                "recall": 0.16666666666666666,
+                "f1": 0.25
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 3,
+                "precision": 0.6666666666666666,
+                "recall": 0.4,
+                "f1": 0.5
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 3,
+                "precision": 0.6666666666666666,
+                "recall": 0.4,
+                "f1": 0.5
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 113,
+            "scene_id": "scene_08"
+          },
+          {
+            "tp": 7,
+            "fp": 120,
+            "fn": 23,
+            "precision": 0.0551,
+            "recall": 0.2333,
+            "f1": 0.0892,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 2,
+                "fp": 4,
+                "fn": 4,
+                "precision": 0.3333333333333333,
+                "recall": 0.3333333333333333,
+                "f1": 0.3333333333333333
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 6,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.5,
+                "recall": 0.16666666666666666,
+                "f1": 0.25
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 3,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6666666666666666
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 5,
+                "precision": 1.0,
+                "recall": 0.16666666666666666,
+                "f1": 0.2857142857142857
+              }
+            },
+            "pred_unmatched_fp": 104,
+            "scene_id": "scene_09"
+          },
+          {
+            "tp": 11,
+            "fp": 166,
+            "fn": 13,
+            "precision": 0.0621,
+            "recall": 0.4583,
+            "f1": 0.1095,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 8,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 1,
+                "fp": 3,
+                "fn": 5,
+                "precision": 0.25,
+                "recall": 0.16666666666666666,
+                "f1": 0.2
+              },
+              "left_of": {
+                "tp": 5,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.8333333333333334,
+                "recall": 1.0,
+                "f1": 0.9090909090909091
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 5,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 141,
+            "scene_id": "scene_10"
+          },
+          {
+            "tp": 5,
+            "fp": 175,
+            "fn": 19,
+            "precision": 0.0278,
+            "recall": 0.2083,
+            "f1": 0.049,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 11,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 1,
+                "fp": 3,
+                "fn": 5,
+                "precision": 0.25,
+                "recall": 0.16666666666666666,
+                "f1": 0.2
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 3,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6666666666666666
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 5,
+                "precision": 1.0,
+                "recall": 0.16666666666666666,
+                "f1": 0.2857142857142857
+              }
+            },
+            "pred_unmatched_fp": 143,
+            "scene_id": "scene_11"
+          },
+          {
+            "tp": 4,
+            "fp": 168,
+            "fn": 26,
+            "precision": 0.0233,
+            "recall": 0.1333,
+            "f1": 0.0396,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 8,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 9,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 1,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.25,
+                "recall": 0.2,
+                "f1": 0.22222222222222224
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 3,
+                "fp": 3,
+                "fn": 2,
+                "precision": 0.5,
+                "recall": 0.6,
+                "f1": 0.5454545454545454
+              },
+              "under": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 135,
+            "scene_id": "scene_12"
+          },
+          {
+            "tp": 11,
+            "fp": 131,
+            "fn": 11,
+            "precision": 0.0775,
+            "recall": 0.5,
+            "f1": 0.1341,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 9,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 11,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 3,
+                "precision": 0.4,
+                "recall": 0.4,
+                "f1": 0.4000000000000001
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 3,
+                "fp": 1,
+                "fn": 2,
+                "precision": 0.75,
+                "recall": 0.6,
+                "f1": 0.6666666666666665
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 5,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 1,
+                "fp": 4,
+                "fn": 0,
+                "precision": 0.2,
+                "recall": 1.0,
+                "f1": 0.33333333333333337
+              },
+              "right_of": {
+                "tp": 5,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.8333333333333334,
+                "recall": 1.0,
+                "f1": 0.9090909090909091
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 99,
+            "scene_id": "scene_13"
+          }
+        ],
+        "aggregate": {
+          "micro_f1": 0.0878,
+          "macro_f1": 0.0867,
+          "micro_precision": 0.0523,
+          "micro_recall": 0.2727,
+          "ci_95": [
+            0.0555,
+            0.1189
+          ],
+          "per_relation": {
+            "adjacent_to": {
+              "tp": 3,
+              "fp": 63,
+              "fn": 5,
+              "precision": 0.045454545454545456,
+              "recall": 0.375,
+              "f1": 0.08108108108108107
+            },
+            "attached_to": {
+              "tp": 0,
+              "fp": 67,
+              "fn": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "behind": {
+              "tp": 0,
+              "fp": 5,
+              "fn": 15,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "higher_than": {
+              "tp": 13,
+              "fp": 17,
+              "fn": 38,
+              "precision": 0.43333333333333335,
+              "recall": 0.2549019607843137,
+              "f1": 0.32098765432098764
+            },
+            "in_front_of": {
+              "tp": 0,
+              "fp": 4,
+              "fn": 15,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "inside": {
+              "tp": 0,
+              "fp": 8,
+              "fn": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "left_of": {
+              "tp": 23,
+              "fp": 8,
+              "fn": 23,
+              "precision": 0.7419354838709677,
+              "recall": 0.5,
+              "f1": 0.5974025974025974
+            },
+            "lower_than": {
+              "tp": 2,
+              "fp": 4,
+              "fn": 49,
+              "precision": 0.3333333333333333,
+              "recall": 0.0392156862745098,
+              "f1": 0.07017543859649122
+            },
+            "on_top_of": {
+              "tp": 2,
+              "fp": 19,
+              "fn": 3,
+              "precision": 0.09523809523809523,
+              "recall": 0.4,
+              "f1": 0.15384615384615385
+            },
+            "right_of": {
+              "tp": 23,
+              "fp": 7,
+              "fn": 23,
+              "precision": 0.7666666666666667,
+              "recall": 0.5,
+              "f1": 0.605263157894737
+            },
+            "under": {
+              "tp": 0,
+              "fp": 2,
+              "fn": 5,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          }
+        }
+      },
+      "clustering": {
+        "scenes": [
+          {
+            "n_gt": 5,
+            "n_pred": 5,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_06"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_07"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_08"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 3,
+            "count_error": 1,
+            "obj_recall": 0.75,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_09"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_10"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_11"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_12"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_13"
+          }
+        ]
+      }
+    },
+    "GNN v7 (Tabletop fine-tuned)": {
+      "relation_only": {
+        "scenes": [
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 26,
+            "fp": 46,
+            "fn": 30,
+            "precision": 0.3611,
+            "recall": 0.4643,
+            "f1": 0.4063,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 2,
+                "fp": 14,
+                "fn": 0,
+                "precision": 0.125,
+                "recall": 1.0,
+                "f1": 0.2222222222222222
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 18,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 8,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 7,
+                "fp": 2,
+                "fn": 3,
+                "precision": 0.7777777777777778,
+                "recall": 0.7,
+                "f1": 0.7368421052631577
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 8,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.75,
+                "recall": 0.75,
+                "f1": 0.75
+              },
+              "lower_than": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 7,
+                "precision": 1.0,
+                "recall": 0.3,
+                "f1": 0.4615384615384615
+              },
+              "on_top_of": {
+                "tp": 1,
+                "fp": 5,
+                "fn": 0,
+                "precision": 0.16666666666666666,
+                "recall": 1.0,
+                "f1": 0.2857142857142857
+              },
+              "right_of": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.75,
+                "recall": 0.75,
+                "f1": 0.75
+              },
+              "under": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6666666666666666
+              }
+            },
+            "scene_id": "scene_06"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 11,
+            "fp": 29,
+            "fn": 13,
+            "precision": 0.275,
+            "recall": 0.4583,
+            "f1": 0.3437,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 8,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 11,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 3,
+                "fp": 1,
+                "fn": 3,
+                "precision": 0.75,
+                "recall": 0.5,
+                "f1": 0.6
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 5,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 3,
+                "fp": 2,
+                "fn": 3,
+                "precision": 0.6,
+                "recall": 0.5,
+                "f1": 0.5454545454545454
+              },
+              "lower_than": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 4,
+                "precision": 1.0,
+                "recall": 0.3333333333333333,
+                "f1": 0.5
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 3,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6666666666666666
+              },
+              "under": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_07"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 10,
+            "fp": 30,
+            "fn": 22,
+            "precision": 0.25,
+            "recall": 0.3125,
+            "f1": 0.2778,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 12,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 5,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 5,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_08"
+          },
+          {
+            "obj_coverage": 0.75,
+            "pair_coverage": 0.467,
+            "tp": 8,
+            "fp": 11,
+            "fn": 6,
+            "precision": 0.4211,
+            "recall": 0.5714,
+            "f1": 0.4848,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 2,
+                "fp": 4,
+                "fn": 0,
+                "precision": 0.3333333333333333,
+                "recall": 1.0,
+                "f1": 0.5
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 6,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              }
+            },
+            "scene_id": "scene_09"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 11,
+            "fp": 27,
+            "fn": 13,
+            "precision": 0.2895,
+            "recall": 0.4583,
+            "f1": 0.3548,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.4,
+                "recall": 0.3333333333333333,
+                "f1": 0.3636363636363636
+              },
+              "left_of": {
+                "tp": 4,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.8,
+                "f1": 0.888888888888889
+              },
+              "lower_than": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.5,
+                "recall": 0.16666666666666666,
+                "f1": 0.25
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 4,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.8,
+                "f1": 0.888888888888889
+              },
+              "under": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_10"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 12,
+            "fp": 32,
+            "fn": 12,
+            "precision": 0.2727,
+            "recall": 0.5,
+            "f1": 0.3529,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 11,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.4,
+                "recall": 0.3333333333333333,
+                "f1": 0.3636363636363636
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 5,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.8333333333333334,
+                "f1": 0.9090909090909091
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 5,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.8333333333333334,
+                "f1": 0.9090909090909091
+              }
+            },
+            "scene_id": "scene_11"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 1,
+            "fp": 34,
+            "fn": 29,
+            "precision": 0.0286,
+            "recall": 0.0333,
+            "f1": 0.0308,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 8,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 9,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 0,
+                "fp": 5,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 1,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.25,
+                "recall": 0.2,
+                "f1": 0.22222222222222224
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 5,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_12"
+          },
+          {
+            "obj_coverage": 1.0,
+            "pair_coverage": 1.0,
+            "tp": 10,
+            "fp": 29,
+            "fn": 12,
+            "precision": 0.2564,
+            "recall": 0.4545,
+            "f1": 0.3279,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 12,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 2,
+                "fn": 3,
+                "precision": 0.5,
+                "recall": 0.4,
+                "f1": 0.4444444444444445
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.8,
+                "recall": 0.8,
+                "f1": 0.8000000000000002
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 5,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.8,
+                "recall": 0.8,
+                "f1": 0.8000000000000002
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "scene_id": "scene_13"
+          }
+        ],
+        "aggregate": {
+          "micro_f1": 0.3219,
+          "macro_f1": 0.3224,
+          "micro_precision": 0.2722,
+          "micro_recall": 0.3938,
+          "avg_obj_coverage": 0.969,
+          "avg_pair_coverage": 0.933,
+          "ci_95": [
+            0.2334,
+            0.3954
+          ],
+          "per_relation": {
+            "adjacent_to": {
+              "tp": 4,
+              "fp": 74,
+              "fn": 0,
+              "precision": 0.05128205128205128,
+              "recall": 1.0,
+              "f1": 0.09756097560975609
+            },
+            "attached_to": {
+              "tp": 0,
+              "fp": 89,
+              "fn": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "behind": {
+              "tp": 0,
+              "fp": 3,
+              "fn": 15,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "higher_than": {
+              "tp": 16,
+              "fp": 20,
+              "fn": 32,
+              "precision": 0.4444444444444444,
+              "recall": 0.3333333333333333,
+              "f1": 0.380952380952381
+            },
+            "in_front_of": {
+              "tp": 0,
+              "fp": 3,
+              "fn": 15,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "inside": {
+              "tp": 0,
+              "fp": 13,
+              "fn": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "left_of": {
+              "tp": 31,
+              "fp": 8,
+              "fn": 12,
+              "precision": 0.7948717948717948,
+              "recall": 0.7209302325581395,
+              "f1": 0.7560975609756098
+            },
+            "lower_than": {
+              "tp": 6,
+              "fp": 4,
+              "fn": 42,
+              "precision": 0.6,
+              "recall": 0.125,
+              "f1": 0.20689655172413793
+            },
+            "on_top_of": {
+              "tp": 1,
+              "fp": 15,
+              "fn": 4,
+              "precision": 0.0625,
+              "recall": 0.2,
+              "f1": 0.09523809523809523
+            },
+            "right_of": {
+              "tp": 30,
+              "fp": 6,
+              "fn": 13,
+              "precision": 0.8333333333333334,
+              "recall": 0.6976744186046512,
+              "f1": 0.759493670886076
+            },
+            "under": {
+              "tp": 1,
+              "fp": 3,
+              "fn": 4,
+              "precision": 0.25,
+              "recall": 0.2,
+              "f1": 0.22222222222222224
+            }
+          }
+        }
+      },
+      "end_to_end": {
+        "scenes": [
+          {
+            "tp": 27,
+            "fp": 164,
+            "fn": 29,
+            "precision": 0.1414,
+            "recall": 0.4821,
+            "f1": 0.2186,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 1,
+                "fp": 14,
+                "fn": 1,
+                "precision": 0.06666666666666667,
+                "recall": 0.5,
+                "f1": 0.11764705882352941
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 15,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 8,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 4,
+                "precision": 0.75,
+                "recall": 0.6,
+                "f1": 0.6666666666666665
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 8,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.75,
+                "recall": 0.75,
+                "f1": 0.75
+              },
+              "lower_than": {
+                "tp": 6,
+                "fp": 1,
+                "fn": 4,
+                "precision": 0.8571428571428571,
+                "recall": 0.6,
+                "f1": 0.7058823529411764
+              },
+              "on_top_of": {
+                "tp": 1,
+                "fp": 5,
+                "fn": 0,
+                "precision": 0.16666666666666666,
+                "recall": 1.0,
+                "f1": 0.2857142857142857
+              },
+              "right_of": {
+                "tp": 6,
+                "fp": 2,
+                "fn": 2,
+                "precision": 0.75,
+                "recall": 0.75,
+                "f1": 0.75
+              },
+              "under": {
+                "tp": 1,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.3333333333333333,
+                "recall": 1.0,
+                "f1": 0.5
+              }
+            },
+            "pred_unmatched_fp": 120,
+            "scene_id": "scene_06"
+          },
+          {
+            "tp": 3,
+            "fp": 172,
+            "fn": 21,
+            "precision": 0.0171,
+            "recall": 0.125,
+            "f1": 0.0302,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 4,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.5,
+                "recall": 0.16666666666666666,
+                "f1": 0.25
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "lower_than": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 4,
+                "precision": 0.6666666666666666,
+                "recall": 0.3333333333333333,
+                "f1": 0.4444444444444444
+              },
+              "right_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 161,
+            "scene_id": "scene_07"
+          },
+          {
+            "tp": 6,
+            "fp": 146,
+            "fn": 26,
+            "precision": 0.0395,
+            "recall": 0.1875,
+            "f1": 0.0652,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 5,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 6,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.5,
+                "recall": 0.16666666666666666,
+                "f1": 0.25
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 3,
+                "precision": 0.6666666666666666,
+                "recall": 0.4,
+                "f1": 0.5
+              },
+              "lower_than": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 5,
+                "precision": 1.0,
+                "recall": 0.16666666666666666,
+                "f1": 0.2857142857142857
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 3,
+                "precision": 0.6666666666666666,
+                "recall": 0.4,
+                "f1": 0.5
+              },
+              "under": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 131,
+            "scene_id": "scene_08"
+          },
+          {
+            "tp": 10,
+            "fp": 137,
+            "fn": 20,
+            "precision": 0.068,
+            "recall": 0.3333,
+            "f1": 0.113,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 2,
+                "fp": 4,
+                "fn": 4,
+                "precision": 0.3333333333333333,
+                "recall": 0.3333333333333333,
+                "f1": 0.3333333333333333
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 6,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.5,
+                "recall": 0.16666666666666666,
+                "f1": 0.25
+              },
+              "left_of": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 3,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6666666666666666
+              },
+              "lower_than": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 5,
+                "precision": 0.5,
+                "recall": 0.16666666666666666,
+                "f1": 0.25
+              },
+              "right_of": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 3,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6666666666666666
+              }
+            },
+            "pred_unmatched_fp": 125,
+            "scene_id": "scene_09"
+          },
+          {
+            "tp": 12,
+            "fp": 191,
+            "fn": 12,
+            "precision": 0.0591,
+            "recall": 0.5,
+            "f1": 0.1057,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 1,
+                "fp": 3,
+                "fn": 5,
+                "precision": 0.25,
+                "recall": 0.16666666666666666,
+                "f1": 0.2
+              },
+              "left_of": {
+                "tp": 5,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "lower_than": {
+                "tp": 1,
+                "fp": 2,
+                "fn": 5,
+                "precision": 0.3333333333333333,
+                "recall": 0.16666666666666666,
+                "f1": 0.2222222222222222
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 5,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "under": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 163,
+            "scene_id": "scene_10"
+          },
+          {
+            "tp": 9,
+            "fp": 205,
+            "fn": 15,
+            "precision": 0.0421,
+            "recall": 0.375,
+            "f1": 0.0756,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 10,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 12,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 1,
+                "fp": 3,
+                "fn": 5,
+                "precision": 0.25,
+                "recall": 0.16666666666666666,
+                "f1": 0.2
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 2,
+                "precision": 0.8,
+                "recall": 0.6666666666666666,
+                "f1": 0.7272727272727272
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 2,
+                "precision": 0.8,
+                "recall": 0.6666666666666666,
+                "f1": 0.7272727272727272
+              }
+            },
+            "pred_unmatched_fp": 170,
+            "scene_id": "scene_11"
+          },
+          {
+            "tp": 1,
+            "fp": 167,
+            "fn": 29,
+            "precision": 0.006,
+            "recall": 0.0333,
+            "f1": 0.0101,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 8,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 9,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "behind": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "in_front_of": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 5,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "lower_than": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 6,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 1,
+                "fp": 3,
+                "fn": 4,
+                "precision": 0.25,
+                "recall": 0.2,
+                "f1": 0.22222222222222224
+              },
+              "under": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 134,
+            "scene_id": "scene_12"
+          },
+          {
+            "tp": 11,
+            "fp": 145,
+            "fn": 11,
+            "precision": 0.0705,
+            "recall": 0.5,
+            "f1": 0.1236,
+            "per_relation": {
+              "adjacent_to": {
+                "tp": 0,
+                "fp": 11,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "attached_to": {
+                "tp": 0,
+                "fp": 12,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "higher_than": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 3,
+                "precision": 0.4,
+                "recall": 0.4,
+                "f1": 0.4000000000000001
+              },
+              "inside": {
+                "tp": 0,
+                "fp": 3,
+                "fn": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "left_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.8,
+                "recall": 0.8,
+                "f1": 0.8000000000000002
+              },
+              "lower_than": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 4,
+                "precision": 0.5,
+                "recall": 0.2,
+                "f1": 0.28571428571428575
+              },
+              "on_top_of": {
+                "tp": 0,
+                "fp": 2,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "right_of": {
+                "tp": 4,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.8,
+                "recall": 0.8,
+                "f1": 0.8000000000000002
+              },
+              "under": {
+                "tp": 0,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            },
+            "pred_unmatched_fp": 110,
+            "scene_id": "scene_13"
+          }
+        ],
+        "aggregate": {
+          "micro_f1": 0.0959,
+          "macro_f1": 0.0927,
+          "micro_precision": 0.0562,
+          "micro_recall": 0.3264,
+          "ci_95": [
+            0.0542,
+            0.1355
+          ],
+          "per_relation": {
+            "adjacent_to": {
+              "tp": 3,
+              "fp": 65,
+              "fn": 5,
+              "precision": 0.04411764705882353,
+              "recall": 0.375,
+              "f1": 0.07894736842105263
+            },
+            "attached_to": {
+              "tp": 0,
+              "fp": 74,
+              "fn": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "behind": {
+              "tp": 0,
+              "fp": 3,
+              "fn": 15,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "higher_than": {
+              "tp": 13,
+              "fp": 17,
+              "fn": 38,
+              "precision": 0.43333333333333335,
+              "recall": 0.2549019607843137,
+              "f1": 0.32098765432098764
+            },
+            "in_front_of": {
+              "tp": 0,
+              "fp": 3,
+              "fn": 15,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "inside": {
+              "tp": 0,
+              "fp": 8,
+              "fn": 0,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "left_of": {
+              "tp": 24,
+              "fp": 8,
+              "fn": 22,
+              "precision": 0.75,
+              "recall": 0.5217391304347826,
+              "f1": 0.6153846153846153
+            },
+            "lower_than": {
+              "tp": 12,
+              "fp": 9,
+              "fn": 39,
+              "precision": 0.5714285714285714,
+              "recall": 0.23529411764705882,
+              "f1": 0.3333333333333333
+            },
+            "on_top_of": {
+              "tp": 1,
+              "fp": 13,
+              "fn": 4,
+              "precision": 0.07142857142857142,
+              "recall": 0.2,
+              "f1": 0.10526315789473682
+            },
+            "right_of": {
+              "tp": 25,
+              "fp": 8,
+              "fn": 21,
+              "precision": 0.7575757575757576,
+              "recall": 0.5434782608695652,
+              "f1": 0.6329113924050633
+            },
+            "under": {
+              "tp": 1,
+              "fp": 5,
+              "fn": 4,
+              "precision": 0.16666666666666666,
+              "recall": 0.2,
+              "f1": 0.1818181818181818
+            }
+          }
+        }
+      },
+      "clustering": {
+        "scenes": [
+          {
+            "n_gt": 5,
+            "n_pred": 5,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_06"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_07"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_08"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 3,
+            "count_error": 1,
+            "obj_recall": 0.75,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_09"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_10"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_11"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_12"
+          },
+          {
+            "n_gt": 4,
+            "n_pred": 4,
+            "count_error": 0,
+            "obj_recall": 1.0,
+            "obj_precision": 1.0,
+            "mean_dist": 0.0,
+            "merges": 0,
+            "splits": 0,
+            "scene_id": "scene_13"
+          }
+        ]
+      }
+    }
+  },
+  "clustering": {}
+}

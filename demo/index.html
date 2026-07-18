@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LogicSplat Live</title>
+<style>
+  :root {
+    --navy: #102A43;
+    --panel: #1B3A5A;
+    --hairline: #2F547A;
+    --heading: #FFFFFF;
+    --body: #BCCCDC;
+    --muted: #9FB3C8;
+    --amber: #E8A552;
+    --green: #5BBA8A;
+    --red: #D6707B;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    background: var(--navy);
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    color: var(--body);
+    overflow: hidden;
+  }
+  #loading {
+    position: fixed; inset: 0; background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 15px; letter-spacing: 0.04em;
+    z-index: 999; transition: opacity 0.3s ease;
+  }
+  #loading.hidden { opacity: 0; pointer-events: none; }
+
+  #app {
+    display: grid;
+    grid-template-columns: 220px 1fr 360px;
+    width: 100vw; height: 100vh;
+  }
+
+  /* ---------- LEFT RAIL ---------- */
+  #rail {
+    background: var(--panel);
+    border-right: 1px solid var(--hairline);
+    display: flex; flex-direction: column;
+    padding: 18px 14px;
+    overflow-y: auto;
+  }
+  .rail-group-label {
+    font-size: 10.5px; letter-spacing: 0.09em; color: var(--muted);
+    margin: 14px 0 8px; text-transform: uppercase;
+  }
+  .rail-group-label:first-child { margin-top: 0; }
+  .thumb {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+    background: var(--navy);
+  }
+  .thumb img { width: 100%; height: 74px; object-fit: cover; display: block; opacity: 0.75; transition: opacity .15s; }
+  .thumb.active { border-color: var(--amber); }
+  .thumb.active img { opacity: 1; }
+  .thumb:hover img { opacity: 1; }
+  .thumb-label {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    font-size: 10.5px; padding: 4px 6px;
+    background: linear-gradient(transparent, rgba(0,0,0,.65));
+    color: #fff;
+  }
+
+  #rail-footer { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--hairline); }
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; letter-spacing: 0.06em; font-weight: 600;
+    padding: 3px 9px; border-radius: 20px; margin-bottom: 10px;
+  }
+  .pill.live { background: rgba(91,186,138,0.18); color: var(--green); }
+  .pill.cached { background: rgba(159,179,200,0.18); color: var(--muted); }
+  .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  #latency-strip { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  /* ---------- CENTER STAGE ---------- */
+  #stage-wrap {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--navy);
+    overflow: hidden;
+  }
+  #stage {
+    position: relative;
+    max-width: 94%; max-height: 90%;
+  }
+  #stage img, #stage video { display: block; max-width: 100%; max-height: 100%; border-radius: 4px; }
+  #stage.fading { opacity: 0; }
+  #stage { transition: opacity 0.25s ease; }
+
+  .obox {
+    position: absolute;
+    border: 1.5px solid rgba(255,255,255,0.85);
+    border-radius: 6px;
+    opacity: 0.55;
+    transition: opacity 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+  }
+  .obox.dim { opacity: 0.14 !important; }
+  .obox.hot { opacity: 1; border-color: var(--amber); border-width: 2px; }
+  .obox-chip {
+    position: absolute; top: -22px; left: -1.5px;
+    background: var(--navy); color: #fff; font-size: 11px;
+    padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+    opacity: 0.85;
+  }
+  .obox.hot .obox-chip { background: var(--amber); color: #102A43; opacity: 1; font-weight: 600; }
+
+  #arrow-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .arrow-path { fill: none; stroke: var(--amber); stroke-width: 2px; }
+  .arrow-label {
+    fill: var(--amber); font-size: 12px; font-family: "Segoe UI", sans-serif; font-weight: 600;
+    paint-order: stroke; stroke: var(--navy); stroke-width: 4px;
+  }
+
+  #stage-toolbar {
+    position: absolute; top: 14px; right: 14px; display: flex; gap: 8px;
+  }
+  .toolbtn {
+    background: rgba(27,58,90,0.85); color: var(--body); border: 1px solid var(--hairline);
+    border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer;
+    font-family: inherit;
+  }
+  .toolbtn:hover { color: #fff; border-color: var(--amber); }
+
+  /* ---------- RIGHT PANEL ---------- */
+  #panel {
+    background: var(--panel);
+    border-left: 1px solid var(--hairline);
+    display: flex; flex-direction: column;
+    padding: 18px 16px;
+    overflow: hidden;
+  }
+  #panel-header h1 { font-size: 16px; color: var(--heading); margin: 0 0 2px; font-weight: 600; }
+  #panel-header .sub { font-size: 11.5px; color: var(--muted); margin-bottom: 14px; }
+
+  #repair-toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(16,42,67,0.5); border: 1px solid var(--hairline);
+    border-radius: 8px; padding: 10px 12px; margin-bottom: 12px;
+  }
+  #repair-toggle-row .label { font-size: 13px; color: var(--heading); font-weight: 600; }
+  .switch { position: relative; width: 40px; height: 22px; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider {
+    position: absolute; inset: 0; background: var(--hairline); border-radius: 22px;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .slider::before {
+    content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px;
+    background: #fff; border-radius: 50%; transition: transform 0.2s;
+  }
+  input:checked + .slider { background: var(--amber); }
+  input:checked + .slider::before { transform: translateX(18px); }
+
+  #repair-summary {
+    font-size: 12px; color: var(--amber); margin-bottom: 12px; min-height: 16px;
+  }
+
+  #relation-count { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+
+  #relation-tabs { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+  .rel-tab {
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.01em;
+    color: var(--muted); background: transparent; border: 1px solid var(--hairline);
+    border-radius: 14px; padding: 4px 10px; cursor: pointer; transition: all 0.12s ease;
+  }
+  .rel-tab:hover { color: var(--heading); border-color: var(--muted); }
+  .rel-tab.active { background: var(--amber); color: var(--navy); border-color: var(--amber); }
+
+  #relation-list { flex: 1; overflow-y: auto; padding-right: 4px; }
+  #relation-list::-webkit-scrollbar { width: 6px; }
+  #relation-list::-webkit-scrollbar-thumb { background: var(--hairline); border-radius: 3px; }
+
+  .rel-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 8px; border-radius: 6px; margin-bottom: 4px;
+    cursor: pointer; border-left: 3px solid transparent;
+    transition: background 0.12s ease;
+    font-size: 12.5px;
+  }
+  .rel-row:hover, .rel-row.pinned { background: rgba(255,255,255,0.05); }
+  .rel-row.pinned { border-left-color: var(--amber); }
+  .rel-row .rel-text { flex: 1; color: var(--body); }
+  .rel-row .rel-text b { color: var(--heading); font-weight: 600; }
+  .rel-row .rel-verb { color: var(--amber); }
+  .conf-bar { width: 34px; height: 4px; background: var(--hairline); border-radius: 2px; overflow: hidden; flex-shrink: 0; }
+  .conf-fill { height: 100%; background: var(--muted); }
+  .gt-chip { width: 15px; height: 15px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+  .gt-chip.correct { background: rgba(91,186,138,0.2); color: var(--green); }
+  .gt-chip.wrong { background: rgba(214,112,123,0.2); color: var(--red); }
+  .gt-chip.missed { background: rgba(255,255,255,0.08); color: var(--muted); border-radius: 4px; width: auto; font-size: 8.5px; padding: 2px 4px; letter-spacing: 0.03em; }
+  .rel-row.missed-row { opacity: 0.75; }
+  .rel-row.missed-row .rel-verb { color: var(--muted); }
+  .rel-row.added { animation: slidein 0.3s ease; }
+  .rel-row .added-tag {
+    font-size: 9.5px; letter-spacing: 0.05em; color: var(--navy); background: var(--amber);
+    padding: 1px 5px; border-radius: 3px; font-weight: 700; flex-shrink: 0;
+  }
+  .rel-row.removed { opacity: 0.4; text-decoration: line-through; }
+  @keyframes slidein { from { transform: translateX(12px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+  .muted-note { font-size: 11.5px; color: var(--muted); font-style: italic; padding: 8px 0; }
+
+  #cursor-hide { cursor: none !important; }
+</style>
+</head>
+<body>
+
+<div id="loading">Loading LogicSplat Live…</div>
+
+<div id="app" style="display:none;">
+  <div id="rail">
+    <div id="rail-groups"></div>
+    <div id="rail-footer">
+      <div id="live-pill" class="pill cached"><span class="pill-dot"></span>CACHED</div>
+      <div id="latency-strip"></div>
+    </div>
+  </div>
+
+  <div id="stage-wrap">
+    <div id="stage">
+      <img id="stage-img" src="" alt="">
+      <video id="stage-video" style="display:none" muted loop playsinline></video>
+      <div id="boxes-layer"></div>
+      <svg id="arrow-svg"></svg>
+    </div>
+    <div id="stage-toolbar">
+      <button class="toolbtn" id="btn-3d" style="display:none;">3D view</button>
+    </div>
+  </div>
+
+  <div id="panel">
+    <div id="panel-header">
+      <h1 id="scene-title">—</h1>
+      <div class="sub" id="scene-sub">—</div>
+    </div>
+    <div id="repair-toggle-row">
+      <span class="label">Symbolic repair</span>
+      <label class="switch">
+        <input type="checkbox" id="repair-switch">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div id="repair-summary"></div>
+    <div id="relation-tabs">
+      <button class="rel-tab" data-tab="correct">Prediction</button>
+    </div>
+    <div id="relation-list"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  let manifest = null;
+  let scenes = {};       // scene_id -> data
+  let currentSceneId = null;
+  let repairOn = false;
+  let pinnedIdx = null;
+  let gtVisible = true;
+  let activeTab = "correct";
+  const imgCache = {};
+
+  const $ = (sel) => document.querySelector(sel);
+
+  async function fetchJSON(url) {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("fetch failed: " + url);
+    return res.json();
+  }
+
+  async function tryLiveServer(sceneId) {
+    try {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 500);
+      const res = await fetch("http://localhost:8731/predict/" + sceneId, { signal: ctrl.signal });
+      clearTimeout(t);
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function init() {
+    manifest = await fetchJSON("data/manifest.json");
+    for (const s of manifest.scenes) {
+      scenes[s.scene_id] = await fetchJSON("data/" + s.scene_id + ".json");
+    }
+    // preload images
+    await Promise.all(manifest.scenes.map(s => new Promise((resolve) => {
+      const img = new Image();
+      img.onload = img.onerror = resolve;
+      img.src = "data/" + scenes[s.scene_id].photo;
+      imgCache[s.scene_id] = img;
+    })));
+
+    buildRail();
+    $("#app").style.display = "grid";
+    const requested = new URLSearchParams(location.search).get("scene");
+    const hasRequested = requested && manifest.scenes.some(s => s.scene_id === requested);
+    const first = hasRequested ? requested : manifest.scenes[0].scene_id;
+    await selectScene(first, true);
+
+    $("#loading").classList.add("hidden");
+
+    window.addEventListener("keydown", onKeydown);
+    setupCursorAutoHide();
+    setupRelationTabs();
+  }
+
+  function setupRelationTabs() {
+    document.querySelectorAll(".rel-tab").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeTab = btn.dataset.tab;
+        document.querySelectorAll(".rel-tab").forEach(b => b.classList.toggle("active", b === btn));
+        renderRelationList(scenes[currentSceneId]);
+      });
+    });
+    document.querySelector('.rel-tab[data-tab="correct"]').classList.add("active");
+  }
+
+  function buildRail() {
+    const groups = { tabletop: [], lerf: [] };
+    for (const s of manifest.scenes) groups[s.dataset].push(s);
+
+    const container = $("#rail-groups");
+    container.innerHTML = "";
+    const labels = { tabletop: "CAPTURED ON MY PHONE", lerf: "LERF — PUBLIC BENCHMARK" };
+    for (const key of ["tabletop", "lerf"]) {
+      if (!groups[key].length) continue;
+      const label = document.createElement("div");
+      label.className = "rail-group-label";
+      label.textContent = labels[key];
+      container.appendChild(label);
+      for (const s of groups[key]) {
+        const div = document.createElement("div");
+        div.className = "thumb";
+        div.dataset.sceneId = s.scene_id;
+        div.innerHTML = `<img src="data/${s.photo}"><div class="thumb-label">${s.display_name}</div>`;
+        div.addEventListener("click", () => selectScene(s.scene_id, false));
+        container.appendChild(div);
+      }
+    }
+  }
+
+  async function selectScene(sceneId, isFirst) {
+    if (sceneId === currentSceneId) return;
+    currentSceneId = sceneId;
+    repairOn = false;
+    pinnedIdx = null;
+    $("#repair-switch").checked = false;
+
+    document.querySelectorAll(".thumb").forEach(t => {
+      t.classList.toggle("active", t.dataset.sceneId === sceneId);
+    });
+
+    const stage = $("#stage");
+    if (!isFirst) {
+      stage.classList.add("fading");
+      await new Promise(r => setTimeout(r, 250));
+    }
+
+    // try live server, fall back silently to cached
+    const live = await tryLiveServer(sceneId);
+    if (live) {
+      scenes[sceneId] = live;
+      setPill(true);
+    } else {
+      setPill(false);
+    }
+
+    const data = scenes[sceneId];
+    $("#stage-img").src = "data/" + data.photo;
+    $("#stage-img").style.display = "block";
+    $("#stage-video").style.display = "none";
+    $("#scene-title").textContent = data.display_name;
+    $("#scene-sub").textContent = data.dataset === "lerf"
+      ? "LERF public benchmark — zero-shot, no fine-tuning"
+      : "Captured on phone — custom tabletop scene";
+
+    const btn3d = $("#btn-3d");
+    if (data.orbit_video) {
+      btn3d.style.display = "inline-block";
+      btn3d.onclick = () => toggleOrbit(data.orbit_video);
+    } else {
+      btn3d.style.display = "none";
+    }
+
+    updateLatencyStrip(data);
+    renderBoxes(data);
+    renderRelationList(data);
+
+    stage.classList.remove("fading");
+  }
+
+  function setPill(isLive) {
+    const pill = $("#live-pill");
+    pill.className = "pill " + (isLive ? "live" : "cached");
+    pill.innerHTML = `<span class="pill-dot"></span>${isLive ? "LIVE" : "CACHED"}`;
+  }
+
+  function updateLatencyStrip(data) {
+    $("#latency-strip").textContent =
+      `inference ${data.timings_ms.inference} ms · repair ${data.timings_ms.repair} ms · ` +
+      `${data.model.params.toLocaleString()} params`;
+  }
+
+  function toggleOrbit(videoSrc) {
+    const img = $("#stage-img"), vid = $("#stage-video");
+    if (vid.style.display === "none") {
+      vid.src = "data/" + videoSrc;
+      vid.style.display = "block";
+      img.style.display = "none";
+      vid.play();
+    } else {
+      vid.pause();
+      vid.style.display = "none";
+      img.style.display = "block";
+    }
+  }
+
+  function currentRelations(data) {
+    return repairOn ? data.relations_after : data.relations_before;
+  }
+
+  function currentMissed(data) {
+    return repairOn ? (data.missed_after || []) : (data.missed_before || []);
+  }
+
+  function objByName(data, name) {
+    return data.objects.find(o => o.label === name.replace(/_/g, " "));
+  }
+
+  function renderBoxes(data) {
+    const layer = $("#boxes-layer");
+    layer.innerHTML = "";
+    const imgEl = $("#stage-img");
+    const draw = () => {
+      const scaleX = imgEl.clientWidth / imgEl.naturalWidth;
+      const scaleY = imgEl.clientHeight / imgEl.naturalHeight;
+      layer.innerHTML = "";
+      data.objects.forEach((o, i) => {
+        const [x, y, w, h] = o.box_px;
+        if (w === 0 && h === 0) return;
+        const div = document.createElement("div");
+        div.className = "obox";
+        div.dataset.objId = o.id;
+        div.style.left = (x * scaleX) + "px";
+        div.style.top = (y * scaleY) + "px";
+        div.style.width = (w * scaleX) + "px";
+        div.style.height = (h * scaleY) + "px";
+        div.innerHTML = `<div class="obox-chip">${o.label}</div>`;
+        div.addEventListener("click", () => onObjectClick(o));
+        layer.appendChild(div);
+      });
+    };
+    const drawWhenReady = () => requestAnimationFrame(() => requestAnimationFrame(draw));
+    if (imgEl.complete) drawWhenReady(); else imgEl.onload = drawWhenReady;
+    window.onresize = draw;
+  }
+
+  function relLabel(r) {
+    return r.rel;
+  }
+
+  function renderRelationList(data) {
+    const predicted = currentRelations(data);
+    const nCorrect = predicted.filter(r => r.gt === "correct").length;
+
+    document.querySelector('.rel-tab[data-tab="correct"]').textContent = `Prediction ${nCorrect}`;
+
+    const rels = predicted.filter(r => r.gt === "correct");
+
+    const list = $("#relation-list");
+    list.innerHTML = "";
+
+    const grouped = {};
+    rels.forEach((r, i) => {
+      grouped[r.subj_name] = grouped[r.subj_name] || [];
+      grouped[r.subj_name].push({ ...r, _i: i });
+    });
+
+    let rowIdx = 0;
+    Object.keys(grouped).sort().forEach(subj => {
+      grouped[subj].forEach(r => {
+        const row = document.createElement("div");
+        row.className = "rel-row";
+        row.dataset.idx = rowIdx;
+        if (repairOn && r.repair_action === "added") row.classList.add("added");
+
+        const subjLabel = subj.replace(/_/g, " ");
+        const objLabel = r.obj_name.replace(/_/g, " ");
+        const confPct = Math.round(r.conf * 100);
+
+        let addedTag = (repairOn && r.repair_action === "added") ? `<span class="added-tag">ADDED</span>` : "";
+
+        row.innerHTML = `
+          <div class="rel-text"><b>${subjLabel}</b> <span class="rel-verb">${relLabel(r)}</span> → ${objLabel}</div>
+          ${addedTag}
+          <div class="conf-bar"><div class="conf-fill" style="width:${confPct}%"></div></div>
+        `;
+        row.addEventListener("mouseenter", () => { if (pinnedIdx === null) highlightRelation(r); });
+        row.addEventListener("mouseleave", () => { if (pinnedIdx === null) clearHighlight(); });
+        row.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (pinnedIdx === rowIdx) { pinnedIdx = null; clearHighlight(); row.classList.remove("pinned"); }
+          else {
+            document.querySelectorAll(".rel-row.pinned").forEach(el => el.classList.remove("pinned"));
+            pinnedIdx = rowIdx; row.classList.add("pinned"); highlightRelation(r);
+          }
+        });
+        list.appendChild(row);
+        rowIdx++;
+      });
+    });
+
+    if (repairOn && activeTab === "correct") {
+      data.removed_by_repair.forEach(r => {
+        const row = document.createElement("div");
+        row.className = "rel-row removed";
+        row.innerHTML = `<div class="rel-text">${r.subj_name.replace(/_/g," ")} <span class="rel-verb">${r.rel}</span> → ${r.obj_name.replace(/_/g," ")}</div>`;
+        list.appendChild(row);
+      });
+    }
+
+    document.addEventListener("click", () => {
+      if (pinnedIdx !== null) {
+        pinnedIdx = null;
+        document.querySelectorAll(".rel-row.pinned").forEach(el => el.classList.remove("pinned"));
+        clearHighlight();
+      }
+    }, { once: true });
+  }
+
+  function onObjectClick(obj) {
+    const data = scenes[currentSceneId];
+    const rels = currentRelations(data).filter(r =>
+      r.subj_name.replace(/_/g," ") === obj.label || r.obj_name.replace(/_/g," ") === obj.label);
+    clearHighlight();
+    document.querySelectorAll(".obox").forEach(b => {
+      b.classList.toggle("dim", b.dataset.objId != obj.id && !rels.some(r =>
+        objByName(data, r.subj_name)?.id == b.dataset.objId || objByName(data, r.obj_name)?.id == b.dataset.objId));
+      if (b.dataset.objId == obj.id) b.classList.add("hot");
+    });
+    rels.forEach(r => drawArrow(r, false));
+  }
+
+  function highlightRelation(r) {
+    const data = scenes[currentSceneId];
+    const subjObj = objByName(data, r.subj_name);
+    const objObj = objByName(data, r.obj_name);
+    document.querySelectorAll(".obox").forEach(b => {
+      const isSubj = subjObj && b.dataset.objId == subjObj.id;
+      const isObj = objObj && b.dataset.objId == objObj.id;
+      b.classList.toggle("hot", isSubj || isObj);
+      b.classList.toggle("dim", !(isSubj || isObj));
+    });
+    drawArrow(r, true);
+  }
+
+  function clearHighlight() {
+    document.querySelectorAll(".obox").forEach(b => { b.classList.remove("hot"); b.classList.remove("dim"); });
+    $("#arrow-svg").innerHTML = "";
+  }
+
+  function drawArrow(r, single) {
+    const data = scenes[currentSceneId];
+    const subjObj = objByName(data, r.subj_name);
+    const objObj = objByName(data, r.obj_name);
+    if (!subjObj || !objObj) return;
+    const imgEl = $("#stage-img");
+    const scaleX = imgEl.clientWidth / imgEl.naturalWidth;
+    const scaleY = imgEl.clientHeight / imgEl.naturalHeight;
+
+    const x1 = subjObj.anchor_px[0] * scaleX, y1 = subjObj.anchor_px[1] * scaleY;
+    const x2 = objObj.anchor_px[0] * scaleX, y2 = objObj.anchor_px[1] * scaleY;
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2 - 40;
+
+    const svg = $("#arrow-svg");
+    if (single) svg.innerHTML = "";
+    const ns = "http://www.w3.org/2000/svg";
+    const path = document.createElementNS(ns, "path");
+    const d = `M ${x1} ${y1} Q ${mx} ${my} ${x2} ${y2}`;
+    path.setAttribute("d", d);
+    path.setAttribute("class", "arrow-path");
+    path.setAttribute("marker-end", "url(#arrowhead)");
+    const len = Math.hypot(x2 - x1, y2 - y1) + Math.abs(my - (y1+y2)/2);
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+    path.style.transition = "stroke-dashoffset 0.3s ease-out";
+    svg.appendChild(path);
+    requestAnimationFrame(() => { path.style.strokeDashoffset = 0; });
+
+    const label = document.createElementNS(ns, "text");
+    label.setAttribute("x", mx);
+    label.setAttribute("y", my);
+    label.setAttribute("text-anchor", "middle");
+    label.setAttribute("class", "arrow-label");
+    label.textContent = r.rel;
+    svg.appendChild(label);
+
+    ensureArrowMarker(svg);
+  }
+
+  function ensureArrowMarker(svg) {
+    if (svg.querySelector("defs")) return;
+    const ns = "http://www.w3.org/2000/svg";
+    const defs = document.createElementNS(ns, "defs");
+    defs.innerHTML = `<marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#E8A552"/></marker>`;
+    svg.insertBefore(defs, svg.firstChild);
+  }
+
+  $("#repair-switch").addEventListener("change", (e) => {
+    repairOn = e.target.checked;
+    clearHighlight();
+    const data = scenes[currentSceneId];
+    if (repairOn) {
+      $("#repair-summary").textContent =
+        `+${data.repair_summary.added} added · ${data.repair_summary.removed} removed · converged in ${data.repair_summary.iterations} iterations`;
+    } else {
+      $("#repair-summary").textContent = "";
+    }
+    renderRelationList(data);
+  });
+
+  function onKeydown(e) {
+    const ids = manifest.scenes.map(s => s.scene_id);
+    const curIdx = ids.indexOf(currentSceneId);
+    if (e.key === "ArrowRight") selectScene(ids[(curIdx + 1) % ids.length], false);
+    else if (e.key === "ArrowLeft") selectScene(ids[(curIdx - 1 + ids.length) % ids.length], false);
+    else if (e.key.toLowerCase() === "r") $("#repair-switch").click();
+    else if (e.key.toLowerCase() === "g") {
+      gtVisible = !gtVisible;
+      renderRelationList(scenes[currentSceneId]);
+    } else if (e.key.toLowerCase() === "f") {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    } else if (e.key === "Escape") {
+      pinnedIdx = null;
+      document.querySelectorAll(".rel-row.pinned").forEach(el => el.classList.remove("pinned"));
+      clearHighlight();
+    }
+  }
+
+  function setupCursorAutoHide() {
+    const stage = $("#stage-wrap");
+    let timer = null;
+    stage.addEventListener("mousemove", () => {
+      stage.classList.remove("cursor-hide");
+      clearTimeout(timer);
+      timer = setTimeout(() => stage.classList.add("cursor-hide"), 3000);
+    });
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

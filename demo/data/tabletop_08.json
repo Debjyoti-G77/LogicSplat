@@ -1,0 +1,1200 @@
+{
+  "scene_id": "tabletop_08",
+  "display_name": "Tabletop 08 \u2014 router & perfume",
+  "dataset": "tabletop",
+  "photo": "tabletop_08.jpg",
+  "objects": [
+    {
+      "id": 0,
+      "label": "router",
+      "box_px": [
+        535,
+        30,
+        275,
+        95
+      ],
+      "anchor_px": [
+        672,
+        77
+      ]
+    },
+    {
+      "id": 1,
+      "label": "agaro box",
+      "box_px": [
+        510,
+        120,
+        395,
+        200
+      ],
+      "anchor_px": [
+        707,
+        220
+      ]
+    },
+    {
+      "id": 2,
+      "label": "perfume",
+      "box_px": [
+        1255,
+        390,
+        290,
+        465
+      ],
+      "anchor_px": [
+        1400,
+        622
+      ]
+    },
+    {
+      "id": 3,
+      "label": "pen",
+      "box_px": [
+        630,
+        450,
+        260,
+        130
+      ],
+      "anchor_px": [
+        760,
+        515
+      ]
+    },
+    {
+      "id": 4,
+      "label": "table",
+      "box_px": [
+        0,
+        90,
+        1920,
+        990
+      ],
+      "anchor_px": [
+        960,
+        585
+      ]
+    }
+  ],
+  "relations_before": [
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "pen",
+      "conf": 0.9995,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "perfume",
+      "conf": 0.9998,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9953,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "perfume",
+      "conf": 0.9779,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 0.9926,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "perfume",
+      "conf": 0.9941,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "router",
+      "conf": 0.9731,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.9711,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9978,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "adjacent_to",
+      "obj_name": "perfume",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9993,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.9538,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "in_front_of",
+      "obj_name": "perfume",
+      "conf": 0.8341,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 0.9807,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.7855,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9876,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 0.8026,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9994,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "adjacent_to",
+      "obj_name": "pen",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9999,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.9929,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "higher_than",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "higher_than",
+      "obj_name": "router",
+      "conf": 0.9817,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 0.7519,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.7691,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9907,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 0.7905,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9478,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "pen",
+      "conf": 0.9995,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "perfume",
+      "conf": 0.9969,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "pen",
+      "conf": 0.6606,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "agaro_box",
+      "conf": 0.8315,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "pen",
+      "conf": 0.9155,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "perfume",
+      "conf": 0.9881,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 0.8952,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "perfume",
+      "conf": 0.8645,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9407,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9989,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "pen",
+      "conf": 0.9959,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "perfume",
+      "conf": 0.9956,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9855,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "perfume",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "agaro_box",
+      "conf": 0.9954,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "pen",
+      "conf": 0.9965,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "perfume",
+      "conf": 0.9951,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.9961,
+      "gt": "correct"
+    }
+  ],
+  "relations_after": [
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "pen",
+      "conf": 0.9995,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "perfume",
+      "conf": 0.9998,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9953,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "table",
+      "conf": 0.236,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.691,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "perfume",
+      "conf": 0.9779,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 0.9926,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "perfume",
+      "conf": 0.9941,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "router",
+      "conf": 0.9731,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.9711,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9978,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "adjacent_to",
+      "obj_name": "perfume",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9993,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "adjacent_to",
+      "obj_name": "table",
+      "conf": 0.251,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.9538,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "in_front_of",
+      "obj_name": "perfume",
+      "conf": 0.8341,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 0.9807,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "lower_than",
+      "obj_name": "perfume",
+      "conf": 0.5236,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 0.2482,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.7855,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9876,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "perfume",
+      "conf": 0.6286,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 0.8026,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9994,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "adjacent_to",
+      "obj_name": "pen",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9999,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "adjacent_to",
+      "obj_name": "table",
+      "conf": 0.2416,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "behind",
+      "obj_name": "pen",
+      "conf": 0.7292,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.9929,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "higher_than",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "higher_than",
+      "obj_name": "router",
+      "conf": 0.9817,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 0.7519,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 0.3087,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.7691,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9907,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 0.7905,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9478,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "pen",
+      "conf": 0.9995,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "perfume",
+      "conf": 0.9969,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "table",
+      "conf": 0.2242,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "pen",
+      "conf": 0.6606,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "agaro_box",
+      "conf": 0.8315,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "pen",
+      "conf": 0.9155,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "perfume",
+      "conf": 0.9881,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "pen",
+      "conf": 0.8952,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "perfume",
+      "conf": 0.8645,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 0.6585,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "router",
+      "rel": "lower_than",
+      "obj_name": "perfume",
+      "conf": 0.3397,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.5813,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "router",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 0.9407,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9989,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "pen",
+      "conf": 0.9959,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "perfume",
+      "conf": 0.9956,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9855,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "pen",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "perfume",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "agaro_box",
+      "conf": 0.9954,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "pen",
+      "conf": 0.9965,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "perfume",
+      "conf": 0.9951,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.9961,
+      "gt": "correct",
+      "repair_action": "kept"
+    }
+  ],
+  "removed_by_repair": [],
+  "missed_before": [
+    {
+      "subj_name": "agaro_box",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.691,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "in_front_of",
+      "obj_name": "pen",
+      "conf": 0.4672,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "in_front_of",
+      "obj_name": "perfume",
+      "conf": 0.54,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.1554,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "behind",
+      "obj_name": "agaro_box",
+      "conf": 0.4746,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "lower_than",
+      "obj_name": "perfume",
+      "conf": 0.5236,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 0.2482,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "right_of",
+      "obj_name": "perfume",
+      "conf": 0.6286,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "behind",
+      "obj_name": "agaro_box",
+      "conf": 0.6047,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "behind",
+      "obj_name": "pen",
+      "conf": 0.7292,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 0.3087,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 0.0526,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "perfume",
+      "conf": 0.2446,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 0.6585,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "agaro_box",
+      "conf": 0.2776,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.5813,
+      "gt": "missed"
+    }
+  ],
+  "missed_after": [
+    {
+      "subj_name": "agaro_box",
+      "rel": "in_front_of",
+      "obj_name": "pen",
+      "conf": 0.4672,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "in_front_of",
+      "obj_name": "perfume",
+      "conf": 0.54,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.1554,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "pen",
+      "rel": "behind",
+      "obj_name": "agaro_box",
+      "conf": 0.4746,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "behind",
+      "obj_name": "agaro_box",
+      "conf": 0.6047,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "perfume",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 0.0526,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "perfume",
+      "conf": 0.2446,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "agaro_box",
+      "conf": 0.2776,
+      "gt": "missed"
+    }
+  ],
+  "repair_summary": {
+    "added": 13,
+    "removed": 0,
+    "iterations": 2
+  },
+  "timings_ms": {
+    "inference": 14.88,
+    "repair": 0.59
+  },
+  "model": {
+    "params": 1018414,
+    "name": "GeoKAN-Gamma"
+  },
+  "gt_available": true,
+  "correct_count": 52,
+  "total_count": 68
+}

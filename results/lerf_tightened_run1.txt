@@ -1,0 +1,55 @@
+Model loaded (Gamma): 1,018,414 params
+======================================================================
+LERF EVALUATION (FRESH RE-RUN): GeoKAN-Gamma + Symbolic Repair
+======================================================================
+
+----------------------------------------------------------------------
+  Scene: ramen
+----------------------------------------------------------------------
+  Gaussians after filter: 233,219
+  Objects found: 13
+  GT relations (geometry-derived): 616
+  Before repair: mR@1=25.2%  mR@3=74.4%  mR@5=99.0%
+  After repair:  mR@1=97.4%  mR@3=97.4%  mR@5=99.0%
+  Repair: contradictions=0 added=8
+
+----------------------------------------------------------------------
+  Scene: teatime
+----------------------------------------------------------------------
+  Gaussians after filter: 587,980
+  Objects found: 10
+  GT relations (geometry-derived): 330
+  Before repair: mR@1=24.2%  mR@3=69.1%  mR@5=91.5%
+  After repair:  mR@1=76.4%  mR@3=77.9%  mR@5=91.5%
+  Repair: contradictions=0 added=7
+
+----------------------------------------------------------------------
+  Scene: waldo_kitchen
+----------------------------------------------------------------------
+  Gaussians after filter: 561,021
+  Objects found: 10
+  GT relations (geometry-derived): 334
+  Before repair: mR@1=24.9%  mR@3=74.6%  mR@5=93.1%
+  After repair:  mR@1=88.6%  mR@3=89.5%  mR@5=93.7%
+  Repair: contradictions=0 added=8
+
+----------------------------------------------------------------------
+  Scene: figurines
+----------------------------------------------------------------------
+  Gaussians after filter: 242,159
+  Objects found: 10
+  GT relations (geometry-derived): 364
+  Before repair: mR@1=23.4%  mR@3=65.9%  mR@5=91.8%
+  After repair:  mR@1=88.5%  mR@3=88.5%  mR@5=92.3%
+  Repair: contradictions=0 added=16
+
+======================================================================
+AGGREGATE RESULTS (4 LERF scenes) -- FRESH RE-RUN, GeoKAN-Gamma
+======================================================================
+
+  Total GT triples: 1644
+  Before repair: mR@1=24.5%  mR@3=71.5%  mR@5=94.7%
+  After repair:  mR@1=89.4%  mR@3=89.9%  mR@5=95.0%
+  Repair stats: 0 contradictions, 39 relations added
+
+Saved -> results/lerf_results_fresh.json

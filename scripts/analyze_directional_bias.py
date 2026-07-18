@@ -16,7 +16,7 @@ from src.dataset.loader_scannet import SceneGraphDatasetScanNet
 from src.relations.schema import RELATION_NAMES, Relation
 
 SCANNET_DIR = "D:/scannet/scans"
-CACHE_DIR   = "data/scannet_cache"
+CACHE_DIR   = "D:/logicsplat_data/scannet_cache"
 
 print("Loading dataset from cache...")
 ds = SceneGraphDatasetScanNet(scannet_dir=SCANNET_DIR, cache_dir=CACHE_DIR, verbose=False)

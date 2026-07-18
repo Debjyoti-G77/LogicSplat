@@ -21,7 +21,7 @@ from src.relations.schema import NUM_RELATIONS, RELATION_NAMES, RELATION_DESCRIP
 from src.graph.definitions import Object3D, SceneGraph
 
 
-DATA_DIR   = "data/processed"
+DATA_DIR   = "D:/logicsplat_data/processed"
 MODEL_PATH = "models/relation_gnn_gat_scannet_geometry.pt"
 
 

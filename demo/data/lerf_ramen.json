@@ -1,0 +1,5643 @@
+{
+  "scene_id": "lerf_ramen",
+  "display_name": "LERF \u2014 ramen (public benchmark)",
+  "dataset": "lerf",
+  "photo": "lerf_ramen.jpg",
+  "objects": [
+    {
+      "id": 1,
+      "label": "kamaboko",
+      "box_px": [
+        533,
+        264,
+        93,
+        44
+      ],
+      "anchor_px": [
+        580,
+        286
+      ]
+    },
+    {
+      "id": 2,
+      "label": "onion segments",
+      "box_px": [
+        587,
+        317,
+        82,
+        45
+      ],
+      "anchor_px": [
+        628,
+        340
+      ]
+    },
+    {
+      "id": 3,
+      "label": "bowl",
+      "box_px": [
+        339,
+        145,
+        473,
+        310
+      ],
+      "anchor_px": [
+        576,
+        300
+      ]
+    },
+    {
+      "id": 4,
+      "label": "plate",
+      "box_px": [
+        349,
+        341,
+        429,
+        197
+      ],
+      "anchor_px": [
+        564,
+        440
+      ]
+    },
+    {
+      "id": 5,
+      "label": "wavy noodles",
+      "box_px": [
+        435,
+        215,
+        134,
+        58
+      ],
+      "anchor_px": [
+        502,
+        244
+      ]
+    },
+    {
+      "id": 6,
+      "label": "egg",
+      "box_px": [
+        543,
+        210,
+        140,
+        79
+      ],
+      "anchor_px": [
+        613,
+        250
+      ]
+    },
+    {
+      "id": 7,
+      "label": "sake cup",
+      "box_px": [
+        99,
+        404,
+        117,
+        131
+      ],
+      "anchor_px": [
+        158,
+        470
+      ]
+    },
+    {
+      "id": 8,
+      "label": "nori",
+      "box_px": [
+        656,
+        161,
+        181,
+        195
+      ],
+      "anchor_px": [
+        746,
+        258
+      ]
+    },
+    {
+      "id": 9,
+      "label": "napkin",
+      "box_px": [
+        206,
+        471,
+        143,
+        116
+      ],
+      "anchor_px": [
+        278,
+        529
+      ]
+    },
+    {
+      "id": 10,
+      "label": "chopsticks",
+      "box_px": [
+        233,
+        285,
+        112,
+        296
+      ],
+      "anchor_px": [
+        289,
+        433
+      ]
+    }
+  ],
+  "relations_before": [
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9994,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9958,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9987,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "higher_than",
+      "obj_name": "chopsticks",
+      "conf": 0.9058,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "higher_than",
+      "obj_name": "napkin",
+      "conf": 0.9918,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "higher_than",
+      "obj_name": "sake cup",
+      "conf": 0.9695,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "in_front_of",
+      "obj_name": "napkin",
+      "conf": 0.9458,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.8537,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 0.9785,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 0.9985,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "right_of",
+      "obj_name": "onion segments",
+      "conf": 0.8365,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.8067,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 0.9728,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 0.9994,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 0.9551,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.7573,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "in_front_of",
+      "obj_name": "napkin",
+      "conf": 0.7783,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "lower_than",
+      "obj_name": "bowl",
+      "conf": 0.9667,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "lower_than",
+      "obj_name": "kamaboko",
+      "conf": 0.9334,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "lower_than",
+      "obj_name": "onion segments",
+      "conf": 0.99,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "bowl",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "kamaboko",
+      "conf": 0.9996,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "napkin",
+      "conf": 0.996,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "sake cup",
+      "conf": 0.8452,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 0.9996,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 0.9865,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 0.999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 0.9979,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9888,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 0.9199,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 0.9993,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 0.9984,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9869,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "nori",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "nori",
+      "conf": 0.9402,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 0.8841,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9994,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "higher_than",
+      "obj_name": "chopsticks",
+      "conf": 0.8472,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "higher_than",
+      "obj_name": "napkin",
+      "conf": 0.9867,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "higher_than",
+      "obj_name": "sake cup",
+      "conf": 0.9522,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "in_front_of",
+      "obj_name": "napkin",
+      "conf": 0.9404,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.7991,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 0.9749,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 0.9992,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "right_of",
+      "obj_name": "bowl",
+      "conf": 0.7021,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "right_of",
+      "obj_name": "onion segments",
+      "conf": 0.8912,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.8704,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "behind",
+      "obj_name": "bowl",
+      "conf": 0.9127,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "behind",
+      "obj_name": "kamaboko",
+      "conf": 0.9053,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "behind",
+      "obj_name": "onion segments",
+      "conf": 0.7789,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "behind",
+      "obj_name": "sake cup",
+      "conf": 0.801,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 0.998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 0.9387,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "lower_than",
+      "obj_name": "bowl",
+      "conf": 0.9983,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "lower_than",
+      "obj_name": "kamaboko",
+      "conf": 0.9963,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "lower_than",
+      "obj_name": "onion segments",
+      "conf": 0.9993,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "right_of",
+      "obj_name": "onion segments",
+      "conf": 0.8998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.9076,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9986,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9993,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "behind",
+      "obj_name": "wavy noodles",
+      "conf": 0.7864,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "bowl",
+      "conf": 0.998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "kamaboko",
+      "conf": 0.9987,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "onion segments",
+      "conf": 0.9719,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "onion segments",
+      "conf": 0.9969,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "plate",
+      "conf": 0.9961,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 0.9325,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 0.9211,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.8936,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9013,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "higher_than",
+      "obj_name": "chopsticks",
+      "conf": 0.9806,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "higher_than",
+      "obj_name": "napkin",
+      "conf": 0.9973,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "higher_than",
+      "obj_name": "sake cup",
+      "conf": 0.9871,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "in_front_of",
+      "obj_name": "napkin",
+      "conf": 0.79,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.8082,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "left_of",
+      "obj_name": "bowl",
+      "conf": 0.8664,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "left_of",
+      "obj_name": "kamaboko",
+      "conf": 0.9013,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "left_of",
+      "obj_name": "napkin",
+      "conf": 0.8955,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 0.9984,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 0.9866,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "on_top_of",
+      "obj_name": "plate",
+      "conf": 0.8454,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 0.9946,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "bowl",
+      "conf": 0.7669,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "onion segments",
+      "conf": 0.762,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "bowl",
+      "conf": 0.8519,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "kamaboko",
+      "conf": 0.8893,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "napkin",
+      "conf": 0.9018,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 0.9977,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "chopsticks",
+      "conf": 0.8526,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "sake cup",
+      "conf": 0.8736,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 0.994,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 0.9996,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "under",
+      "obj_name": "onion segments",
+      "conf": 0.8815,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "under",
+      "obj_name": "wavy noodles",
+      "conf": 0.7687,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.6978,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "in_front_of",
+      "obj_name": "napkin",
+      "conf": 0.9012,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 0.8617,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "lower_than",
+      "obj_name": "bowl",
+      "conf": 0.9818,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "lower_than",
+      "obj_name": "kamaboko",
+      "conf": 0.9619,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "lower_than",
+      "obj_name": "onion segments",
+      "conf": 0.9931,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "bowl",
+      "conf": 0.9829,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "kamaboko",
+      "conf": 0.9779,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "napkin",
+      "conf": 0.947,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "onion segments",
+      "conf": 0.997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.9955,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 0.9986,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 0.9755,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 0.994,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 0.9996,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 0.9991,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 0.9992,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9821,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 0.9988,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 0.9074,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 0.9989,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9996,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 0.9997,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 0.999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 0.9994,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9787,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "egg",
+      "conf": 0.8033,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "in_front_of",
+      "obj_name": "egg",
+      "conf": 0.7558,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "in_front_of",
+      "obj_name": "nori",
+      "conf": 0.7593,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "nori",
+      "conf": 0.9326,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct"
+    }
+  ],
+  "relations_after": [
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9994,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9958,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9987,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "higher_than",
+      "obj_name": "chopsticks",
+      "conf": 0.9058,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "higher_than",
+      "obj_name": "napkin",
+      "conf": 0.9918,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "higher_than",
+      "obj_name": "sake cup",
+      "conf": 0.9695,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "in_front_of",
+      "obj_name": "napkin",
+      "conf": 0.9458,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.8537,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "left_of",
+      "obj_name": "kamaboko",
+      "conf": 0.7128,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 0.9785,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 0.9985,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "right_of",
+      "obj_name": "onion segments",
+      "conf": 0.8365,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.8067,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 0.9728,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 0.9994,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 0.9551,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.7573,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "in_front_of",
+      "obj_name": "napkin",
+      "conf": 0.7783,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "lower_than",
+      "obj_name": "bowl",
+      "conf": 0.9667,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "lower_than",
+      "obj_name": "kamaboko",
+      "conf": 0.9334,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "lower_than",
+      "obj_name": "onion segments",
+      "conf": 0.99,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "bowl",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "kamaboko",
+      "conf": 0.9996,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "napkin",
+      "conf": 0.996,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "sake cup",
+      "conf": 0.8452,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "chopsticks",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 0.9996,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 0.9865,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 0.999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 0.9979,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9888,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 0.9199,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 0.9993,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 0.9984,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9869,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "behind",
+      "obj_name": "wavy noodles",
+      "conf": 0.7321,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "nori",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "higher_than",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "nori",
+      "conf": 0.9402,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 0.8841,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9994,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "higher_than",
+      "obj_name": "chopsticks",
+      "conf": 0.8472,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "higher_than",
+      "obj_name": "napkin",
+      "conf": 0.9867,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "higher_than",
+      "obj_name": "sake cup",
+      "conf": 0.9522,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "in_front_of",
+      "obj_name": "napkin",
+      "conf": 0.9404,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.7991,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 0.9749,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 0.9992,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "right_of",
+      "obj_name": "bowl",
+      "conf": 0.7021,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "right_of",
+      "obj_name": "onion segments",
+      "conf": 0.8912,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.8704,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "kamaboko",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "behind",
+      "obj_name": "bowl",
+      "conf": 0.9127,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "behind",
+      "obj_name": "chopsticks",
+      "conf": 0.6623,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "behind",
+      "obj_name": "kamaboko",
+      "conf": 0.9053,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "behind",
+      "obj_name": "onion segments",
+      "conf": 0.7789,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "behind",
+      "obj_name": "sake cup",
+      "conf": 0.801,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 0.998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 0.9387,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "lower_than",
+      "obj_name": "bowl",
+      "conf": 0.9983,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "lower_than",
+      "obj_name": "kamaboko",
+      "conf": 0.9963,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "lower_than",
+      "obj_name": "onion segments",
+      "conf": 0.9993,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "right_of",
+      "obj_name": "onion segments",
+      "conf": 0.8998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.9076,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9986,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9993,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "behind",
+      "obj_name": "wavy noodles",
+      "conf": 0.7864,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "bowl",
+      "conf": 0.998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "kamaboko",
+      "conf": 0.9987,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "onion segments",
+      "conf": 0.9719,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "higher_than",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "onion segments",
+      "conf": 0.9969,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "plate",
+      "conf": 0.9961,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 0.9325,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 0.9211,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.8936,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9013,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "higher_than",
+      "obj_name": "chopsticks",
+      "conf": 0.9806,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "higher_than",
+      "obj_name": "napkin",
+      "conf": 0.9973,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "higher_than",
+      "obj_name": "sake cup",
+      "conf": 0.9871,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "in_front_of",
+      "obj_name": "napkin",
+      "conf": 0.79,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "in_front_of",
+      "obj_name": "plate",
+      "conf": 0.8082,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "left_of",
+      "obj_name": "bowl",
+      "conf": 0.8664,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "left_of",
+      "obj_name": "kamaboko",
+      "conf": 0.9013,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "left_of",
+      "obj_name": "napkin",
+      "conf": 0.8955,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 0.9984,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 0.9866,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "on_top_of",
+      "obj_name": "plate",
+      "conf": 0.8454,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 0.9946,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "onion segments",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "bowl",
+      "conf": 0.7669,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "kamaboko",
+      "conf": 0.7194,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "onion segments",
+      "conf": 0.762,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "bowl",
+      "conf": 0.8519,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "kamaboko",
+      "conf": 0.8893,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "napkin",
+      "conf": 0.9018,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 0.9977,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "chopsticks",
+      "conf": 0.8526,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "sake cup",
+      "conf": 0.8736,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 0.994,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 0.9996,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "under",
+      "obj_name": "onion segments",
+      "conf": 0.8815,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "under",
+      "obj_name": "wavy noodles",
+      "conf": 0.7687,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "adjacent_to",
+      "obj_name": "wavy noodles",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "attached_to",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.6978,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "in_front_of",
+      "obj_name": "napkin",
+      "conf": 0.9012,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 0.8617,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "lower_than",
+      "obj_name": "bowl",
+      "conf": 0.9818,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "lower_than",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "lower_than",
+      "obj_name": "kamaboko",
+      "conf": 0.9619,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "lower_than",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "lower_than",
+      "obj_name": "onion segments",
+      "conf": 0.9931,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "lower_than",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "bowl",
+      "conf": 0.9829,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "egg",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "kamaboko",
+      "conf": 0.9779,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "napkin",
+      "conf": 0.947,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "onion segments",
+      "conf": 0.997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "plate",
+      "conf": 0.9955,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "sake cup",
+      "rel": "right_of",
+      "obj_name": "wavy noodles",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "bowl",
+      "conf": 0.9986,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "chopsticks",
+      "conf": 0.9755,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "egg",
+      "conf": 0.994,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "napkin",
+      "conf": 0.9996,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "nori",
+      "conf": 0.9991,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "onion segments",
+      "conf": 0.9992,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "plate",
+      "conf": 0.9821,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "adjacent_to",
+      "obj_name": "sake cup",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "bowl",
+      "conf": 0.9988,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "chopsticks",
+      "conf": 0.9074,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "egg",
+      "conf": 0.9989,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "kamaboko",
+      "conf": 0.9996,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "napkin",
+      "conf": 0.9997,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "nori",
+      "conf": 0.999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "onion segments",
+      "conf": 0.9994,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "plate",
+      "conf": 0.9787,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "attached_to",
+      "obj_name": "sake cup",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "egg",
+      "conf": 0.8033,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "nori",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "higher_than",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "in_front_of",
+      "obj_name": "egg",
+      "conf": 0.7558,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "in_front_of",
+      "obj_name": "nori",
+      "conf": 0.7593,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "bowl",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "chopsticks",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "kamaboko",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "napkin",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "nori",
+      "conf": 0.9326,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "onion segments",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "plate",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "left_of",
+      "obj_name": "sake cup",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "wavy noodles",
+      "rel": "on_top_of",
+      "obj_name": "plate",
+      "conf": 0.5237,
+      "gt": "wrong",
+      "repair_action": "added"
+    }
+  ],
+  "removed_by_repair": [],
+  "missed_before": [
+    {
+      "subj_name": "bowl",
+      "rel": "left_of",
+      "obj_name": "kamaboko",
+      "conf": 0.7128,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "bowl",
+      "rel": "left_of",
+      "obj_name": "napkin",
+      "conf": 0.7024,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "egg",
+      "rel": "behind",
+      "obj_name": "wavy noodles",
+      "conf": 0.7321,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.4442,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "right_of",
+      "obj_name": "bowl",
+      "conf": 0.6832,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "on_top_of",
+      "obj_name": "plate",
+      "conf": 0.4048,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "behind",
+      "obj_name": "kamaboko",
+      "conf": 0.7194,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "napkin",
+      "conf": 0.4794,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "under",
+      "obj_name": "nori",
+      "conf": 0.6088,
+      "gt": "missed"
+    }
+  ],
+  "missed_after": [
+    {
+      "subj_name": "bowl",
+      "rel": "left_of",
+      "obj_name": "napkin",
+      "conf": 0.7024,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "higher_than",
+      "obj_name": "plate",
+      "conf": 0.4442,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "napkin",
+      "rel": "right_of",
+      "obj_name": "bowl",
+      "conf": 0.6832,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "nori",
+      "rel": "on_top_of",
+      "obj_name": "plate",
+      "conf": 0.4048,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "lower_than",
+      "obj_name": "napkin",
+      "conf": 0.4794,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "plate",
+      "rel": "under",
+      "obj_name": "nori",
+      "conf": 0.6088,
+      "gt": "missed"
+    }
+  ],
+  "repair_summary": {
+    "added": 8,
+    "removed": 0,
+    "iterations": 2
+  },
+  "timings_ms": {
+    "inference": 10.41,
+    "repair": 4.06
+  },
+  "model": {
+    "params": 1018414,
+    "name": "GeoKAN-Gamma"
+  },
+  "gt_available": true,
+  "correct_count": 346,
+  "total_count": 360
+}

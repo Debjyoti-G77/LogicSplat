@@ -45,7 +45,7 @@ from src.relations.geometry import derive_relations
 # ── constants ─────────────────────────────────────────────────────────────────
 
 NODE_FEATURE_DIM = 10
-EDGE_FEATURE_DIM = 10
+EDGE_FEATURE_DIM = 17
 
 # NYU40 label ID → human-readable name (subset used in ScanNet)
 NYU40_NAMES = {
@@ -171,7 +171,7 @@ def _edge_features(
     scene_extent: np.ndarray,
 ) -> np.ndarray:
     """
-    Compute 10-dim geometric edge features between two objects.
+    Compute 17-dim geometric edge features between two objects.
 
     Features [0-1] are the KEY fix for directional relations:
       [0]  delta_x  — signed X displacement (A centroid - B centroid), normalized
@@ -186,8 +186,19 @@ def _edge_features(
       [5]  bbox_overlap_xy (fraction of A's footprint overlapping B)
       [6]  volume_ratio (min/max, 0-1)
       [7]  height_ratio (log-normalized)
-      [8]  vertical_gap (a.bottom - b.top, normalized, clamped)
+      [8]  vertical_gap (a.bottom - b.top, normalized by scene extent, clamped)
       [9]  size_ratio_xy (log-normalized)
+
+    Contact-specific features:
+      [10] vert_gap_obj_norm — vertical gap normalized by mean object height
+      [11] vert_gap_abs — absolute vertical gap in meters, clipped [-0.5, 0.5]
+      [12] contact_score — exp(-|gap|/threshold) * bbox_overlap * a_above_b
+      [13] support_overlap_b — XY intersection area / B's footprint area
+
+    Rule-margin features:
+      [14] ontop_z_margin — how far above z_min_threshold is the Z diff
+      [15] ontop_xy_margin — how far inside B's footprint is A's centroid
+      [16] z_dominance_margin — does Z diff dominate XY distance
     """
     if len(pts_a) == 0 or len(pts_b) == 0:
         return np.zeros(EDGE_FEATURE_DIM, dtype=np.float32)
@@ -225,10 +236,100 @@ def _edge_features(
         -3.0, 3.0,
     ) / 3.0)
 
+    # ── Contact-specific features [10-13] ──
+    # [10] vert_gap_obj_norm: vertical gap normalized by mean object height
+    mean_height = max((size_a[2] + size_b[2]) / 2.0, 1e-6)
+    vert_gap_obj_norm = float(np.clip((min_a[2] - max_b[2]) / mean_height, -3.0, 3.0) / 3.0)
+
+    # [11] vert_gap_abs: absolute vertical gap in meters, clipped
+    vert_gap_abs = float(np.clip(min_a[2] - max_b[2], -0.5, 0.5))
+
+    # [12] contact_score: high when small gap AND high XY overlap AND A above B
+    a_above_b = float(c_a[2] > c_b[2])
+    raw_gap = float(min_a[2] - max_b[2])
+    contact_score = float(
+        np.exp(-abs(raw_gap) / max(mean_height * 0.3, 0.01)) * bbox_overlap * a_above_b
+    )
+
+    # [13] support_overlap_b: XY intersection area / B's footprint area
+    area_b = max((max_b[0] - min_b[0]) * (max_b[1] - min_b[1]), 1e-9)
+    support_overlap_b = float((ix * iy) / area_b)
+
+    # ── Rule-margin features [14-16] ──
+    # These encode how close each pair is to the on_top_of rule boundary,
+    # helping the GNN learn the decision surface directly.
+
+    # [14] ontop_z_margin: how far above z_min_threshold is the Z diff?
+    #   Positive = above threshold (rule would fire), negative = below
+    z_min_thresh = max(norm[2] * 0.02, 0.01)
+    centroid_z_diff = float(c_a[2] - c_b[2])
+    ontop_z_margin = float(np.clip(
+        (centroid_z_diff - z_min_thresh) / max(z_min_thresh, 0.01), -3.0, 3.0
+    ) / 3.0)
+
+    # [15] ontop_xy_margin: how far inside B's footprint is A's centroid?
+    #   Positive = inside footprint (rule would fire), negative = outside
+    b_xy_size = float(np.linalg.norm(size_b[:2]))
+    xy_limit = max(b_xy_size * 0.8, 0.1)
+    centroid_xy_dist = float(np.linalg.norm(c_a[:2] - c_b[:2]))
+    ontop_xy_margin = float(np.clip(
+        (xy_limit - centroid_xy_dist) / max(xy_limit, 0.01), -3.0, 3.0
+    ) / 3.0)
+
+    # [16] z_dominance_margin: does Z diff dominate XY distance?
+    #   on_top_of requires centroid_z_diff > centroid_xy_dist * z_dominance_factor
+    ontop_z_dom = 0.5
+    z_dom_margin = float(np.clip(
+        (centroid_z_diff - centroid_xy_dist * ontop_z_dom) / max(abs(centroid_z_diff) + 0.01, 0.01),
+        -3.0, 3.0
+    ) / 3.0)
+
     return np.array([
         delta_x, delta_y, delta_z, xy_dist, dist_3d,
         bbox_overlap, vol_ratio, h_ratio, vert_gap, size_ratio_xy,
+        vert_gap_obj_norm, vert_gap_abs, contact_score, support_overlap_b,
+        ontop_z_margin, ontop_xy_margin, z_dom_margin,
     ], dtype=np.float32)
+
+
+def _read_axis_alignment(scene_dir: str, scene_id: str) -> np.ndarray:
+    """
+    Read the axisAlignment 4×4 matrix from the ScanNet per-scene .txt file.
+    Returns a (4,4) float32 rotation matrix, or identity if file not found.
+
+    The axisAlignment matrix rotates the raw scan coordinate system to a
+    canonical gravity-aligned orientation where:
+      - Z axis = up (gravity direction)
+      - X/Y axes = consistent horizontal orientation across scenes
+
+    Without this, delta_y in edge features is arbitrary per scan, making
+    in_front_of/behind unlearnable (same geometry, opposite labels).
+    """
+    txt_path = os.path.join(scene_dir, f"{scene_id}.txt")
+    if not os.path.exists(txt_path):
+        return np.eye(4, dtype=np.float32)
+    try:
+        with open(txt_path) as f:
+            for line in f:
+                if line.startswith("axisAlignment"):
+                    vals = list(map(float, line.split("=")[1].strip().split()))
+                    return np.array(vals, dtype=np.float32).reshape(4, 4)
+    except Exception:
+        pass
+    return np.eye(4, dtype=np.float32)
+
+
+def _apply_axis_alignment(points: np.ndarray, matrix: np.ndarray) -> np.ndarray:
+    """
+    Apply a 4×4 axisAlignment matrix to (N, 3) point array.
+    Uses homogeneous coordinates: [x, y, z, 1] @ M.T
+    """
+    if np.allclose(matrix, np.eye(4)):
+        return points  # identity — skip transform
+    ones = np.ones((len(points), 1), dtype=np.float32)
+    pts_h = np.concatenate([points, ones], axis=1)  # (N, 4)
+    pts_aligned = (matrix @ pts_h.T).T             # (N, 4)
+    return pts_aligned[:, :3].astype(np.float32)
 
 
 # ── scene loader ──────────────────────────────────────────────────────────────
@@ -261,6 +362,12 @@ def load_scannet_scene(
     except Exception as e:
         print(f"  [skip] {scene_id}: failed to read mesh: {e}")
         return None
+
+    # ── apply axisAlignment to canonical orientation ──────────────────────────
+    # Rotates the scan so Y-axis is consistent across all scenes, making
+    # in_front_of/behind learnable. Falls back to identity if .txt not found.
+    axis_matrix = _read_axis_alignment(scene_dir, scene_id)
+    all_points = _apply_axis_alignment(all_points, axis_matrix)
 
     scene_min = all_points.min(axis=0)
     scene_max = all_points.max(axis=0)
@@ -372,13 +479,18 @@ def build_scannet_scene_graph_geometric(scene_data: Dict) -> Optional[Dict]:
     Build a PyG-compatible scene graph from ScanNet geometry using
     derive_relations() from geometry.py to auto-label every object pair.
 
+    Multi-label mode: every edge carries a multi-hot vector of shape
+    (NUM_RELATIONS,) where each entry is 1.0 if that relation holds between
+    the pair, 0.0 otherwise.  This matches the GT annotation convention where
+    multiple relations can hold simultaneously (e.g. higher_than AND on_top_of).
+
     No human annotation needed — relations are derived purely from 3D bboxes.
 
     Returns dict with keys:
         x:           (N, 10) node features
-        edge_index:  (2, E) directed edges (all pairs)
-        edge_attr:   (E, 8) geometric edge features
-        edge_label:  (E,)   relation class from derive_relations()
+        edge_index:  (2, E) directed edges (all pairs that have ≥1 relation)
+        edge_attr:   (E, 10) geometric edge features
+        edge_label:  (E, NUM_RELATIONS) multi-hot float tensor
         obj_labels:  list of semantic label strings
         scene_id:    str
     Returns None if fewer than 2 objects.
@@ -394,7 +506,8 @@ def build_scannet_scene_graph_geometric(scene_data: Dict) -> Optional[Dict]:
     x = np.stack([objects[oid]["node_feat"] for oid in obj_ids])
     obj_labels = [objects[oid]["label"] for oid in obj_ids]
 
-    src_list, dst_list, label_list, edge_feat_list = [], [], [], []
+    src_list, dst_list, edge_feat_list = [], [], []
+    label_list: List[np.ndarray] = []
 
     for i, oid_a in enumerate(obj_ids):
         pts_a = objects[oid_a]["points"]
@@ -409,20 +522,22 @@ def build_scannet_scene_graph_geometric(scene_data: Dict) -> Optional[Dict]:
             min_b = pts_b.min(axis=0)
             max_b = pts_b.max(axis=0)
 
-            # derive relation labels from geometry
+            # derive ALL applicable relation labels from geometry
             rels = derive_relations(min_a, max_a, min_b, max_b)
 
-            # pick the highest-priority relation (first in list = most specific)
-            # if no relation holds, skip this pair
-            if not rels:
-                continue
+            # build multi-hot label vector (all-zeros if no relation)
+            multi_hot = np.zeros(NUM_RELATIONS, dtype=np.float32)
+            for r in rels:
+                multi_hot[int(r)] = 1.0
 
-            label = int(rels[0])  # first = most specific (physical > proximity > directional)
+            # Always include the edge — even if multi_hot is all zeros.
+            # This gives the GNN negative examples (pairs with NO relation)
+            # so it learns when NOT to predict a relation.
             edge_feat = _edge_features(pts_a, pts_b, scene_extent)
 
             src_list.append(i)
             dst_list.append(j)
-            label_list.append(label)
+            label_list.append(multi_hot)
             edge_feat_list.append(edge_feat)
 
     if not src_list:
@@ -432,7 +547,7 @@ def build_scannet_scene_graph_geometric(scene_data: Dict) -> Optional[Dict]:
         "x":          torch.tensor(x, dtype=torch.float32),
         "edge_index": torch.tensor([src_list, dst_list], dtype=torch.long),
         "edge_attr":  torch.tensor(np.stack(edge_feat_list), dtype=torch.float32),
-        "edge_label": torch.tensor(label_list, dtype=torch.long),
+        "edge_label": torch.tensor(np.stack(label_list), dtype=torch.float32),
         "obj_labels": obj_labels,
         "scene_id":   scene_data["scene_id"],
     }
@@ -475,12 +590,12 @@ class SceneGraphDatasetScanNet(Dataset):
     """
 
     # bump this if the feature schema changes — invalidates old cache files
-    CACHE_VERSION = "v2"
+    CACHE_VERSION = "v7_margins"
 
     def __init__(
         self,
         scannet_dir: str = "data/scannet/scans",
-        cache_dir: str = "data/scannet_cache",
+        cache_dir: str = "D:/logicsplat_data/scannet_cache",
         max_scenes: Optional[int] = None,
         verbose: bool = True,
     ):
@@ -501,12 +616,27 @@ class SceneGraphDatasetScanNet(Dataset):
             if os.path.isdir(os.path.join(scannet_dir, name))
         ])
 
+        try:
+            from tqdm import tqdm
+            _tqdm = tqdm
+        except ImportError:
+            _tqdm = None
+
+        total = min(len(scene_ids), max_scenes) if max_scenes else len(scene_ids)
         if verbose:
-            total = min(len(scene_ids), max_scenes) if max_scenes else len(scene_ids)
             print(f"SceneGraphDatasetScanNet: processing {total} scenes "
                   f"(cache: {cache_dir})")
 
-        for scene_id in scene_ids:
+        scene_iter = scene_ids[:total]
+        if _tqdm is not None and verbose:
+            scene_iter = _tqdm(
+                scene_iter,
+                desc="Building cache",
+                unit="scene",
+                dynamic_ncols=True,
+            )
+
+        for scene_id in scene_iter:
             if max_scenes is not None and loaded >= max_scenes:
                 break
 
@@ -521,30 +651,44 @@ class SceneGraphDatasetScanNet(Dataset):
                     self.graphs.append(graph)
                     loaded += 1
                     cache_hits += 1
+                    if _tqdm is not None and verbose:
+                        scene_iter.set_postfix(
+                            loaded=loaded, cache=cache_hits, skip=skipped
+                        )
                     continue
                 except Exception:
-                    # corrupt cache file — reprocess
                     os.remove(cache_path)
 
             # ── process from raw files ────────────────────────────────────────
             scene_data = load_scannet_scene(scene_id, scannet_dir)
             if scene_data is None:
                 skipped += 1
+                if _tqdm is not None and verbose:
+                    scene_iter.set_postfix(
+                        loaded=loaded, cache=cache_hits, skip=skipped
+                    )
                 continue
 
             graph = build_scannet_scene_graph_geometric(scene_data)
             if graph is None:
                 skipped += 1
+                if _tqdm is not None and verbose:
+                    scene_iter.set_postfix(
+                        loaded=loaded, cache=cache_hits, skip=skipped
+                    )
                 continue
 
-            # save to cache (strip large point arrays — only keep tensors)
             torch.save(graph, cache_path)
-
             self.graphs.append(graph)
             loaded += 1
 
-            if verbose and loaded % 100 == 0:
-                print(f"  ... {loaded} scenes processed")
+            if _tqdm is not None and verbose:
+                scene_iter.set_postfix(
+                    loaded=loaded, cache=cache_hits, skip=skipped
+                )
+            elif verbose and loaded % 50 == 0:
+                print(f"  ... {loaded}/{total} scenes processed "
+                      f"({cache_hits} cached, {skipped} skipped)")
 
         if verbose:
             print(f"SceneGraphDatasetScanNet: loaded {loaded} scenes "
@@ -554,17 +698,22 @@ class SceneGraphDatasetScanNet(Dataset):
 
     def _print_stats(self):
         from collections import Counter
-        all_labels = []
+        # edge_label is now (E, NUM_RELATIONS) multi-hot — sum positives per class
+        import torch as _torch
+        pos_counts = _torch.zeros(NUM_RELATIONS)
+        total_edges = 0
         for g in self.graphs:
             if "edge_label" in g:
-                all_labels.extend(g["edge_label"].tolist())
-        if not all_labels:
+                lbl = g["edge_label"]
+                pos_counts += lbl.sum(dim=0)
+                total_edges += lbl.shape[0]
+        if total_edges == 0:
             return
-        counts = Counter(all_labels)
-        total = sum(counts.values())
-        print(f"Relation distribution (ScanNet, {total} edges):")
-        for idx, count in sorted(counts.items()):
-            bar = "#" * int(30 * count / total)
+        print(f"Relation distribution (ScanNet, {total_edges} edges, multi-label):")
+        max_count = pos_counts.max().item()
+        for idx in range(NUM_RELATIONS):
+            count = int(pos_counts[idx].item())
+            bar = "#" * int(30 * count / max(max_count, 1))
             print(f"  {RELATION_NAMES[idx]:20s} {count:6d}  {bar}")
 
     def __len__(self) -> int:

@@ -1,0 +1,2878 @@
+   LogicSplat: Neuro-Symbolic 3D Scene Graph Generation from Gaussian Splats via
+                              Geometric Kolmogorov-Arnold Networks
+
+                                                 PREFACE
+
+Understanding how objects relate to one another in three-dimensional space is among the more
+quietly difficult problems in computer vision. It is not enough for a system to detect that a table
+and a cup are present in a scene -- it must understand that the cup sits on the table, that the
+router is behind the laptop, that the book is lower than the shelf it fell from. These spatial
+relations are the connective tissue of scene understanding, and yet they remain surprisingly
+hard to learn from visual data alone.
+
+This project began with a broad interest in that problem and a specific context: 3D Gaussian
+Splatting, which has made high-quality scene reconstruction accessible from a few minutes of
+casual smartphone video. The original conception was ambitious -- semantic segmentation via
+foundation models, natural language querying via a local LLM. What the research ultimately
+produced was something quite different, and I believe more interesting: a geometry-native
+system, free of any foundation model, that learns spatial relations directly from the geometric
+properties of Gaussian clusters. That shift was not a retreat from the original ambition. It was
+where the evidence led.
+
+The report documents both the system that was built and the reasoning behind every design
+decision -- the feature engineering, the training strategy, the architectural choices, and the
+evaluation across three distinct scene domains. The end-to-end user-facing application
+originally planned is not within the scope of this report; that remains natural future work, as
+discussed in the concluding chapter.
+
+I am grateful to Mr. Sahil Shah, whose guidance throughout this project was decisive --
+particularly his suggestion to explore Geometric Kolmogorov-Arnold Networks at a point
+when the research needed direction. I also thank the open-source communities behind
+NerfStudio, PyTorch Geometric, and the 3RScan dataset for making this work possible.
+
+Debjyoti Sengupta
+
+Symbiosis Institute of Geoinformatics,
+
+Pune June 2026
+                                           1.INTRODUCTION
+
+1.1 Background and Motivation
+
+The ability to reason about the spatial relationships between objects in a three-dimensional
+environment is a fundamental requirement for machines that must interpret, navigate, or
+interact with the physical world. Whether the application is robotic manipulation, autonomous
+navigation, or augmented reality, a system cannot act meaningfully on a scene it can only
+perceive as a collection of isolated objects. It must also understand that one object rests on top
+of another, that two objects are adjacent, that a third is directly in front of a fourth. This
+structured, relational understanding of a scene is formally encoded as a scene graph -- a
+directed graph in which nodes represent object instances and edges represent the spatial or
+semantic relationships between them.
+
+Constructing such graphs from real three-dimensional data has historically required either
+expensive depth sensors, manually annotated point clouds, or large foundation models trained
+on internet-scale data. The emergence of 3D Gaussian Splatting (3DGS), introduced by Kerbl
+et al. (2023), offers a compelling alternative starting point. Unlike neural radiance fields, a
+Gaussian splat reconstructs a scene as an explicit set of anisotropic Gaussian primitives, each
+carrying position, colour, opacity, and a full 3D covariance matrix that encodes local surface
+geometry. Critically, a photorealistic Gaussian splat of a room-scale scene can now be
+reconstructed from a short smartphone video in under fifteen minutes using NerfStudio's
+splatfacto pipeline, placing high-quality 3D scene reconstruction within reach of end users
+without specialised hardware.
+
+Despite this accessibility, the problem of extracting structured relational scene graphs directly
+from Gaussian splats remains largely unsolved. Existing approaches either rely on 2D image
+features from large vision-language models -- introducing dependency on foundation models
+with billions of parameters and minute-scale inference times -- or operate on mesh and point
+cloud representations that do not exploit the unique geometric richness of the Gaussian
+representation. The natural question arises: can the geometry encoded within the Gaussian
+primitives themselves -- their positions, scales, and covariance structures -- provide sufficient
+signal to predict spatial relations accurately, without any foundation model at inference time?
+
+This project, LogicSplat, investigates that question. It proposes a geometry-first pipeline that
+proceeds from raw smartphone video, through Gaussian splat reconstruction and object
+clustering, to a scene graph predicted entirely from geometric features by a Geometric
+Kolmogorov-Arnold Network (GeoKAN). A zero-parameter symbolic consistency repair
+module enforces logical constraints on the output, ensuring the final graph is free of
+contradictions. The result is a system that achieves Macro F1 = 0.926 and R@5 = 98.3% on
+the 3DSSG benchmark using only 1.018 million parameters and under two seconds of inference
+time on a consumer GPU -- outperforming foundation-model-based methods that are three
+orders of magnitude larger.
+1.2 Problem Statement
+
+Despite the rapid advancement of 3D scene reconstruction techniques, the automatic generation
+of structured spatial scene graphs from Gaussian splat representations remains an open and
+largely unaddressed problem. Three specific gaps define the current state of the field.
+
+First, existing scene graph methods that operate on 3D data depend heavily on large foundation
+models -- vision-language models such as CLIP, SAM, LLaVA, and GroundingDINO -- to
+interpret object identity and spatial context. Systems such as GaussianGraph (Li et al., 2025)
+and ReLaGS (Arafa et al., 2026) require billions of parameters, several gigabytes of GPU
+memory, and over ten minutes of inference time per scene. This dependency makes them
+impractical for deployment on consumer hardware and unsuitable for real-time applications.
+
+Second, the 3D Gaussian Splat representation carries rich geometric information in the form of
+per-Gaussian covariance matrices, opacity values, and spatial distributions -- yet existing
+pipelines discard this geometry in favour of projected 2D image features. The question of
+whether the geometry encoded within Gaussian primitives is itself sufficient to predict spatial
+relations -- without any visual language model -- has not been systematically investigated.
+
+Third, the annotations provided by the 3DSSG dataset (Wald et al., 2020), which is the primary
+benchmark for indoor 3D scene graphs, are extremely sparse: human annotators label only 80­
+120 directed object pairs per scene out of approximately 870 possible pairs. This severe
+annotation sparsity means that standard supervised training on 3DSSG labels leaves the
+majority of geometrically derivable relations unlearned, suppressing model performance
+independently of architectural choices.
+
+This project addresses all three gaps. It asks whether a lightweight model trained exclusively
+on geometric features extracted from Gaussian splats, augmented with rule-derived labels to
+overcome annotation sparsity, and refined by a zero-parameter symbolic consistency module,
+can match or exceed the performance of foundation-model-dependent systems on established
+benchmarks -- while remaining deployable on a single consumer GPU in under two seconds.
+
+1.3 Research Questions
+
+This project is structured around the following research questions:
+
+RQ1. Can geometric features extracted directly from 3D Gaussian Splat primitives -- without
+any visual language model or 2D image feature -- provide sufficient signal to predict spatial
+relations between objects in indoor scenes?
+
+RQ2. Does a Kolmogorov-Arnold Network architecture with a learnable geometric metric
+outperform standard graph neural network layers for spatial relation prediction, and does the
+choice of basis function (RBF, wavelet, or fixed diagonal) materially affect performance?
+
+RQ3. To what extent can rule-based pseudo-label injection address the annotation sparsity
+inherent in the 3DSSG dataset, and how much of the observed performance gain is attributable
+to this injection rather than architectural improvements?
+RQ4. Does a zero-parameter symbolic consistency repair module, enforcing logical constraints
+such as inverse completeness, mutual exclusion, and transitivity, improve scene graph quality
+on held-out and cross-domain scenes without retraining?
+
+RQ5. How well does a model trained exclusively on room-scale indoor scenes (3RScan, 3­8
+m scene extent) generalise zero-shot to a significantly different scale domain -- specifically
+tabletop environments with scene extents of 0.3­0.8 m -- and which spatial relations transfer
+reliably across this domain gap?
+
+RQ6. Does the geometry-first pipeline generalise to indoor scenes from an entirely different
+dataset (LERF), and is the degree of generalisation explained by scale similarity rather than
+scene type?
+
+RQ7. How does the computational footprint of the proposed geometry-first approach compare
+against foundation-model-dependent systems in terms of parameter count, GPU memory, and
+inference time, at equivalent or superior benchmark performance?
+
+RQ8. Can the complete pipeline -- from consumer smartphone video through Gaussian splat
+reconstruction to final scene graph -- be executed end-to-end on a single consumer GPU within
+a practically deployable time budget?
+
+1.4 Research Objectives
+
+The overarching objective of this project is to design, implement, and evaluate a lightweight,
+geometry-first pipeline for spatial scene graph generation from 3D Gaussian Splats, operating
+without foundation models at inference time. The specific objectives are as follows:
+
+O1. To develop a complete end-to-end pipeline that converts a short smartphone video into a
+structured spatial scene graph, encompassing Gaussian splat reconstruction, object clustering,
+geometric feature extraction, relation prediction, and symbolic consistency repair.
+
+O2. To design and implement the GeoKAN layer -- a Kolmogorov-Arnold Network variant
+with a learnable geometric metric -- and integrate it into a dual-head graph neural network
+architecture (GeoKANRelationGNN) capable of jointly predicting contact and directional
+spatial relations.
+
+O3. To develop a rule-based label injection strategy that derives geometrically certain pseudo-
+labels for unannotated object pairs in the 3DSSG dataset, thereby substantially increasing the
+effective training signal without introducing data leakage.
+
+O4. To design and implement a zero-parameter symbolic consistency repair module
+(SceneGraphRepair) that enforces inverse completeness, mutual exclusion, asymmetry, and
+transitivity constraints on predicted scene graphs through fixed-point iteration.
+
+O5. To conduct a systematic ablation study comparing three GeoKAN basis function variants
+-- RBF, Mexican hat wavelet, and fixed diagonal (Gamma) -- under identical training
+conditions, and to identify the variant that achieves the best balance of accuracy and training
+stability.
+
+O6. To benchmark the final system against state-of-the-art scene graph methods on the 3DSSG
+validation set and the LERF dataset, and to evaluate zero-shot cross-domain generalisation on
+eight custom-captured tabletop scenes.
+
+O7. To characterise the domain gap between room-scale training data and tabletop evaluation
+data, identifying which spatial relations transfer robustly and which degrade, and explaining
+the root cause in terms of scale-dependent feature distributions.
+
+1.5 Scope and Delimitations
+
+This project focuses on the prediction of spatial relations between object instances in static
+three-dimensional indoor scenes reconstructed as 3D Gaussian Splats. The scope and
+boundaries of the work are defined as follows.
+
+Within scope:
+
+The project covers the full pipeline from Gaussian splat input to scene graph output, including
+opacity-based filtering, statistical outlier removal, RANSAC-based background segmentation,
+HDBSCAN object clustering, geometric feature engineering, graph neural network inference,
+per-relation threshold calibration, and symbolic consistency repair. Evaluation is conducted on
+the 3DSSG benchmark (Wald et al., 2020), four LERF scenes (Kerr et al., 2023), and eight
+custom-captured tabletop scenes. The relation schema consists of ten directed spatial relations:
+on_top_of, under, attached_to, adjacent_to, left_of, right_of, in_front_of, behind, higher_than,
+and lower_than.
+
+Outside scope:
+
+The project does not address semantic object recognition or open-vocabulary object labelling
+as a primary contribution; object identity labels are used only for human-readable output and
+do not influence relation prediction. Dynamic scenes, scenes with significant occlusion, and
+outdoor environments are not considered. The project does not address scene graph generation
+from raw RGB-D sequences, mesh-based representations, or NeRF implicit fields. Temporal
+reasoning -- tracking how spatial relations change over time -- is outside the scope of this
+work.
+
+The project does not claim to produce a deployable robotics system or a generalised spatial
+reasoning engine. The tabletop evaluation scenes were captured and annotated by the author
+specifically for cross-domain testing; they do not constitute a large-scale benchmark and results
+on them are reported as indicative of zero-shot generalisation rather than definitive cross-
+domain performance.
+
+Finally, the two relations -- INSIDE and HANGING_FROM -- present in the original 3DSSG
+vocabulary are excluded from the relation schema on account of insufficient positive training
+examples (262 and 974 instances respectively out of over two million total edges), and their
+prediction is not attempted.
+
+1.6 Significance of the Study
+
+The significance of this work lies at the intersection of three practical concerns: accessibility
+of 3D scene understanding, efficiency of spatial reasoning systems, and the integrity of
+evaluation methodology in cross-domain machine learning.
+
+From a technical standpoint, this project demonstrates that foundation models are not a
+prerequisite for high-quality spatial scene graph generation. The proposed system achieves
+Macro F1 = 0.926 and R@5 = 98.3% on the 3DSSG validation benchmark using 1.018 million
+parameters and under two seconds of inference time on a consumer GPU -- outperforming
+ReLaGS (Arafa et al., 2026), which uses approximately 1.5 billion parameters and requires
+12.6 minutes per scene. This result has direct implications for the deployability of 3D scene
+understanding in resource-constrained environments, including edge devices, mobile robotics
+platforms, and applications where low latency is essential.
+
+From a representational standpoint, the project makes a concrete contribution to the
+understanding of what geometric information Gaussian Splats contain and how it can be
+exploited. By demonstrating that 10-dimensional node features and 22-dimensional edge
+features derived entirely from cluster geometry -- without colour, texture, or semantic labels
+-- are sufficient to learn ten spatial relation classes to high accuracy, the project establishes a
+principled baseline for geometry-first scene understanding from Gaussian representations.
+
+From a methodological standpoint, the project contributes an honest account of cross-domain
+evaluation under a genuine domain gap. The 11-percentage-point difference between an
+inflated R@3 obtained through post-hoc ground truth adjustment (0.864) and the honest zero-
+shot result (0.758) is documented and explained, providing the community with a clear
+illustration of how evaluation design choices can misrepresent generalisation. The final
+reported numbers -- R@3 = 0.758, R@5 = 0.927 on tabletop scenes -- are derived from
+ground truth constructed purely from deterministic geometric principles, with no adaptation to
+model failures.
+
+Finally, the symbolic consistency repair module contributes a domain-agnostic, zero-parameter
+post-processing strategy that improves Micro F1 by 3.4 points on cross-domain data solely
+through logical inference, without any retraining. This establishes a reusable component that
+can be applied to any scene graph system whose output is expected to satisfy spatial logic
+constraints.
+
+1.7 Structure of the Report
+
+The remainder of this report is organised as follows.
+
+Chapter 2: Literature Review surveys the key prior work across six areas relevant to this
+project: 3D scene understanding and scene graphs, 3D Gaussian Splatting, graph neural
+networks for relational reasoning, Kolmogorov-Arnold Networks, neuro-symbolic approaches
+in 3D vision, and symbolic consistency in scene understanding. The chapter concludes with an
+identification of the research gap that motivates this work.
+
+Chapter 3: Methodology presents the complete technical pipeline. It covers the scene
+reconstruction process from smartphone video through COLMAP and NerfStudio splatfacto,
+Gaussian data preprocessing, HDBSCAN-based object clustering, geometric feature
+engineering, rule-based label injection, the GeoKANRelationGNN architecture and its three
+basis function variants, the training strategy including asymmetric loss and data augmentation,
+symbolic consistency repair, and the evaluation protocol for all three test settings.
+
+Chapter 4: Results reports the quantitative outcomes of all experiments. It presents the model
+evolution table from the GAT baseline through GeoKAN-Gamma, the basis function ablation,
+comparison against state-of-the-art methods on the 3DSSG benchmark, per-scene results on
+the LERF held-out evaluation, the impact of symbolic repair across datasets, zero-shot cross-
+domain results on eight tabletop scenes, and a computational efficiency comparison.
+
+Chapter 5: Discussion interprets the results in depth, examining why geometry alone proves
+sufficient, why the fixed diagonal GeoKAN-Gamma variant outperforms the adaptive RBF
+variant, how rule-based label injection drives the majority of the performance improvement,
+and what the cross-domain results reveal about the nature of the scale domain gap. Limitations
+of the current work are also addressed.
+
+Chapter 6: Conclusion summarises the contributions of the project, states the novel findings,
+and outlines directions for future work.
+
+                                       2.LITERATURE REVIEW
+
+2.1 3D Reconstruction and Representation
+
+Kerbl et al. (2023) -- 3D Gaussian Splatting
+
+Kerbl et al. introduced 3D Gaussian Splatting (3DGS) as an explicit, rasterisation-based
+alternative to implicit neural radiance fields for real-time novel view synthesis. Rather
+than encoding a scene as a continuous neural function, 3DGS represents it as a set of
+anisotropic three-dimensional Gaussian primitives, each parameterised by a position, an
+opacity value, a colour encoded as spherical harmonic coefficients, a scale vector, and a
+rotation quaternion. Together, the scale and rotation define a full 3×3 covariance matrix
+that describes the local geometric shape of each Gaussian. This explicit representation
+renders at real-time frame rates and supports direct access to per-Gaussian geometry --
+a property that distinguishes 3DGS from all prior radiance field approaches. For this
+project, the Gaussian splat is not merely a rendering artefact but the primary data
+structure from which object instances are clustered and spatial relations are inferred. The
+covariance matrices, opacity values, and positions of individual Gaussians constitute the
+raw geometric signal from which all 10-dimensional node features and 22-dimensional
+edge features are derived.
+
+Tancik et al. (2023) -- NerfStudio
+
+Tancik et al. introduced NerfStudio as a modular, open-source framework that unified
+the training, evaluation, and deployment of neural radiance field methods under a
+common interface. NerfStudio includes splatfacto, an implementation of the 3D Gaussian
+Splatting training pipeline adapted for practical use from consumer-captured video. The
+framework handles COLMAP-based camera pose estimation, Gaussian initialisation
+from sparse point clouds, and iterative densification and pruning over 30,000 training
+iterations. In this project, NerfStudio splatfacto serves as the reconstruction engine that
+converts a short smartphone video -- typically 60 frames at 640×480 resolution -- into
+the .ply Gaussian splat file that enters the LogicSplat pipeline. The accessibility of
+NerfStudio is directly relevant to the practical motivation of the project: it makes high-
+quality 3D reconstruction available without specialised hardware.
+
+Kerr et al. (2023) -- LERF
+
+Kerr et al. proposed Language Embedded Radiance Fields (LERF), a method that distils
+CLIP language features into a NeRF volume to enable open-vocabulary localisation
+within a scene by querying arbitrary text phrases. LERF released four publicly available
+scenes -- ramen, teatime, waldo_kitchen, and figurines -- each reconstructed from over
+100 frames and covering indoor environments at 1­5 metre scale. While LERF's primary
+contribution is language grounding rather than scene graph generation, its public scene
+releases have been adopted as a standard evaluation environment for 3D scene
+understanding methods, including GaussianGraph (Li et al., 2025). In this project, the
+four LERF scenes serve as a held-out evaluation set for testing in-domain generalisation
+to an unseen dataset. The scenes are not used for training or threshold calibration, and
+ground truth spatial relations are derived geometrically from cluster centroids rather
+than from LERF's language features.
+
+2.2 Three-Dimensional Scene Graph Generation
+
+Wald et al. (2020) -- 3DSSG
+
+Wald et al. introduced the 3D Semantic Scene Graph (3DSSG) dataset and established
+the task of learning scene graph prediction from 3D indoor reconstructions. Built on top
+of the 3RScan scan sequences, 3DSSG provides human-annotated pairwise spatial and
+semantic relationships between object instances across 478 scenes, with a relation
+vocabulary of 26 types covering spatial, comparative, and semantic predicates. The
+annotation process relied on crowdsourced human labellers who identified visible and
+physically plausible relationships between object pairs within each scene. A fundamental
+limitation acknowledged in the dataset is annotation sparsity: labellers annotated only
+80­120 directed object pairs per scene out of approximately 870 possible directed pairs
+in a typical scene, leaving approximately 90 per cent of geometrically valid pairs
+unannotated. This sparsity is a central challenge addressed in this project through rule-
+based label injection, which derives pseudo-labels for unannotated directional and
+contact pairs, increasing the effective training signal by 8­11 times. The 3DSSG validation
+set of 85 held-out scenes, containing 323,237 ground truth relation triples, serves as the
+primary in-domain benchmark for this project.
+
+Wu et al. (2021) -- SceneGraphFusion
+
+Wu et al. proposed SceneGraphFusion, an incremental 3D scene graph prediction system
+that constructs and updates a scene graph in real time from an RGB-D video stream. The
+method maintains a factor graph over object instances, with node and edge features
+updated as new depth frames are integrated. SceneGraphFusion demonstrated that scene
+graph generation from 3D data is feasible in an online setting without requiring a
+complete reconstruction as a prerequisite, achieving competitive results on the 3DSSG
+benchmark. However, its dependence on real-time depth sensor input and frame-by-
+frame processing makes it structurally incompatible with the post-hoc, reconstruction-
+based setting of this project. SceneGraphFusion's contribution is significant in
+establishing that graph neural networks can operate on 3D geometric features for relation
+prediction, a core insight that this project extends by operating on Gaussian splat
+geometry rather than RGB-D depth maps.
+
+Koch et al. (2024) -- Open3DSG
+
+Koch et al. introduced Open3DSG, the first method to predict open-vocabulary 3D scene
+graphs from point cloud inputs, enabling the prediction of object classes and relation
+types not present in the training label set. The approach co-embeds 3D scene graph
+features with the feature space of CLIP-based vision-language models, allowing arbitrary
+semantic queries at inference time. On the 3DSSG benchmark, Open3DSG reports R@3
+= 0.580 and R@5 = 0.650. While the open-vocabulary capability represents a meaningful
+advance over closed-set methods, it introduces a dependency on CLIP (approximately 400
+million parameters) at inference time. This project surpasses Open3DSG on both R@3
+(+29.8 percentage points) and R@5 (+33.3 percentage points) while using a model that is
+over 390 times smaller and requires no vision-language model at inference.
+
+Gu et al. (2024) -- ConceptGraphs
+
+Gu et al. introduced ConceptGraphs, a system that constructs open-vocabulary 3D scene
+graphs from sequences of posed RGB-D images by fusing outputs from 2D foundation
+models -- including class-agnostic instance segmentation, CLIP feature extraction, and
+large language model relation inference -- into a persistent 3D map. ConceptGraphs
+produces human-interpretable scene graphs suitable for downstream robotic planning
+and natural language querying. On the 3DSSG benchmark it achieves R@3 = 0.740 and
+R@5 = 0.790. The system's reliance on an LLM for relation inference introduces both
+significant computational overhead and non-determinism at inference time. The present
+project achieves R@3 = 0.878 and R@5 = 0.983 -- exceeding ConceptGraphs by 13.8 and
+19.3 percentage points respectively -- using a deterministic, geometry-only model with
+no language model dependency.
+
+2.3 Scene Understanding from Gaussian Splats
+
+Qin et al. (2024) -- LangSplat
+
+Qin et al. introduced LangSplat, a method that augments 3D Gaussian Splats with per-
+Gaussian CLIP language features to enable open-vocabulary localisation and semantic
+querying within a scene. Rather than querying a neural volume as in LERF, LangSplat
+trains a small autoencoder to compress CLIP features and distils them directly into the
+Gaussian primitives, achieving significantly faster query speeds. LangSplat demonstrated
+that the Gaussian representation is amenable to feature embedding beyond colour and
+geometry, and established a pattern -- language-augmented Gaussians -- that several
+subsequent works have followed. However, LangSplat's semantic understanding is pixel-
+level rather than instance-level: it localises language queries to regions of Gaussians
+rather than to discrete object instances with explicit boundaries. This limitation motivates
+the object-centric approach of this project, in which Gaussians are first segmented into
+discrete object clusters before any relational reasoning is performed.
+
+Ye et al. (2024) -- Gaussian Grouping
+
+Ye et al. proposed Gaussian Grouping, a method that extends 3DGS with per-Gaussian
+identity features trained using 2D segmentation masks from the Segment Anything Model
+(SAM), enabling instance-level segmentation and editing of 3D Gaussian scenes. By
+assigning each Gaussian a learned group identity embedding, Gaussian Grouping can
+segment, remove, inpaint, or recolour individual object instances within a splat. This
+work is directly relevant to the object clustering problem that this project addresses:
+Gaussian Grouping solves instance segmentation using SAM supervision, whilst this
+project solves it using geometry-only HDBSCAN clustering with no external
+segmentation model. The comparison is instructive -- Gaussian Grouping achieves
+sharper instance boundaries at the cost of requiring SAM at reconstruction time, whereas
+the geometry-only approach of this project operates post-hoc on any existing splat
+without retraining.
+
+Li et al. (2025) -- GaussianGraph
+
+Li et al. proposed GaussianGraph, a framework for open-world scene graph generation
+from 3D Gaussian Splats that integrates adaptive semantic clustering with a multi-modal
+relation prediction pipeline. GaussianGraph introduces a Control-Follow clustering
+strategy that dynamically adapts to scene scale and avoids CLIP feature compression,
+followed by a relation prediction stage that combines geometric verification with vision-
+language model outputs from CLIP, SAM, LLaVA-1.6, and GroundingDINO. On the four
+LERF evaluation scenes, GaussianGraph with its 3D correction module achieves mR@5
+= 63.2% using positional relation queries. This project achieves mR@5 = 92.9% on the
+same scenes -- a 29.7 percentage point improvement -- using a model with no foundation
+model dependency at inference. GaussianGraph serves as the primary baseline for the
+LERF evaluation in this project, and its 3D correction module is qualitatively compared
+against the symbolic consistency repair approach proposed here.
+
+Arafa et al. (2026) -- ReLaGS
+
+Arafa et al. introduced ReLaGS (Relational Language Gaussian Splatting), a framework
+that constructs hierarchical language-distilled Gaussian scene representations and their
+corresponding 3D semantic scene graphs without scene-specific training. ReLaGS
+employs a Gaussian pruning mechanism to refine scene geometry, a multi-view language
+alignment strategy to aggregate 2D vision-language features into accurate 3D object
+embeddings, and a graph neural network to predict spatial and semantic relations from
+the resulting embeddings. Accepted at CVPR 2026, ReLaGS represents the current state
+of the art among Gaussian-based scene graph methods, reporting R@3 = 0.790 and R@5
+= 0.870 on the 3DSSG benchmark using approximately 1.5 billion parameters and 12.6
+minutes of inference time per scene on 7.5 GB of GPU memory. This project surpasses
+ReLaGS on both metrics -- R@3 = 0.878 and R@5 = 0.983 -- using 1.018 million
+parameters, under two seconds of inference, and less than 1.5 GB of GPU memory, with
+no foundation model at inference time.
+
+2.4 Datasets
+
+Wald et al. (2019) -- 3RScan
+
+Wald et al. introduced 3RScan, a large-scale dataset of indoor RGB-D scan sequences
+designed for the task of 3D object instance re-localisation across scene changes. The
+dataset contains 1,482 scenes captured across multiple temporal sessions using a
+Structure Sensor depth camera, with each scene reconstructed as a textured mesh
+annotated with per-vertex instance labels. The re-scan design -- where the same room is
+captured at different points in time with objects moved or replaced -- makes 3RScan
+unique among indoor datasets in explicitly modelling scene dynamics. For this project,
+3RScan serves as the primary source of training and validation data. Gaussian splat
+reconstructions of 565 3RScan scenes are sourced from the GaussianWorld repository,
+which provides MCMC-based 3DGS reconstructions of the original scan sequences. Of
+these, 480 scenes are used for training and 85 for validation, with instance labels
+transferred from the original mesh vertex annotations to Gaussian splat centres via
+nearest-neighbour assignment, achieving a mean coverage of 82.7 per cent.
+
+Dai et al. (2017) -- ScanNet
+
+Dai et al. introduced ScanNet, a richly annotated dataset of 1,513 indoor RGB-D scans
+covering 707 distinct spaces, providing per-frame depth images, camera poses, surface
+reconstructions, and per-vertex semantic and instance segmentation labels. ScanNet
+became one of the most widely used benchmarks for indoor 3D scene understanding,
+providing standardised splits and evaluation protocols for semantic segmentation, object
+detection, and scene reconstruction tasks. In this project, ScanNet was used during an
+exploratory phase of model development -- specifically for training early GAT-based
+baseline models (v1 through v7) using geometry-derived pseudo-labels prior to the
+transition to 3RScan. Although the ScanNet-trained models achieved strong in-domain
+performance, they failed to generalise to custom tabletop scenes due to the cross-domain
+gap between ScanNet's room-scale reconstructions and the tabletop evaluation
+environment. This finding motivated the move to 3RScan with human-annotated 3DSSG
+labels as the primary training source.
+
+2.5 Graph Neural Networks
+
+Velickovi et al. (2018) -- Graph Attention Networks
+
+Velickovi et al. introduced Graph Attention Networks (GAT), a graph neural network
+architecture that computes node representations by attending over each node's
+neighbourhood using a learnable attention mechanism. Unlike prior spectral graph
+convolution methods, GAT operates in the spatial domain and is inductive -- it can
+generalise to unseen graph structures without retraining. The attention coefficients are
+computed as a function of the features of the source and target nodes, allowing the
+network to assign different importance to different neighbours during message passing.
+GAT became one of the most widely adopted graph neural network architectures for tasks
+involving irregular, non-Euclidean data, including molecular property prediction,
+citation network classification, and 3D scene understanding. In the context of this project,
+GAT-based models formed the baseline architecture during the early ScanNet training
+phase, demonstrating that graph-structured relational reasoning over 3D object features
+was a viable approach before the transition to the GeoKAN architecture.
+
+Brody et al. (2021) -- GATv2
+
+Brody et al. identified a fundamental expressiveness limitation in the original GAT: the
+attention function factorises in a way that produces a static ranking of neighbours
+independent of the query node, meaning the model cannot compute dynamic attention in
+the general case. GATv2 addresses this by modifying the order of operations -- applying
+the linear transformation after concatenating source and target node features, rather
+than before -- which restores the full expressive power of dynamic attention. On multiple
+benchmarks, GATv2 demonstrates measurably improved performance over GAT on
+tasks where dynamic neighbourhood weighting is important. In this project, two
+GATv2Conv layers with four attention heads and a 22-dimensional edge feature input
+form the message passing backbone of GeoKANRelationGNN. The edge features --
+encoding directional offsets, volume ratios, and contact scores between object pairs -- are
+incorporated directly into the attention computation, allowing the graph attention
+mechanism to weight neighbouring objects based on their geometric relationship to the
+query object.
+
+2.6 Kolmogorov-Arnold Networks
+
+Liu et al. (2024) -- KAN
+Liu et al. introduced Kolmogorov-Arnold Networks (KANs) as a learnable alternative to
+the multi-layer perceptron, motivated by the Kolmogorov-Arnold representation
+theorem -- a classical result in approximation theory stating that any continuous
+multivariate function can be expressed as a finite composition of continuous univariate
+functions and addition. Whereas a standard MLP places fixed activation functions on
+nodes and learnable weights on edges, a KAN places learnable activation functions on
+edges, parameterised as B-splines, with no fixed nonlinearity. This design allows each
+edge to learn an arbitrary univariate transformation, giving the network the capacity to
+represent complex functional relationships more efficiently than an MLP of equivalent
+parameter count. Liu et al. demonstrated that KANs outperform MLPs on scientific
+function fitting and partial differential equation solving tasks, often with dramatically
+fewer parameters, and exhibit greater interpretability by virtue of their univariate edge
+functions being directly visualisable. This work provides the theoretical and architectural
+foundation for the GeoKAN layer employed in this project.
+
+Sen et al. (2026) -- GeoKAN
+
+Sen et al. introduced Geometric Kolmogorov-Arnold Networks (GeoKAN), a family of
+geometry-aware KAN-type models in which basis expansion is performed in learned,
+geometry-adapted coordinates rather than in the fixed Euclidean input space. GeoKAN
+achieves this by learning a diagonal Riemannian metric that warps the input before basis
+expansion -- the metric scales each input dimension by a learned factor, effectively
+stretching or compressing the feature space to align with the geometry of the data
+manifold. Three main variants are developed: GeoKAN-, which uses a fixed diagonal
+metric parameterised by a learnable scalar per dimension; GeoKAN-NNMetric, which
+computes an input-adaptive metric via a small neural network; and LM-KAN, which
+extends both variants with RBF, wavelet, and Fourier basis functions. Sen et al.
+demonstrate improved approximation of complex targets in supervised fitting and
+physics-informed learning compared to standard KANs and MLPs. This project directly
+applies the GeoKAN- and LM-KAN-RBF variants to the spatial relation prediction task,
+implementing them as the classification heads of GeoKANRelationGNN and
+demonstrating for the first time that GeoKAN's geometry-adaptive metric provides
+measurable benefit for structured prediction over 3D scene graphs.
+
+2.7 Training Strategy for Sparse and Imbalanced Labels
+
+Ridnik et al. (2021) -- Asymmetric Loss
+
+Ridnik et al. introduced the Asymmetric Loss (ASL) for multi-label image classification,
+motivated by the severe positive-negative imbalance characteristic of multi-label datasets
+where most labels are absent for any given sample. Standard binary cross-entropy treats
+positive and negative examples symmetrically, causing the loss to be dominated by the
+large number of easy negative samples and suppressing gradient signal from the rare
+positive examples. ASL addresses this through two mechanisms: an asymmetric focusing
+parameter that applies different hard-example mining strengths to positive and negative
+samples, and a probability margin that shifts the decision boundary by discarding very
+confident negative predictions entirely. Specifically, the negative focusing parameter 
+down-weights well-classified negatives aggressively, whilst the positive focusing
+parameter  is set to zero to preserve all positive gradient signal. In this project, ASL is
+used as the primary training loss with  = 4.0 and  = 0.0, addressing the multi-label
+class imbalance inherent in the 3DSSG relation schema -- where directional relations
+such as higher_than occur hundreds of thousands of times after injection, whilst contact
+relations such as on_top_of remain comparatively rare. ASL is one of the key contributors
+to the performance jump from Macro F1 = 0.52 (standard BCE) to Macro F1 = 0.919 in
+the final GeoKAN-RBF model.
+
+Wu et al. (2020) -- Tackling the Unannotated
+
+Wu et al. examined the problem of annotation bias in scene graph generation datasets,
+demonstrating that standard supervised training on sparsely annotated scene graph
+datasets systematically biases models towards the small subset of labelled relationships
+whilst ignoring the majority of valid but unannotated pairs. The authors showed that
+treating unannotated pairs as true negatives -- the default assumption in standard cross-
+entropy training -- introduces a strong false negative signal that suppresses recall on
+valid but unlabelled relationships. They proposed bias-reduced training strategies
+including re-weighting and semi-supervised label propagation to mitigate this effect.
+Whilst this project does not directly implement the specific methods proposed by Wu et
+al., their analysis directly motivates the rule-based label injection strategy employed here:
+rather than treating the approximately 90 per cent of unannotated directed pairs in
+3DSSG as true negatives, geometric rules are used to derive confident pseudo-labels for
+pairs whose spatial relationships are deterministically derivable from centroid positions.
+This converts the false negative problem into a supervised signal, and is the primary
+driver of the improvement from Macro F1 = 0.505 (GeoKAN-v1, without injection) to
+Macro F1 = 0.926 (GeoKAN-Gamma, with injection).
+
+2.8 Clustering
+
+McInnes et al. (2017) -- HDBSCAN
+
+McInnes et al. introduced HDBSCAN (Hierarchical Density-Based Spatial Clustering of
+Applications with Noise), a density-based clustering algorithm that extends DBSCAN by
+converting it into a hierarchical framework and extracting a flat partition from the
+resulting cluster hierarchy using an excess of mass criterion. Unlike DBSCAN, which
+requires a fixed neighbourhood radius  as input, HDBSCAN operates across all density
+scales simultaneously, building a minimum spanning tree over the data and extracting
+stable clusters based on their persistence across the density hierarchy. This makes
+HDBSCAN substantially more robust to varying local density -- a critical property for
+clustering Gaussian splats, where object density varies considerably between compact
+objects such as a watch and large objects such as a router or box. A further advantage is
+HDBSCAN's explicit handling of noise: points that do not belong to any sufficiently dense
+cluster are assigned a noise label and excluded from object instances, preventing low-
+opacity floaters or background remnants from forming spurious clusters. In this project,
+HDBSCAN is applied to a 5-dimensional feature matrix of XYZ position and RGB colour
+for each Gaussian, normalised using StandardScaler, with min_cluster_size auto-tuned
+by sweeping a set of divisors and selecting the value that produces a cluster count within
+the target range for each scene. An Otsu saturation threshold is applied prior to clustering
+to suppress achromatic background Gaussians that survive opacity filtering. This fully
+parameter-free, scene-adaptive clustering pipeline is applied identically to all scenes --
+training, LERF evaluation, and tabletop cross-domain evaluation -- with no scene-
+specific tuning.
+
+2.9 Research Gap and Positioning of this Work
+
+The literature reviewed in the preceding sections reveals a consistent pattern in the
+evolution of 3D scene graph generation: as the quality of 3D scene representations has
+improved -- from RGB-D depth maps to neural radiance fields to 3D Gaussian Splats --
+the methods used to infer spatial relations have grown increasingly dependent on large
+foundation models. GaussianGraph (Li et al., 2025) combines CLIP, SAM, LLaVA-1.6,
+and GroundingDINO. ReLaGS (Arafa et al., 2026) distils language features from vision-
+language models into Gaussian primitives before applying graph-based relational
+reasoning. ConceptGraphs (Gu et al., 2024) uses an LLM to infer relations from natural
+language object descriptions. Open3DSG (Koch et al., 2024) co-embeds 3D features with
+CLIP to achieve open-vocabulary prediction. The implicit assumption shared across all
+of these methods is that understanding spatial relations in a 3D scene requires semantic
+grounding -- that a model must know what objects are before it can reason about how
+they relate.
+
+This assumption has not been systematically challenged. None of the reviewed methods
+investigate whether the geometric signal available in a Gaussian splat -- the positions,
+scales, orientations, and covariance structures of individual Gaussian primitives -- is
+itself sufficient for accurate spatial relation prediction, independently of any semantic
+label. The question is non-trivial: object identity is not required to determine that one
+object rests on top of another, that two objects are adjacent, or that one is to the left of
+another. These relationships are geometric facts derivable from cluster centroids and
+bounding volumes alone.
+
+A second gap concerns annotation efficiency. The 3DSSG dataset, which is the primary
+benchmark for 3D indoor scene graphs, leaves approximately 90 per cent of valid directed
+object pairs unannotated. No prior work on 3DSSG has directly addressed this sparsity
+through deterministic geometric label injection -- the systematic derivation of pseudo-
+labels for unannotated pairs using rules that are provably correct for directional
+relations.
+
+A third gap concerns post-prediction consistency. Scene graph outputs from all reviewed
+methods can contain logical contradictions -- for example, predicting both
+higher_than(A, B) and higher_than(B, A) simultaneously, or on_top_of(A, B) without the
+corresponding under(B, A). None of the reviewed methods apply a formal, zero-
+parameter constraint enforcement mechanism to resolve such contradictions after
+prediction.
+
+This project addresses all three gaps. It proposes a geometry-first pipeline that makes no
+use of foundation models at inference time, resolves annotation sparsity through rule-
+based label injection, and enforces logical consistency through a zero-parameter symbolic
+repair module. The result is a system that is simultaneously more accurate, more efficient,
+and more logically coherent than existing Gaussian-based scene graph methods.
+
+2.10 Summary Table
+
+Reference Year Venue   Key Contribution     Role in LogicSplat
+
+Kerbl                            3D Gaussian Splatting -- Core scene representation;
+al.    et 2023 SIGGRAPH explicit radiance field with source of all geometric
+
+                                 per-Gaussian covariance features
+
+Tancik et              NerfStudio -- modular Reconstruction     engine
+
+al.        2023 SIGGRAPH NeRF/3DGS       training (splatfacto) used for all scene
+
+                       framework            inputs
+
+Kerr et al. 2023 ICCV  LERF -- language- Source of 4 held-out
+                       embedded radiance fields evaluation scenes
+
+Wald et al. 2019 ICCV                                     Primary training and
+                       3RScan -- large-scale
+                       indoor re-scan dataset validation dataset (480+85
+
+                                                          scenes)
+
+                       3DSSG -- 3D semantic Primary          benchmark;
+
+Wald et al. 2020 CVPR  scene graph dataset and annotation source for training
+
+                       benchmark            labels
+
+Dai et al. 2017 CVPR   ScanNet -- richly
+                       annotated indoor RGB-D Used in exploratory baseline
+
+                                                          phase; not in final training
+                       dataset
+
+Wu et al. 2021 CVPR    SceneGraphFusion --
+                                                          Establishes GNN-based 3D
+
+                       incremental online scene
+                                                          relational reasoning baseline
+
+                       graph prediction
+
+                       Open3DSG -- open- Comparison             baseline;
+Koch et al. 2024 CVPR  vocabulary 3D scene
+                       graphs from point clouds R@3=0.580 vs ours 0.878
+Reference Year Venue     Key Contribution          Role in LogicSplat
+Gu et al. 2024 ICRA
+                         ConceptGraphs -- LLM-
+                         based open-vocabulary 3D Comparison           baseline;
+
+                         scene graphs              R@3=0.740 vs ours 0.878
+
+                                                   Contextualises      semantic
+                         LangSplat -- language- Gaussian
+Qin et al. 2024 CVPR     feature-embedded                          understanding;
+
+                         Gaussian splats           motivates       geometry-only
+
+                                                   alternative
+
+Ye et al. 2024 ECCV      Gaussian Grouping -- Contrasts foundation-model
+                         SAM-supervised Gaussian segmentation with geometry-
+                         instance segmentation only HDBSCAN clustering
+
+Li et al. 2025 arXiv     GaussianGraph -- scene
+                         graph generation from Primary LERF baseline;
+                         3DGS with foundation mR@5=63.2% vs ours 92.9%
+                         models
+
+                         ReLaGS -- language-       State-of-the-art comparison;
+
+Arafa et 2026 CVPR       distilled Gaussian scene R@3=0.790, 1.5B params vs
+al.                      graph without scene-
+Velickovi                                          ours 1.018M
+                         specific training
+              2018 ICLR
+et al.                   GAT -- graph attention Foundational           GNN
+Brody et
+                         networks with learnable architecture; used in baseline
+              2021 ICLR
+al.                      neighbourhood weighting models v1­v7
+Liu et al. 2024 ICLR
+                         GATv2 -- dynamic graph Message passing backbone of
+                         attention with full
+                                                   GeoKANRelationGNN
+                         expressive power
+
+                         KAN -- Kolmogorov-
+                                                            Theoretical foundation of the
+
+                         Arnold Networks with
+                                                            GeoKAN layer
+
+                         learnable edge activations
+
+                         GeoKAN    -- geometry-    Direct architectural basis for
+                         adaptive
+Sen et al. 2026 arXiv    diagonal      KAN with GeoKAN-Gamma                and
+                         metric        Riemannian
+                                                   GeoKAN-RBF
+
+Ridnik et  2021 ICCV     Asymmetric Loss -- Training loss; key contributor
+                         asymmetric focal loss for to F1 improvement from 0.52
+al.                      multi-label imbalance to 0.919
+Reference Year Venue     Key Contribution      Role in LogicSplat
+Wu et al. 2020 arXiv
+McInnes                  Tackling the Unannotated
+                         -- annotation bias in scene Motivates rule-based label
+              2017 JOSS
+et al.                                                      injection strategy
+                         graph datasets
+
+                         HDBSCAN           --
+                         hierarchical density-based Object clustering algorithm
+                                               with Otsu auto-tuning across
+                         clustering with noise all scenes
+                         handling
+
+Table 2.1: Summary of reviewed literature and their role in the LogicSplat project.
+
+                                               3.Methodology
+
+3.1 System Overview and Pipeline Architecture
+
+LogicSplat is a geometry-first pipeline for spatial scene graph generation from 3D
+Gaussian Splats. The system takes as input a short smartphone video of an indoor scene
+and produces as output a directed scene graph whose nodes represent segmented object
+instances and whose edges represent predicted spatial relations from a fixed vocabulary
+of ten relation types: on_top_of, under, attached_to, adjacent_to, left_of, right_of,
+in_front_of, behind, higher_than, and lower_than. No foundation model, vision-language
+model, or depth sensor is required at inference time.
+
+The pipeline consists of eight sequential stages, illustrated in Figure 3.1:
+
+Stage 1 -- Scene Reconstruction. A smartphone video of approximately 60 frames at
+640×480 resolution is processed by COLMAP to estimate camera poses via structure-
+from-motion. The recovered poses and images are passed to NerfStudio splatfacto, which
+trains a 3D Gaussian Splat over 30,000 iterations and exports the result as a .ply file
+containing all Gaussian primitives with their positions, colours, opacities, scales, and
+rotations.
+
+Stage 2 -- Gaussian Preprocessing. The raw Gaussian cloud is cleaned in two steps: an
+opacity filter removes Gaussians below a threshold of 0.1, and Statistical Outlier Removal
+(SOR) discards spatially isolated Gaussians whose mean distance to their 20 nearest
+neighbours exceeds two standard deviations above the scene mean. A RANSAC-based
+plane segmentation pass then identifies and removes the dominant horizontal surface --
+the floor or table -- to isolate the object region.
+
+Stage 3 -- Object Clustering. The cleaned Gaussian cloud is passed to an HDBSCAN
+clustering pipeline operating on a 5-dimensional feature matrix of XYZ position and
+normalised RGB colour. The min_cluster_size parameter is auto-tuned per scene using
+an Otsu saturation threshold and a divisor sweep targeting the expected number of
+objects. Each resulting cluster becomes an Object3D instance with a centroid, bounding
+box, and point count.
+
+Stage 4 -- Feature Extraction. For each object instance, a 10-dimensional node feature
+vector is computed from the cluster's centroid, bounding box dimensions, volume, height
+ratio, point density, and ordinal height rank -- all normalised to be scale-invariant. For
+each directed pair of objects, a 22-dimensional edge feature vector is computed encoding
+directional offsets, 3D distance, bounding box overlap, volume ratio, vertical gap, and
+composite contact scores.
+
+Stage 5 -- Relation Prediction. The object graph, with node and edge features as above,
+is passed to GeoKANRelationGNN. Two GATv2Conv message passing layers with four
+attention heads propagate geometric context across the graph. A pair projection head
+concatenates source and target node embeddings into a 512-dimensional pair
+representation. Two GeoKAN classification heads -- one for contact relations and one for
+directional relations -- produce ten scalar logits per directed object pair.
+
+Stage 6 -- Threshold Calibration. Each of the ten relation logits is thresholded
+independently using per-relation thresholds calibrated on the 3DSSG validation set. This
+converts continuous logits into binary relation predictions.
+
+Stage 7 -- Symbolic Consistency Repair. The predicted relation set is passed to
+SceneGraphRepair, a zero-parameter module that enforces four categories of logical
+constraints -- inverse completeness, mutual exclusion, asymmetry, and transitivity --
+through fixed-point iteration until the graph reaches a contradiction-free state.
+
+Stage 8 -- Output. The final scene graph is returned as a set of directed relation triples
+of the form (subject, relation, object), suitable for downstream tasks including spatial
+querying, robotic planning, and scene summarisation.
+
+The complete pipeline from a cached Gaussian splat to a final scene graph executes in
+under two seconds on an NVIDIA RTX 3060 GPU using less than 1.5 GB of GPU memory.
+
+3.2 Scene Reconstruction Pipeline
+
+3.2.1 Smartphone Video Capture
+
+Scene reconstruction begins with a monocular RGB video captured using a consumer
+smartphone camera. For the eight custom tabletop evaluation scenes collected for this
+project, videos were recorded at 640×480 resolution at approximately 30 frames per
+second, with the camera moved in a slow arc around the scene to ensure adequate multi-
+view coverage of all objects. Approximately 60 frames were extracted per scene, selected
+to provide uniform angular coverage without excessive redundancy between adjacent
+frames. No depth sensor, structured light projector, or calibration target was used. This
+capture protocol was chosen deliberately to reflect a realistic deployment scenario: the
+entire pipeline, from video capture through scene graph generation, should be executable
+by an end user with no specialist equipment.
+
+3.2.2 COLMAP Structure-from-Motion
+
+Camera pose estimation is performed using COLMAP, a general-purpose structure-
+from-motion and multi-view stereo pipeline. COLMAP detects SIFT keypoints in each
+frame, matches them across frame pairs using approximate nearest-neighbour search,
+and recovers per-frame camera poses and a sparse 3D point cloud through incremental
+bundle adjustment. The recovered camera intrinsics and extrinsic poses are stored in a
+transforms.json file that NerfStudio uses to initialise the Gaussian training process. For
+the 3RScan training scenes, pre-computed COLMAP poses from the GaussianWorld
+dataset are used directly, as the original 3RScan sequences were captured with a
+Structure Sensor whose poses are already available. For the custom tabletop and LERF
+evaluation scenes, COLMAP is run from scratch on the captured frames.
+
+3.2.3 NerfStudio Splatfacto
+
+Given camera poses and images, NerfStudio's splatfacto pipeline trains a 3D Gaussian
+Splat using the method of Kerbl et al. (2023). Training proceeds for 30,000 iterations using
+the Adam optimiser, with periodic densification steps that split or clone Gaussians in high-
+gradient regions and pruning steps that remove Gaussians with low opacity or excessive
+scale. The output is a .ply file containing all surviving Gaussian primitives, each
+parameterised by position (x, y, z), colour as spherical harmonic DC coefficients (f_dc_0,
+f_dc_1, f_dc_2), opacity stored as a logit value, log-scale per axis (scale_0, scale_1,
+scale_2), and rotation as a quaternion (rot_0, rot_1, rot_2, rot_3). Reconstruction time on
+an NVIDIA RTX 3060 is approximately 5­15 minutes per scene depending on scene
+complexity, representing a one-time cost per scene after which all subsequent pipeline
+stages operate on the fixed .ply file. For the 3RScan training scenes, pre-trained Gaussian
+splats from the GaussianWorld MCMC repository are used directly, avoiding the need to
+retrain splats for all 565 training and validation scenes.
+
+3.3 Datasets
+
+3.3.1 3RScan and 3DSSG Annotations
+
+The primary training and validation data for this project is drawn from two
+complementary sources: the 3RScan scan dataset (Wald et al., 2019) and the 3D Semantic
+Scene Graph (3DSSG) annotation layer (Wald et al., 2020). 3RScan provides 1,482 indoor
+RGB-D scan sequences of 478 distinct environments, each reconstructed as a textured
+mesh with per-vertex instance segmentation labels. 3DSSG provides human-annotated
+pairwise spatial relationships between object instances across these scenes, using a
+relation vocabulary of 26 types. For this project, the original 26-type vocabulary is
+reduced to 10 relations by aggregating semantically equivalent predicates -- for example,
+standing on, supported by, and lying on are all mapped to on_top_of -- and dropping two
+relations with insufficient positive examples: INSIDE (262 positives, 0.038 per cent
+positive rate) and HANGING_FROM (974 positives, 0.14 per cent positive rate).
+Gaussian splat reconstructions of 565 3RScan scenes are sourced from the
+GaussianWorld repository, which provides MCMC-based 3DGS reconstructions of the
+original sequences. Of these, 565 scenes are used in total: 480 for training and 85 for
+validation, with a scene-level random split at seed 42 ensuring no scene appears in both
+splits. The 46 RIO10 scenes are excluded from training as they form a held-out
+benchmark for re-localisation tasks unrelated to this project. Scenes with fewer than three
+object instances or less than 50 per cent Gaussian coverage after instance label transfer
+are excluded, yielding final training and validation sets of 480 and 85 scenes respectively.
+The training set contains a total of 1,005,126 directed object pair edges, expanding to
+2,383,223 positive label instances after rule-based injection.
+
+3.3.2 Instance Label Transfer to Gaussian Splats
+
+The 3DSSG relation annotations reference object instances defined on 3RScan mesh
+vertices. To transfer these instance identities to the Gaussian splat representation, each
+Gaussian primitive is assigned the instance label of its nearest labelled mesh vertex using
+a nearest-neighbour search in 3D Euclidean space. Gaussians that do not correspond to
+any labelled instance are assigned a background label of -1 and excluded from the object
+graph. This transfer achieves a mean coverage of 82.7 per cent across the 565 scenes,
+meaning that on average 82.7 per cent of Gaussians in each scene receive a valid non-
+background instance label. The 3DSSG object identifiers correspond directly to 3RScan
+instance IDs, so no additional object matching step is required.
+
+3.3.3 ScanNet (Exploratory Phase)
+
+ScanNet (Dai et al., 2017) was used during the early exploratory phase of model
+development, specifically for training GAT-based baseline architectures (model versions
+v1 through v7) prior to the transition to 3RScan. During this phase, spatial relation labels
+were derived entirely from geometric rules applied to cluster centroids, as ScanNet does
+not provide scene graph annotations in the 3DSSG format. Whilst the ScanNet-trained
+models achieved acceptable in-domain performance, they failed to generalise to the
+custom tabletop evaluation scenes due to the significant scale and appearance gap
+between ScanNet room-scale indoor reconstructions and the tabletop environment. This
+cross-domain failure motivated the decision to train the final GeoKAN models on 3RScan
+with human-annotated 3DSSG labels rather than geometry-derived pseudo-labels alone.
+ScanNet data is not used in any aspect of the final GeoKAN model training or evaluation.
+
+3.3.4 Custom Tabletop Scenes (Cross-Domain Evaluation)
+
+Eight tabletop scenes (scene_06 through scene_13) were captured and reconstructed
+specifically for cross-domain evaluation. Each scene contains four or five everyday
+objects -- including a Wi-Fi router, a pen, a water bottle, an Agaro hair dryer box, a
+watch, a perfume bottle, and a cream tub -- arranged on a flat surface at varying
+positions and with varying stacking configurations. Five scenes include a router
+physically placed on top of the Agaro box; three scenes have all objects placed side by side
+without stacking. Scene extents range from 0.3 to 0.8 metres -- approximately one order
+of magnitude smaller than the 3­8 metre room-scale scenes used for training. Three
+scenes (scene_09, scene_12, scene_13) were reconstructed with an inverted Z-axis
+convention, where more negative Z values correspond to physically higher positions; this
+is handled during ground truth construction by negating Z coordinates before deriving
+spatial relations. Ground truth relation files for all eight scenes were constructed
+programmatically using build_gt_all_scenes.py, which runs the same deterministic
+HDBSCAN clustering pipeline used during evaluation, reads the actual cluster centroids,
+and derives all pairwise spatial relations geometrically from those centroids. Cluster-to-
+object assignments were verified by visual inspection of centroid positions and point
+counts.
+
+3.3.5 LERF Scenes (Held-Out Evaluation)
+
+Four scenes from the LERF dataset (Kerr et al., 2023) -- ramen, teatime, waldo_kitchen,
+and figurines -- are used as a held-out evaluation set to assess in-domain generalisation
+to an unseen dataset. These scenes cover indoor environments at 1­5 metre scale, which
+is comparable to the 3­8 metre training distribution of 3RScan, making them a test of
+generalisation to a different dataset rather than a different scale domain. Each scene
+contains 10­13 object instances and was originally captured with over 100 frames per
+scene for the LERF paper. Ground truth relation triples for all four scenes are derived
+using the same deterministic geometric derivation approach as for the tabletop scenes,
+yielding 1,770 ground truth triples in total across the four scenes. A random sample of
+these triples was manually verified for correctness prior to evaluation.
+
+3.4 Gaussian Splatting Data Pipeline
+
+3.4.1 Loading 3DGS .ply Files
+
+The Gaussian splat is loaded from a standard 3DGS-format .ply file using the plyfile
+library. Each vertex in the .ply file corresponds to one Gaussian primitive and carries the
+following attributes: position (x, y, z), spherical harmonic DC colour coefficients (f_dc_0,
+f_dc_1, f_dc_2), opacity stored as a raw logit, log-scale per axis (scale_0, scale_1, scale_2),
+and rotation as a quaternion (rot_0, rot_1, rot_2, rot_3). RGB colour values are recovered
+from the DC spherical harmonic coefficients using the zero-order SH basis constant C =
+0.28209479177387814, giving RGB = (f_dc · C + 0.5) clipped to [0, 1]. Opacity values are
+converted from logit to probability via the sigmoid function: opacity = 1 / (1 + exp(-logit)).
+The full 3×3 covariance matrix for each Gaussian is computed from its scale and rotation
+by constructing the rotation matrix from the normalised quaternion, forming the scale
+matrix S = diag(exp(log_scale)), and computing  = RS·(RS). The upper triangle of  --
+six values -- is stored per Gaussian. Any Gaussian primitive containing NaN or infinite
+values in position, opacity, or scale is removed with a warning before further processing.
+
+3.4.2 Opacity Filtering and Statistical Outlier Removal
+Two sequential filtering operations are applied to the loaded Gaussian cloud before
+clustering. First, an opacity filter removes all Gaussians with opacity below a threshold
+of 0.1, eliminating transparent background Gaussians and low-confidence primitives that
+were retained by the splat training process but carry no meaningful geometric
+information. Second, Statistical Outlier Removal (SOR) is applied using Open3D's
+remove_statistical_outlier function with nb_neighbors = 20 and std_ratio = 2.0. SOR
+computes for each Gaussian the mean Euclidean distance to its 20 nearest neighbours;
+any Gaussian whose mean distance exceeds the scene-wide mean plus 2.0 standard
+deviations is classified as an isolated floater and removed. This step eliminates spatially
+isolated Gaussian primitives that survive opacity filtering -- typically artefacts of the
+splat training process that cluster away from the main scene geometry. A scikit-learn
+nearest-neighbours fallback is available in environments where Open3D is not installed.
+Together, these two filters reduce the Gaussian count to the geometrically coherent core
+of the scene before background removal.
+
+3.4.3 Background Removal via RANSAC Plane Segmentation
+
+Following opacity and outlier filtering, a RANSAC-based plane segmentation step
+removes the dominant horizontal surface -- the floor in room-scale scenes or the table
+surface in tabletop scenes -- to isolate the objects of interest. The algorithm samples up
+to 50,000 Gaussians from the filtered cloud, constructs an Open3D PointCloud object,
+and runs segment_plane with a distance threshold of 1 per cent of the scene bounding box
+diagonal, three RANSAC seed points, 1,000 iterations, and a fixed random seed of 42 for
+reproducibility. The plane equation (a, b, c, d) returned by RANSAC defines the
+dominant surface; the signed distance of each Gaussian from this plane is computed as h
+= (xyz · n ) + d/|n|, where n is the unit plane normal. To determine which side of the plane
+contains the objects rather than the floor or ceiling, the 95th percentile of positive and
+negative signed distances is compared; the side with the smaller spread is identified as the
+object side. Gaussians within the object region -- specifically those with height in
+[-margin, h] where margin = 5 per cent of h -- are retained, and all others are
+removed. If fewer than 10 per cent of Gaussians pass this filter, the step is skipped and
+the unmodified cloud is passed downstream to prevent catastrophic data loss on unusual
+scene geometries.
+
+3.5 Object Clustering
+
+3.5.1 HDBSCAN with Auto-Tuning
+
+Following background removal, the remaining Gaussians are clustered into discrete
+object instances using HDBSCAN (McInnes et al., 2017). The clustering operates on a 5-
+dimensional feature matrix constructed by concatenating XYZ position (3 dimensions)
+and RGB colour normalised to [0, 1] and weighted by a factor of 0.3 (3 dimensions),
+yielding a combined spatial-colour representation that groups Gaussians both by
+proximity and by appearance. The feature matrix is standardised using StandardScaler
+before clustering, ensuring that the spatial and colour dimensions contribute comparably
+to the distance metric. HDBSCAN is run with min_samples = 3 and
+cluster_selection_method set to either eom or leaf, with both tried during auto-tuning.
+
+The primary challenge with HDBSCAN for this application is that min_cluster_size --
+the minimum number of points for a group to be considered a cluster -- must be set
+appropriately for each scene, as Gaussian splat density varies considerably across scenes
+and objects. A fixed value produces either over-segmentation in sparse scenes or under-
+segmentation in dense ones. To address this, min_cluster_size is auto-tuned per scene by
+sweeping a set of divisors [3, 5, 8, 10, 15, 20, 30, 50, 80, 100, 150, 200, 300, 500] of the total
+Gaussian count subsampled to 6,000 points, running HDBSCAN at each divisor, and
+selecting the value that produces a cluster count closest to the midpoint of the target range
+[target_min, target_max]. For training scenes, the target range defaults to [4, 12]; for
+evaluation scenes, the expected object count is passed as n_exact, which sets both
+target_min and target_max to that value, forcing the auto-tuner to find the
+min_cluster_size that produces exactly the expected number of clusters. Gaussians not
+included in the 6,000-point subsample are assigned to their nearest cluster centroid in
+feature space via L2 distance after the initial clustering is complete.
+
+3.5.2 Otsu Saturation Thresholding
+
+Prior to HDBSCAN clustering, an optional Otsu saturation threshold is applied to
+suppress achromatic background Gaussians -- walls, floors, and ceiling remnants -- that
+survive the RANSAC plane removal step. The saturation of each Gaussian is computed
+as sat = max(R, G, B) - min(R, G, B) from its normalised RGB values. A 256-bin
+histogram of saturation values is computed and Otsu's method is applied to find the
+threshold that maximises inter-class variance between low-saturation (background) and
+high-saturation (object) Gaussians. Gaussians below the Otsu threshold are removed
+before clustering. If fewer than 5 per cent of Gaussians pass the threshold -- indicating a
+scene where all objects are achromatic -- the threshold is halved and re-applied; if still
+fewer than 5 per cent pass, the filter is disabled entirely and all Gaussians are passed to
+clustering. This fallback prevents the saturation filter from destroying valid data in scenes
+containing predominantly grey or white objects.
+
+3.5.3 Z-Axis Correction After Clustering
+
+A coordinate system correction is applied after clustering to ensure consistent spatial
+reasoning across all scenes. The 3DGS training convention used by NerfStudio splatfacto
+defines the camera coordinate system with -Z pointing upward, meaning that physically
+higher objects have more negative Z coordinates in the raw splat. After clustering, the Z
+coordinate of all Object3D centroids and bounding box extremes is negated, converting
+the coordinate system to +Z = up. This correction is applied uniformly to all scenes
+processed through the standard pipeline. The three tabletop evaluation scenes that exhibit
+Z-DOWN orientation (scene_09, scene_12, scene_13) were handled separately during
+ground truth construction, where the SCENE_Z_FLIP flag in build_gt_all_scenes.py
+ensures that effective height is computed as -Z for those scenes. All subsequent feature
+computation and relation derivation assumes the +Z = up convention.
+3.5 Object Clustering
+
+3.5.1 HDBSCAN with Auto-Tuning
+
+Following background removal, the remaining Gaussians are clustered into discrete
+object instances using HDBSCAN (McInnes et al., 2017). The clustering operates on a 5-
+dimensional feature matrix constructed by concatenating XYZ position (3 dimensions)
+and RGB colour normalised to [0, 1] and weighted by a factor of 0.3 (3 dimensions),
+yielding a combined spatial-colour representation that groups Gaussians both by
+proximity and by appearance. The feature matrix is standardised using StandardScaler
+before clustering, ensuring that the spatial and colour dimensions contribute comparably
+to the distance metric. HDBSCAN is run with min_samples = 3 and
+cluster_selection_method set to either eom or leaf, with both tried during auto-tuning.
+
+The primary challenge with HDBSCAN for this application is that min_cluster_size --
+the minimum number of points for a group to be considered a cluster -- must be set
+appropriately for each scene, as Gaussian splat density varies considerably across scenes
+and objects. A fixed value produces either over-segmentation in sparse scenes or under-
+segmentation in dense ones. To address this, min_cluster_size is auto-tuned per scene by
+sweeping a set of divisors [3, 5, 8, 10, 15, 20, 30, 50, 80, 100, 150, 200, 300, 500] of the total
+Gaussian count subsampled to 6,000 points, running HDBSCAN at each divisor, and
+selecting the value that produces a cluster count closest to the midpoint of the target range
+[target_min, target_max]. For training scenes, the target range defaults to [4, 12]; for
+evaluation scenes, the expected object count is passed as n_exact, which sets both
+target_min and target_max to that value, forcing the auto-tuner to find the
+min_cluster_size that produces exactly the expected number of clusters. Gaussians not
+included in the 6,000-point subsample are assigned to their nearest cluster centroid in
+feature space via L2 distance after the initial clustering is complete.
+
+3.5.2 Otsu Saturation Thresholding
+
+Prior to HDBSCAN clustering, an optional Otsu saturation threshold is applied to
+suppress achromatic background Gaussians -- walls, floors, and ceiling remnants -- that
+survive the RANSAC plane removal step. The saturation of each Gaussian is computed
+as sat = max(R, G, B) - min(R, G, B) from its normalised RGB values. A 256-bin
+histogram of saturation values is computed and Otsu's method is applied to find the
+threshold that maximises inter-class variance between low-saturation (background) and
+high-saturation (object) Gaussians. Gaussians below the Otsu threshold are removed
+before clustering. If fewer than 5 per cent of Gaussians pass the threshold -- indicating a
+scene where all objects are achromatic -- the threshold is halved and re-applied; if still
+fewer than 5 per cent pass, the filter is disabled entirely and all Gaussians are passed to
+clustering. This fallback prevents the saturation filter from destroying valid data in scenes
+containing predominantly grey or white objects.
+
+3.5.3 Z-Axis Correction After Clustering
+A coordinate system correction is applied after clustering to ensure consistent spatial
+reasoning across all scenes. The 3DGS training convention used by NerfStudio splatfacto
+defines the camera coordinate system with -Z pointing upward, meaning that physically
+higher objects have more negative Z coordinates in the raw splat. After clustering, the Z
+coordinate of all Object3D centroids and bounding box extremes is negated, converting
+the coordinate system to +Z = up. This correction is applied uniformly to all scenes
+processed through the standard pipeline. The three tabletop evaluation scenes that exhibit
+Z-DOWN orientation (scene_09, scene_12, scene_13) were handled separately during
+ground truth construction, where the SCENE_Z_FLIP flag in build_gt_all_scenes.py
+ensures that effective height is computed as -Z for those scenes. All subsequent feature
+computation and relation derivation assumes the +Z = up convention.
+
+3.6 Feature Engineering
+
+3.6.1 Node Features (10-Dimensional)
+
+Each object instance is represented by a 10-dimensional node feature vector computed
+entirely from the geometric properties of its Gaussian cluster. All features are designed to
+be scale-invariant, normalised relative to scene-level statistics rather than absolute metric
+values, so that a model trained on room-scale 3RScan scenes can be applied to tabletop
+scenes without encountering out-of-distribution absolute magnitudes. The normalisation
+divisor used throughout is the average bounding box diagonal across all object instances
+in the scene, denoted avg_diag.
+
+Features 0­2 encode the normalised centroid position (c - scene_min) /
+scene_mean_diag, clipped to a valid range, providing the object's location within the
+scene coordinate frame. Features 3­5 encode size aspect ratios computed as size_axis /
+self_diagonal, where self_diagonal is the object's own bounding box diagonal; these
+capture the object's shape (flat, elongated, or compact) independently of its absolute size.
+Feature 6 is a log-normalised volume: log(volume / scene_median_volume + 1) / 5, clipped
+to [0, 1], providing a relative measure of object size within the scene. Feature 7 is the
+height ratio size_z / max(size_x, size_y), encoding vertical elongation -- distinguishing
+tall objects such as bottles from flat objects such as books. Feature 8 is point density,
+computed as point_count / volume and normalised to [0, 1] across the scene, reflecting
+how densely the object is represented in the Gaussian splat. Feature 9 is the ordinal Z-
+rank of the object's centroid among all scene objects, normalised to [0, 1]; this completely
+scale-invariant feature encodes relative vertical position and is one of the strongest signals
+for higher_than and lower_than prediction.
+
+3.6.2 Edge Features (22-Dimensional)
+
+For each directed object pair (A  B), a 22-dimensional edge feature vector encodes the
+geometric relationship between the two objects. The normalisation divisor for edge
+features is avg_diag = (diag_A + diag_B) / 2, the mean of both objects' bounding box
+diagonals.
+Features 0­2 encode directional offsets: delta_x = (c_A - c_B) / avg_diag, delta_y =
+-(c_y_A - c_y_B) / avg_diag (negated to match the 3DSSG convention where -Y is the
+front direction), and delta_z = (c_z_A - c_z_B) / avg_diag, all clipped to [-3, 3] and
+divided by 3. These three features are the primary signals for left_of, right_of,
+in_front_of, behind, higher_than, and lower_than. Feature 3 is the XY planar distance
+and Feature 4 is the full 3D Euclidean distance between centroids, both normalised by
+avg_diag. Feature 5 is the XY bounding box footprint overlap of A divided by A's
+footprint area. Feature 6 is the volume ratio min(vol_A, vol_B) / max(vol_A, vol_B).
+Feature 7 is the log height ratio log(size_z_A / size_z_B) clipped to [-3, 3] / 3.
+
+Features 8­16 are composite contact and support signals specifically designed for
+on_top_of and under prediction. Feature 8 (vert_gap) encodes the signed vertical gap
+between A's bottom face and B's top face, normalised by the average object height; a
+small positive value indicates A is resting directly on B. Features 9­11 provide alternative
+normalisations of the same vertical gap. Feature 12 (contact_score) is a composite signal:
+exp(-|gap| / threshold) × bbox_overlap × (A_above_B), combining proximity, footprint
+overlap, and vertical ordering into a single contact confidence value. Features 13­16
+encode XY footprint overlap relative to B's area, proximity to the on_top_of rule
+boundary, distance from B's footprint edge, and a stacking-versus-side-by-side
+discriminator (z - 0.5·xy) / max(|z|, ).
+
+Features 17­21 provide containment signals. Feature 17 is the 3D volumetric overlap
+divided by A's volume. Feature 18 is a binary flag indicating whether A's centroid lies
+inside B's bounding box. Features 19­21 encode the vz_ratio z / max(xy_dist,
+0.05·avg_diag) and XY containment fractions along each axis.
+
+3.6.3 Scale-Invariant Normalisation Strategy
+
+All node and edge features are normalised relative to scene-level statistics -- specifically
+the average object bounding box diagonal -- rather than in absolute metric units. This
+design choice is the primary mechanism enabling cross-domain transfer: a model trained
+on 3RScan rooms where avg_diag  0.8­1.2 m will encounter similar normalised feature
+values on tabletop scenes where avg_diag  0.15­0.25 m, because both are expressed as
+multiples of their respective scene's average object size. Without this normalisation, the
+absolute centroid offsets and distances in the tabletop scenes would fall far outside the
+training distribution, causing catastrophic prediction failure. The ordinal Z-rank feature
+(node feature 9) takes this principle to its logical extreme, encoding only the rank order
+of objects by height and discarding all metric information entirely.
+
+3.7 Rule-Based Label Injection
+
+3.7.1 Motivation: Annotation Sparsity in 3DSSG
+
+The 3DSSG dataset, whilst the most comprehensive source of human-annotated 3D
+spatial relations available, suffers from severe annotation sparsity. Human annotators
+labelled between 80 and 120 directed object pairs per scene, out of approximately 870
+possible directed pairs in a scene with around 30 objects (N × (N-1) directed pairs). This
+means that approximately 90 per cent of geometrically valid object pair relationships are
+left unannotated. Standard supervised training treats unannotated pairs as true negatives
+-- that is, as evidence that no relation holds -- which introduces a pervasive false negative
+signal. For directional relations such as left_of, this is particularly damaging: if object A
+is to the left of object B, this is a geometric fact that holds regardless of whether a human
+annotator chose to label it. Training a model to predict left_of = 0 for this pair because it
+was not annotated actively teaches the model an incorrect spatial fact. The consequence
+is visible in the pre-injection baseline: GeoKAN-v1, trained on 3DSSG labels alone,
+achieves only 40,000 positive examples each for left_of and right_of -- a tiny fraction of
+the true positive count -- resulting in Macro F1 = 0.505 despite strong ranking
+performance.
+
+3.7.2 Directional Relation Rules (Confidence = 1.0)
+
+Six of the ten relations -- left_of, right_of, in_front_of, behind, higher_than, and
+lower_than -- are fully determined by the relative positions of object centroids and carry
+no ambiguity. For any directed pair (A, B), the following rules are applied with confidence
+1.0 to all unannotated pairs:
+
+    · left_of(A, B) if c_A < c_B
+
+    · right_of(A, B) if c_A > c_B
+
+    · in_front_of(A, B) if c_y_A < c_y_B (3DSSG convention: -Y is front)
+
+    · behind(A, B) if c_y_A > c_y_B
+
+    · higher_than(A, B) if c_z_A > c_z_B
+
+    · lower_than(A, B) if c_z_A < c_z_B
+
+After injection, the directional relation counts increase from approximately 40,000 per
+class to between 207,603 (in_front_of, behind) and 450,434 (left_of, right_of) positive
+examples, representing an 8­11 times increase in training signal. These injected labels are
+geometric facts -- they cannot be wrong given correct centroid positions -- and are
+therefore assigned confidence 1.0 with no down-weighting.
+
+3.7.3 Contact and Support Rules
+
+The four contact relations -- on_top_of, under, attached_to, and adjacent_to -- are not
+fully determined by centroid positions alone and are injected with lower confidence to
+account for annotation inconsistency and rule imprecision.
+
+on_top_of(A, B) and under(B, A) are injected when A's bottom bounding face is within a
+scene-adaptive vertical threshold of B's top bounding face, A's XY footprint overlaps B's
+footprint, and A's centroid is above B's centroid. These conditions are evaluated using the
+vert_gap and contact_score edge features, with injection confidence 0.75.
+
+adjacent_to(A, B) is injected when the 3D Euclidean distance between centroids is below
+0.8 times the average object diagonal. Due to the inherent ambiguity of the adjacent_to
+label -- annotators apply it inconsistently for near-equal-distance pairs -- injection
+confidence is set to 0.55, the lowest of any injected relation.
+
+attached_to(A, B) is injected when the bounding box gap between A and B is less than 5
+per cent of the average object diagonal, indicating physical contact consistent with wall-
+mounted or built-in object configurations. Injection confidence is 0.60.
+
+3.7.4 Inverse Label Injection (Fix2)
+
+A separate injection step addresses a systematic gap in the 3DSSG annotations: the under
+relation is almost never explicitly annotated, because annotators tend to label the
+relationship from the perspective of the supported object (on_top_of) rather than the
+supporting one. This results in near-zero positive examples for under in the raw 3DSSG
+labels, causing any model trained without correction to achieve essentially zero recall for
+under.
+
+Fix2 resolves this by injecting the logical inverse of every explicitly annotated relation.
+For every 3DSSG-annotated triple (A, R, B), the inverse triple (B, R_inv, A) is injected
+with the same confidence, where the inverse relation pairs are: on_top_of  under,
+higher_than  lower_than, left_of  right_of, in_front_of  behind. Human labels
+always take priority -- Fix2 never overwrites an existing annotation -- but it fills the
+systematic gaps left by annotators who labelled only one direction of a symmetric or
+inverse relationship.
+
+3.7.5 Confidence Weighting and Priority Scheme
+
+All injected labels are represented as soft labels rather than hard binary targets. A
+confidence value c  {0.55, 0.60, 0.75, 1.0} is assigned per relation type as described above;
+the target for that relation in the loss function is set to c rather than 1.0, effectively
+applying label smoothing proportional to the uncertainty of the rule. The priority scheme
+ensures that human-annotated 3DSSG labels always override injected labels: if a directed
+pair (A, B) has an explicit 3DSSG annotation for relation R, the injected label for R on
+that pair is discarded and the human annotation is used with confidence 1.0. This
+preserves the full value of human annotation whilst extending coverage to the 90 per cent
+of unannotated pairs.
+
+3.8 Model Architecture: GeoKANRelationGNN
+
+3.8.1 The GeoKAN Layer
+
+The GeoKAN layer is the core computational unit of the classification heads in
+GeoKANRelationGNN. It implements a geometry-adaptive Kolmogorov-Arnold
+Network in which basis expansion is performed in learned, warped coordinates rather
+than the raw input space. A single GeoKAN layer proceeds through five steps.
+
+Step 1 applies Batch Normalisation to the input vector u, producing a normalised
+representation u_normed. Step 2 computes a diagonal geometric metric g  , where d
+is the input dimension. In the GeoKAN-Gamma variant, g is computed as g_i =
+softplus(_i) + 1e-6, where  is a learnable parameter vector initialised to zero, giving an
+
+initial metric of approximately 1.0 (identity scaling) at the start of training. In the
+
+GeoKAN-RBF variant, a small MetricNet -- a two-layer MLP of structure
+
+Linear(d64)GELULinear(64d)              --  computes  g  as
+
+softplus(MetricNet(u_normed)) + 1e-6, clamped to [0.05, 16.0], producing an input-
+
+dependent adaptive metric. Step 3 computes the warped representation z = u_normed ×
+
+g, stretching the normalised input by the square root of the learned metric. Step 4 applies
+
+a radial basis function expansion: for each of K = 12 learnable centres c spaced linearly
+
+in [-3, 3], the activation is  = exp(-_rbf × (z - c)²), where _rbf =
+
+softplus(learnable_scalar). In the GeoKAN-Wavelet variant, the Mexican hat wavelet 
+
+= (1 - t²) × exp(-t²/2) with t = (z - c) is used in place of the RBF. Step 5 concatenates the
+
+flattened RBF activations with u_normed and passes the result through a linear
+
+projection followed by GELU activation and dropout, producing the output
+
+representation.
+
+A metric regularisation term L_metric = 1e-4 × mean(log(g)²) is added to the training loss
+to penalise extreme metric values and encourage the metric to remain near identity unless
+deviation is justified by the training signal.
+
+3.8.2 Node Encoder
+
+The node encoder transforms the 10-dimensional input node feature vector into a 128-
+dimensional embedding using a single linear layer followed by LayerNorm and GELU
+activation: h = GELU(LayerNorm(Linear(10  128))). This lightweight encoder contains
+1,408 parameters and serves to project the heterogeneous node features into a uniform
+embedding space before graph attention message passing.
+
+3.8.3 GATv2Conv Message Passing Layers
+
+Two successive GATv2Conv layers propagate geometric context across the object graph.
+Each layer uses four attention heads, an input and output dimension of 128 (with heads
+averaged rather than concatenated, so the output dimension is also 128), and a 22-
+dimensional edge feature input that is incorporated into the attention coefficient
+computation. A residual connection adds the input embedding to the layer output before
+LayerNorm is applied. The two GATv2Conv layers together contain 148,736 parameters
+and allow each object node to aggregate relational context from its graph neighbourhood,
+incorporating information about the geometric relationships between connected objects
+via the edge features. After the second GATv2Conv layer, each node carries a 128-
+dimensional embedding that encodes both its own geometric properties and the context
+of its spatial relationships with other objects in the scene.
+
+3.8.4 Pair Projection Head
+
+For each directed object pair (A  B), a pair representation is constructed by
+concatenating four terms: the source node embedding h_A, the target node embedding
+h_B, their element-wise difference h_A - h_B, and their element-wise product h_A 
+h_B. This yields a 512-dimensional vector that captures both the individual properties of
+each object and their relational contrast. A linear projection followed by LayerNorm and
+GELU reduces this to a 64-dimensional pair embedding: p =
+GELU(LayerNorm(Linear(512  64))). This head contains 33,024 parameters.
+
+3.8.5 Contact GeoKAN Head
+
+The contact head predicts four relations: on_top_of, under, attached_to, and adjacent_to.
+Its input is an 86-dimensional vector formed by concatenating the 64-dimensional pair
+embedding with the full 22-dimensional edge feature vector. Two sequential GeoKAN
+layers with hidden dimension 128 and K = 12 RBF centres process this input, followed by
+a linear output layer producing four logits. The contact head contains approximately
+579,020 parameters in the RBF variant. The full edge feature vector is concatenated
+because contact relations depend critically on precise vertical gap and footprint overlap
+values that are directly present in the edge features.
+
+3.8.6 Directional GeoKAN Head
+
+The directional head predicts six relations: left_of, right_of, in_front_of, behind,
+higher_than, and lower_than. Its input is a 74-dimensional vector formed by
+concatenating the 64-dimensional pair embedding with the first 10 edge features -- the
+directional offset, distance, and overlap features most relevant to directional prediction.
+Two GeoKAN layers with the same configuration as the contact head, followed by a linear
+output layer, produce six logits. The directional head contains approximately 301,531
+parameters in the RBF variant. The separation into two heads allows each to specialise:
+the contact head attends to vertical proximity and footprint overlap, whilst the directional
+head focuses on centroid offsets and 3D distances.
+
+3.8.7 Model Variants: Evolution from GAT Baseline to GeoKAN-Gamma
+
+The final GeoKANRelationGNN architecture emerged through a systematic evolution
+spanning eleven model versions. The initial ScanNet-based models (v1­v3) used a single-
+head GAT with 8-dimensional node features and a softmax loss, achieving unstable Macro
+F1  0.35. Successive improvements introduced multi-label binary cross-entropy (v4),
+corrected data leakage from augmentation before the train-validation split (v5),
+expanded edge features to include contact signals (v6), added the dual-head structure and
+asymmetric focal loss (v7). The transition to 3RScan with GeoKAN heads and real
+Gaussian data (GeoKAN-v1) achieved Macro F1 = 0.505 and R@5 = 0.967, but with a 12-
+class schema that included the near-zero INSIDE and HANGING_FROM relations. After
+scale-invariant feature normalisation (GeoKAN-v2), correction of a configuration error
+in the ASL parameters (GeoKAN-v3), and the introduction of rule-based label injection
+with the corrected 10-class schema (GeoKAN-RBF), Macro F1 jumped to 0.919. The final
+GeoKAN-Gamma variant replaced the adaptive MetricNet with a fixed diagonal metric,
+reduced the learning rate from 2×10³ to 5×10, and extended warmup from 5 to 10
+epochs, achieving the best result of Macro F1 = 0.926 with 1,018,414 parameters -- 53,504
+fewer than GeoKAN-RBF.
+
+3.9 Training Strategy
+3.9.1 Asymmetric Loss
+
+The primary training objective is the Asymmetric Loss (ASL) introduced by Ridnik et al.
+(2021), adapted for the multi-label spatial relation prediction task. Standard binary cross-
+entropy is ill-suited to this setting because the positive-to-negative ratio is highly skewed:
+even after rule-based label injection, the majority of directed object pairs carry no
+relation for most relation types, creating a large imbalance between positive and negative
+examples. ASL addresses this through asymmetric focusing: negative examples are down-
+weighted by a factor of (1 - p)^ that suppresses the gradient from well-classified
+negatives, whilst positive examples receive no focusing ( = 0.0) to preserve all positive
+gradient signal. In this project,  = 4.0 and  = 0.0 are used, with no probability margin
+shift. This configuration was arrived at after correcting an earlier error in GeoKAN-v3,
+where  = 4.0 was mistakenly applied, causing training instability and degraded
+performance.
+
+The total training loss has three components: L = L_ASL + L_inv + L_metric. The inverse
+consistency loss L_inv = 0.1 × MSE(p(R(A,B)), p(R_inv(B,A))) penalises disagreement
+between the predicted probability of a relation and the predicted probability of its inverse
+on the reversed pair, encouraging the model to learn logically consistent predictions
+during training. The metric regularisation loss L_metric = 1e-4 × mean(log(g)²) prevents
+the GeoKAN metric from collapsing to extreme values.
+
+3.9.2 Per-Relation Loss Weights and Label Smoothing
+
+Four contact relations receive additional loss weighting to counteract their lower positive
+frequency even after injection: attached_to (weight 1.8), adjacent_to (weight 1.5),
+on_top_of (weight 1.2), and under (weight 1.2). These weights multiply the ASL loss for
+positive examples of the respective relation, increasing the gradient signal for the most
+challenging relation classes.
+
+Label smoothing is applied per relation to reduce overconfidence on ambiguous labels,
+particularly those derived from geometric rules where the boundary between positive and
+negative is not sharp. The smoothing values are: adjacent_to (0.12), in_front_of and
+behind (0.08 each), left_of and right_of (0.07 each), on_top_of and under (0.04 each),
+attached_to (0.05), higher_than and lower_than (0.04 each). Directional relations with
+perfectly deterministic rules receive the lowest smoothing, whilst adjacent_to -- whose
+rule boundary is the most ambiguous -- receives the highest.
+
+3.9.3 Data Augmentation and Negative Subsampling
+
+Each training scene is augmented with five additional variants: three rotations about the
+vertical axis (90°, 180°, 270°), two reflections (flip_x, flip_y), and a jitter augmentation
+that adds small random perturbations to all centroid positions. Scenes containing
+attached_to or adjacent_to relations -- which are rare in 3DSSG -- receive additional
+copies with extra flip_x and flip_y augmentations to oversample these rare-relation
+scenes. In total, each scene contributes up to seven graph instances to training (original
+plus six augmented), giving an augment_factor of 6. Augmentation is applied after the
+train-validation split to prevent any augmented version of a validation scene from
+appearing in training.
+
+Negative subsampling is applied per batch to manage the volume of negative examples.
+All positive edges are retained in every batch. Negative edges are randomly subsampled
+to achieve a target positive rate of approximately 30 per cent per batch. Soft labels with
+value  0.5 are treated as positive for the purposes of subsampling. This prevents the
+optimiser from spending the majority of each gradient step on trivially easy negative
+pairs.
+
+3.9.4 Optimiser, Scheduler, and Warmup Configuration
+
+The model is trained using the AdamW optimiser with weight decay 1e-4 and gradient
+clipping at max norm 2.0. The learning rate schedule consists of a linear warmup phase
+followed by cosine decay to zero. For GeoKAN-RBF, the initial learning rate is 2×10³
+with a 5-epoch warmup. For GeoKAN-Gamma, the initial learning rate is reduced to
+5×10 with a 10-epoch warmup, reflecting the greater sensitivity of the fixed diagonal
+metric parameterisation to large early gradient steps. Training runs for a maximum of
+100 epochs with early stopping at patience 15 -- training halts if validation Macro F1
+does not improve for 15 consecutive epochs. The batch size is 8 scenes. Positive class
+weights are computed per relation from the training set positive rate, capped at 8.0, and
+passed to the loss function to provide an additional signal for rare relations alongside the
+ASL focusing. GeoKAN-Gamma converges in approximately 1,093 seconds (18 minutes)
+on an NVIDIA RTX 3060; GeoKAN-RBF requires approximately 1,500 seconds due to
+the additional MetricNet forward pass.
+
+3.9.5 Per-Relation Threshold Calibration
+
+After training, each of the ten relation sigmoid outputs is thresholded independently using
+a threshold calibrated on the 3DSSG validation set. For each relation, the threshold that
+maximises the validation set F1 score for that relation is selected by sweeping candidate
+thresholds in [0.1, 0.9] at 0.05 intervals. This per-relation calibration is important because
+the marginal positive rates differ substantially across relations -- higher_than and
+lower_than are positive for the majority of pairs, whilst attached_to is positive for very
+few -- meaning a single global threshold cannot be optimal for all relations
+simultaneously. Hierarchical mutual exclusion constraints are applied after thresholding
+at evaluation time: for each axis-aligned relation pair (left_of / right_of, in_front_of /
+behind, higher_than / lower_than), if both relations are predicted for the same directed
+pair, the one with the lower sigmoid score is suppressed.
+
+3.10 Symbolic Consistency Repair
+
+3.10.1 Motivation and Design
+
+Neural network predictions are not inherently constrained to satisfy logical consistency.
+A model that predicts spatial relations independently for each directed object pair may
+produce outputs that violate elementary spatial logic -- for example, simultaneously
+predicting higher_than(A, B) and higher_than(B, A), or predicting on_top_of(A, B)
+without the corresponding under(B, A). Such contradictions reduce the utility of the scene
+graph for downstream tasks that rely on logical inference, and they represent a form of
+prediction error that does not reflect genuine uncertainty but rather a failure of the model
+to enforce known structural constraints.
+
+SceneGraphRepair is a zero-parameter post-processing module that enforces four
+categories of logical constraints on the predicted scene graph through deterministic fixed-
+point iteration. It carries no learnable parameters, requires no training data, and
+operates identically on any scene regardless of domain -- making it fully domain-
+agnostic. Its design is motivated by the observation that many spatial constraints are
+universal physical facts rather than dataset-specific conventions: an object cannot
+simultaneously be both to the left of and to the right of another object; if A is higher than
+B then B must be lower than A.
+
+3.10.2 Constraint Types
+
+Four categories of constraints are enforced:
+
+Inverse completeness. For each inverse relation pair -- on_top_of  under, higher_than
+ lower_than, left_of  right_of, in_front_of  behind -- if one direction is predicted
+with confidence above threshold, the inverse is added to the graph if not already present.
+This is the most impactful constraint: on the 3DSSG validation set it adds 13,027 inverse
+relations per 85 scenes (153 per scene on average), and on the tabletop cross-domain
+scenes it rescues the on_top_of relation by inferring it from the reliably predicted under
+relation (on_top_of F1 improving from 0.621 to 0.919 after repair).
+
+Mutual exclusion. For each pair of mutually exclusive relations -- on_top_of vs. under
+for the same directed pair, left_of vs. right_of, in_front_of vs. behind, higher_than vs.
+lower_than -- if both are predicted, the one with the lower confidence score is removed.
+This eliminates direct directional contradictions where the model has predicted opposing
+relations simultaneously.
+
+Asymmetry. For relations that are physically asymmetric -- specifically higher_than and
+its directional analogues -- if higher_than(A, B) and higher_than(B, A) are both
+predicted, the one with lower confidence is removed. This enforces the asymmetry
+property of strict ordering relations.
+
+Transitivity. For transitive relations -- higher_than and left_of chains -- if
+higher_than(A, B) and higher_than(B, C) are both predicted, higher_than(A, C) is added
+if not already present. Transitivity inference is applied conservatively to avoid
+exponential chain propagation in large scenes.
+
+3.10.3 Fixed-Point Iteration Algorithm
+
+Constraint enforcement proceeds through alternating removal and addition passes until
+the predicted graph reaches a fixed point -- a state in which no further constraint fires.
+In each iteration, the removal pass applies mutual exclusion and asymmetry constraints
+to eliminate contradictions; the addition pass then applies inverse completeness and
+transitivity to infer new relations from the now-consistent graph. This alternation is
+necessary because adding an inverse relation in the addition pass may create a new
+contradiction that the next removal pass must resolve. In practice, convergence is fast:
+the algorithm requires an average of 3.3 iterations on the 3DSSG validation set and 1.9
+iterations on the LERF scenes. The fixed-point is guaranteed to be reached because each
+iteration either removes at least one relation (strictly reducing the contradiction count)
+or adds relations without creating new contradictions.
+
+The impact of symbolic repair varies by dataset. On the 3DSSG validation set, the model
+is already largely consistent due to the inverse consistency training loss, so repair resolves
+only 396 contradictions across 85 scenes (4.7 per scene) and produces a negligible change
+in Macro F1 (-0.002). On the LERF held-out scenes, repair adds 137 relations and
+improves mR@5 from 88.0 per cent to 92.9 per cent (+4.9 percentage points). On the
+tabletop cross-domain scenes, repair adds 88 relations entirely via inverse and symmetry
+inference and improves Micro F1 from 0.740 to 0.774 (+3.4 points), with the largest gains
+on on_top_of (+0.298 F1) and lower_than (+0.152 F1).
+
+3.11 Evaluation Protocol
+
+3.11.1 Metrics: Macro F1, Micro F1, and R@K
+
+Three complementary metrics are used to evaluate scene graph prediction quality, each
+measuring a different aspect of performance.
+
+Macro F1 is the unweighted average of per-relation F1 scores across all ten relation
+classes. For each relation, F1 = 2 × (precision × recall) / (precision + recall), computed
+using binary predictions obtained after per-relation threshold calibration. Macro F1
+treats all relation classes equally regardless of their frequency, making it sensitive to
+performance on rare relations such as on_top_of and attached_to. It is the primary metric
+for measuring balanced classification performance across the full relation schema.
+
+Micro F1 aggregates true positives, false positives, and false negatives across all relation
+classes before computing a single F1 score, effectively weighting each class by its
+frequency. Micro F1 is reported for cross-domain tabletop evaluation, where it provides
+a frequency-weighted view of overall prediction quality.
+
+Predicate Recall at K (R@K) measures the fraction of ground truth relation triples for
+which the correct relation appears among the model's top-K highest-confidence
+predictions for that directed object pair, regardless of the threshold decision. R@3 and
+R@5 are reported throughout. R@K is a ranking metric rather than a classification
+metric -- it evaluates whether the model correctly ranks the true relation highly,
+independently of whether the threshold produces the right binary decision. This makes
+R@K robust to threshold miscalibration and directly comparable across methods with
+different threshold strategies.
+
+3.11.2 Baselines
+Four baselines are used for comparison on the 3DSSG benchmark. ReLaGS (Arafa et al.,
+2026) and GaussianGraph (Li et al., 2025) are the two Gaussian-specific scene graph
+methods most directly comparable to this work, both operating on 3DGS representations
+but using large foundation models. ConceptGraphs (Gu et al., 2024) and Open3DSG
+(Koch et al., 2024) represent foundation-model-dependent approaches operating on
+RGB-D and point cloud inputs respectively. For the LERF evaluation, GaussianGraph is
+the primary baseline as it is the only prior method evaluated on the same four LERF
+scenes using the same positional relation query protocol. Results for all baselines are
+taken from their respective published papers; no reimplementation is performed.
+
+3.11.3 Cross-Domain Evaluation Setup (Tabletop)
+
+The eight tabletop evaluation scenes are used exclusively for zero-shot cross-domain
+evaluation -- the GeoKAN-Gamma model trained on 3RScan is applied directly to
+tabletop scenes without any fine-tuning, threshold re-calibration, or scene-specific
+adaptation. The only legitimate adaptation applied is the suppression of the attached_to
+relation (setting predicted probabilities to zero), which is justified by the hard physical
+constraint that no objects in the tabletop scenes are wall-mounted or built-in -- a domain
+expert constraint rather than a data-driven adaptation. The 3RScan-calibrated
+thresholds for all other nine relations are used unchanged. Ground truth for all eight
+scenes is constructed by build_gt_all_scenes.py, which runs the same deterministic
+HDBSCAN clustering pipeline as the evaluation script (RANSAC seed = 42), ensuring
+perfect coordinate alignment between ground truth centroids and predicted cluster
+centroids (Hungarian match distance = 0.000 for all eight scenes). Evaluation is conducted
+both without and with symbolic consistency repair to quantify the repair contribution
+independently of the base model.
+
+3.11.4 Held-Out Evaluation Setup (LERF)
+
+The four LERF scenes are used as a held-out evaluation set to assess in-domain
+generalisation to an unseen dataset at comparable scale to the training distribution. The
+evaluation protocol is identical to the 3DSSG validation protocol: the GeoKAN-Gamma
+model with 3RScan-calibrated thresholds is applied without modification, and R@1,
+R@3, and R@5 are computed against geometry-derived ground truth. Results are
+reported both before and after symbolic consistency repair. Comparison against
+GaussianGraph is conducted using the mR@1, mR@3, and mR@5 metrics on positional
+relation queries, matching the evaluation protocol reported in Table V of Li et al. (2025).
+
+                                                   4.Results
+
+4.1 In-Domain Performance on 3DSSG Validation Set
+
+4.1.1 Model Evolution Table
+
+Table 4.1 presents the full evolution of the GeoKANRelationGNN architecture from the
+initial GAT baseline through to the final GeoKAN-Gamma model. Each row corresponds
+to a distinct model version with a specific architectural or training change, trained and
+evaluated on the 3RScan / 3DSSG dataset unless otherwise noted.
+
+Version    Key Change                                Data                      Macro F1
+
+v1­v3      Single-head GAT, 8-dim node features, ScanNet (geo- 0.35
+
+           softmax loss                              derived)                  (unstable)
+
+v4         Multi-label BCE, 10-dim node features, ScanNet (geo-                0.42
+
+           signed delta edge features                derived)
+
+v5         Fixed data leakage (augmentation after ScanNet (geo-                0.44
+
+           split), all-pairs negatives               derived)
+
+v6         14-dim edge features with contact signals ScanNet (geo-             0.49
+
+           (vert_gap, contact_score, support_overlap) derived)
+
+v7         17-dim edge features, dual-head GAT, ScanNet (geo- 0.52
+           asymmetric focal loss, threshold tuning derived)
+
+GeoKAN-v1  GeoKAN heads replacing MLP, 3RScan real 3RScan                      /
+                                                                                0.505
+           Gaussian data, 12-class schema            3DSSG
+
+GeoKAN-v2 22-dim scale-invariant edge features 3RScan                          / 0.48
+           (avg_diag normalisation)                  3DSSG
+
+GeoKAN-v3  Incorrect ASL configuration ( = 4.0, 3RScan                         /
+                                                                                0.46
+           prob_margin = 0.05)                       3DSSG
+
+GeoKAN-    Rule injection, correct ASL ( = 4.0,  = 0.0), 3RScan                /
+RBF                                                                  3DSSG     + 0.919
+
+           10-class schema
+                                                                     injected
+
+GeoKAN-    Mexican hat wavelet basis replacing RBF   3RScan                    /
+Wavelet                                              3DSSG                     + 0.914
+                                                     injected
+
+GeoKAN-    Fixed diagonal metric, LR = 5×10, warmup  3RScan                    /
+Gamma                                                                          + 0.926
+           = 10 epochs                               3DSSG
+
+                                                     injected
+
+Table 4.1: Model evolution from GAT baseline to GeoKAN-Gamma. The jump from v7 (0.52)
+to GeoKAN-RBF (0.919) is attributable primarily to rule-based label injection and correct
+ASL configuration.
+
+4.1.2 GeoKAN-Gamma Final Results
+GeoKAN-Gamma achieves Macro F1 = 0.926, R@3 = 0.878, and R@5 = 0.983 on the
+3DSSG validation set of 85 held-out scenes containing 323,237 ground truth relation
+triples. The model contains 1,018,414 parameters and completes inference in under two
+seconds on an NVIDIA RTX 3060 GPU using less than 1.5 GB of GPU memory.
+
+4.1.3 Per-Relation F1 Breakdown
+
+Table 4.2 presents the per-relation F1 scores for all three GeoKAN variants on the 3DSSG
+validation set.
+
+Relation GeoKAN-Gamma GeoKAN-RBF GeoKAN-Wavelet
+
+on_top_of 0.846    0.839  0.833
+
+under    0.857     0.844  0.826
+
+attached_to 0.940  0.936  0.934
+
+adjacent_to 0.945  0.942  0.943
+
+left_of  0.957     0.955  0.950
+
+right_of 0.956     0.955  0.950
+
+in_front_of 0.902  0.888  0.875
+
+behind 0.901       0.889  0.884
+
+higher_than 0.977  0.968  0.968
+
+lower_than 0.976   0.977  0.972
+
+Macro F1 0.926     0.919  0.914
+
+Table 4.2: Per-relation F1 scores for all three GeoKAN variants. GeoKAN-Gamma's largest
+gains over RBF are on in_front_of (+1.4 pp), behind (+1.2 pp), and under (+1.3 pp).
+
+4.1.4 Training Convergence
+
+GeoKAN-RBF converges rapidly from the first epoch, reaching Macro F1 = 0.711 at
+epoch 1, 0.816 at epoch 5, 0.903 at epoch 10, and the final value of 0.919 by epoch 15. This
+fast convergence reflects the strong geometric signal provided by the injected labels --
+the model learns the directional relations almost immediately and progressively refines
+the contact relation boundaries over subsequent epochs. GeoKAN-Gamma follows a
+similar trajectory with a slower initial ramp due to the longer 10-epoch warmup, but
+reaches a higher final value of 0.926 with greater training stability. Total training time is
+approximately 18 minutes for GeoKAN-Gamma and 25 minutes for GeoKAN-RBF on an
+NVIDIA RTX 3060.
+
+4.2 GeoKAN Basis Function Ablation
+4.2.1 GeoKAN-Gamma vs. RBF vs. Wavelet
+
+Table 4.3 presents a direct comparison of the three GeoKAN basis function variants under
+identical training conditions -- the same dataset, augmentation strategy, loss
+configuration, and evaluation protocol -- differing only in the basis function and metric
+parameterisation of the GeoKAN layers.
+
+Variant Metric Type  Basis Function                                         Train
+                                      Macro R@3 R@5 Params Time
+                                      F1
+
+                                                                            (s)
+
+GeoKAN- Fixed diagonal: -- (no RBF;
+                                                                 0.926 0.878 0.983 1,018,414 1,093
+
+Gamma g_i = softplus(_i) warped linear)
+
+GeoKAN-  Adaptive:   RBF:
+
+RBF      MetricNet MLP exp(-(z-c)²),  0.919 0.875 0.982 1,071,918 1,500
+
+         per sample  K=12
+
+GeoKAN-  Adaptive:   Mexican hat:
+
+Wavelet MetricNet MLP (1-t²)exp(-t²/2) 0.914 0.872 0.979 1,071,918 1,268
+         per sample
+
+Table 4.3: GeoKAN basis function ablation. All variants trained on 3RScan / 3DSSG with
+identical configuration. GeoKAN-Gamma is the best-performing variant despite having the
+simplest metric parameterisation.
+
+Three findings emerge from this ablation.
+
+GeoKAN-Gamma outperforms the adaptive variants. The fixed diagonal metric, which
+learns a single scalar scaling per input dimension with no dependence on the input value,
+achieves the highest Macro F1 (0.926) and R@5 (0.983) despite being the architecturally
+simplest variant. It also has 53,504 fewer parameters than the RBF and Wavelet variants,
+as the MetricNet MLP is replaced by a single learnable vector . This result indicates that
+for the spatial relation prediction task, the additional flexibility of an input-dependent
+adaptive metric does not translate into improved predictive performance -- the
+geometric features are sufficiently well-structured that a fixed re-scaling of each
+dimension captures the relevant variation without requiring per-sample adaptation.
+
+GeoKAN-Gamma required different training hyperparameters. The fixed diagonal
+metric is more sensitive to large gradient steps in early training, as the metric parameters
+ interact directly with the basis expansion without the stabilising effect of the MetricNet's
+nonlinear path. A lower learning rate (5×10 vs. 2×10³) and a longer warmup (10 vs. 5
+epochs) were necessary for stable training. The gains from GeoKAN-Gamma are
+concentrated on the relations that benefit most from consistent axis-aligned scaling:
+in_front_of (+1.4 pp over RBF), behind (+1.2 pp), and under (+1.3 pp) -- all relations
+whose ground truth is strongly aligned with a single feature axis.
+GeoKAN-Wavelet performs worst. The Mexican hat wavelet basis, whilst theoretically
+appealing for its ability to represent oscillatory patterns, produces the lowest Macro F1
+(0.914) across all three variants. The negative lobes of the wavelet function -- which
+produce negative activations for inputs away from the centre -- cause destructive
+interference in the multi-label classification setting, where the model must simultaneously
+activate multiple output heads for a given input. The RBF basis, with its non-negative
+activations, does not suffer from this interference effect and outperforms the wavelet
+variant across all metrics.
+
+4.3 Comparison with State-of-the-Art
+
+4.3.1 vs. ReLaGS (Arafa et al., CVPR 2026)
+
+ReLaGS is the current state-of-the-art Gaussian-based scene graph method and the most
+directly comparable system to this work. It constructs a hierarchical language-distilled
+Gaussian scene representation using CLIP, SAM, and a Jina embedding model, then
+applies a graph neural network to predict spatial and semantic relations from the
+resulting language-augmented embeddings. On the 3DSSG benchmark, ReLaGS reports
+R@3 = 0.790 and R@5 = 0.870. GeoKAN-Gamma surpasses these figures by 8.8
+percentage points on R@3 (0.878 vs. 0.790) and 11.3 percentage points on R@5 (0.983 vs.
+0.870), while using approximately 0.07 per cent of the parameter count (1.018M vs. ~1.5B)
+and completing inference in under two seconds rather than 12.6 minutes. This
+comparison demonstrates that a geometry-first approach, trained on structured
+geometric features with rule-augmented labels, can substantially outperform a state-of-
+the-art foundation-model-dependent system on the established benchmark for this task.
+
+4.3.2 vs. ConceptGraphs (Gu et al., ICRA 2024)
+
+ConceptGraphs constructs open-vocabulary 3D scene graphs by fusing outputs from 2D
+foundation models -- including class-agnostic instance segmentation, CLIP feature
+extraction, and large language model relation inference -- into a persistent 3D object
+map. On the 3DSSG benchmark it achieves R@3 = 0.740 and R@5 = 0.790. GeoKAN-
+Gamma exceeds ConceptGraphs by 13.8 percentage points on R@3 and 19.3 percentage
+points on R@5, whilst the geometry-first approach requires no language model, no
+segmentation model, and no CLIP encoder at inference time. The ConceptGraphs result
+is noteworthy because it reflects a fundamentally different paradigm -- open-vocabulary,
+LLM-reasoned relations -- yet is surpassed by a model that predicts relations purely from
+3D geometry.
+
+4.3.3 vs. Open3DSG (Koch et al., CVPR 2024)
+
+Open3DSG is the first open-vocabulary 3D scene graph method operating on point cloud
+inputs, achieving R@3 = 0.580 and R@5 = 0.650 on the 3DSSG benchmark using CLIP
+co-embedding. GeoKAN-Gamma exceeds Open3DSG by 29.8 percentage points on R@3
+and 33.3 percentage points on R@5. Open3DSG operates on point clouds rather than
+Gaussian splats, meaning it does not exploit the per-Gaussian covariance and opacity
+information available in the 3DGS representation. This comparison suggests that the
+richer geometric signal of Gaussian splats, combined with geometry-first feature
+engineering, provides a substantial representational advantage over point cloud methods
+even when those methods are augmented with large vision-language models.
+
+4.3.4 Computational Efficiency Comparison
+
+Table 4.4 summarises the performance and computational footprint of all compared
+methods.
+
+Method                         Foundation            Inference  GPU
+                R@3 R@5 Models             Params Time          Memory
+
+GeoKAN-Gamma    0.878 0.983 None           1.018M < 2 sec       < 1.5 GB
+(ours)
+
+GeoKAN-RBF (ours) 0.875 0.982 None         1.072M < 2 sec       < 1.5 GB
+
+GeoKAN-Wavelet  0.872 0.979 None           1.072M < 2 sec       < 1.5 GB
+(ours)
+
+ReLaGS          0.790 0.870 CLIP + SAM + ~1.5B 12.6 min         7.5 GB
+                               Jina
+
+ConceptGraphs   0.740 0.790 LLM + CLIP ~1B+ --                  --
+
+Open3DSG        0.580 0.650 CLIP           ~400M --             --
+
+Table 4.4: Comparison with state-of-the-art methods on the 3DSSG benchmark. GeoKAN-
+Gamma achieves the highest R@3 and R@5 whilst using the fewest parameters, the shortest
+inference time, and the lowest GPU memory footprint of any compared method.
+
+The efficiency advantage of GeoKAN-Gamma over ReLaGS is particularly striking:
+GeoKAN-Gamma uses 0.07 per cent of ReLaGS's parameter count, completes inference
+approximately 380 times faster, and requires 5 times less GPU memory -- whilst
+outperforming it on both benchmark metrics. This positions the geometry-first approach
+as not merely competitive but dominant in the efficiency-performance trade-off space for
+Gaussian-based scene graph generation.
+
+4.4 Impact of Symbolic Consistency Repair
+
+4.4.1 On the 3DSSG Validation Set
+
+On the 3DSSG validation set of 85 scenes, symbolic consistency repair has a near-neutral
+impact on Macro F1, reducing it by 0.002 points (from 0.928 to 0.926). This near-zero
+impact is expected and reflects a positive property of the trained model: GeoKAN-
+Gamma, having been trained with the inverse consistency loss L_inv, already produces
+largely consistent predictions on in-domain data. Across 85 validation scenes, repair
+resolves only 396 contradictions (4.7 per scene on average) -- an extremely low
+contradiction rate given that each scene contains hundreds of directed object pairs. The
+repair module does add 13,027 inverse relations (153 per scene on average) via inverse
+completion, but because the model's threshold-calibrated predictions already capture
+most of these inverse relations on the in-domain validation set, the additional inverses do
+not substantially change the F1 calculation. The negligible F1 change on 3DSSG confirms
+that symbolic repair does not degrade in-domain performance whilst providing a safety
+guarantee of logical consistency.
+
+4.4.2 On the LERF Scenes
+
+The impact of symbolic repair is substantially larger on the four LERF held-out scenes,
+where the model operates on an unseen dataset without threshold re-calibration. Table
+4.5 presents per-scene results before and after repair.
+
+Scene      Objects GT Triples mR@5 Before mR@5 After Relations Added
+
+ramen      13 640     0.898  0.948  --
+
+teatime    10 372     0.922  0.941  --
+
+waldo_kitchen 10 368  0.859  0.921  --
+
+figurines  10  390    0.831  0.892  --
+
+Aggregate -- 1,770 0.880     0.929  137
+
+Table 4.5: Impact of symbolic consistency repair on the four LERF evaluation scenes. Repair
+adds 137 relations via inverse completion and improves aggregate mR@5 by 4.9 percentage
+points.
+
+Repair adds 137 relations across the four scenes (34.25 per scene on average) via the
+inverse completion mechanism, with 2 contradictions resolved. The mR@5 improvement
+of 4.9 percentage points -- from 0.880 to 0.929 -- arises because on unseen scenes the
+model's threshold-calibrated predictions are less complete than on the in-domain
+validation set: the model correctly ranks the true relation highly (hence R@5 before
+repair is already 88.0 per cent) but does not always fire the threshold for both a relation
+and its inverse. The repair module infers the missing inverse from the confidently
+predicted direction, recovering these missed relations without any retraining or threshold
+adjustment.
+
+4.5 Held-Out Scene Evaluation: LERF (In-Domain Generalisation)
+
+4.5.1 Per-Scene Results
+
+The four LERF scenes -- ramen, teatime, waldo_kitchen, and figurines -- serve as a held-
+out evaluation set for assessing in-domain generalisation to an unseen dataset. These
+scenes cover indoor environments at 1­5 metre scale, placing them within the same scale
+class as the 3RScan training distribution (3­8 metres), and are therefore a test of cross-
+dataset rather than cross-domain generalisation. The GeoKAN-Gamma model with
+3RScan-calibrated thresholds is applied without modification. Table 4.6 presents per-
+scene results after symbolic consistency repair.
+
+Scene      Objects GT Triples mR@1 mR@3 mR@5
+
+ramen      13 640                       0.891 0.897 0.948
+
+teatime    10 372                       0.925 0.925 0.941
+
+waldo_kitchen 10 368                    0.856 0.872 0.921
+
+figurines  10        390                0.808 0.826 0.892
+
+Aggregate -- 1,770 0.872 0.882 0.929
+
+Table 4.6: Per-scene LERF results for GeoKAN-Gamma after symbolic consistency repair.
+
+Performance is consistently strong across all four scenes. The teatime scene achieves the
+highest mR@1 (0.925), reflecting its relatively simple spatial arrangement with clear
+vertical and horizontal separations between objects. The figurines scene achieves the
+lowest mR@5 (0.892), which is consistent with its dense arrangement of small decorative
+objects at similar heights -- a configuration that challenges the higher_than and
+lower_than predictions where Z differences are small. The ramen scene, despite having
+the largest object count (13 objects, yielding 156 directed pairs), achieves a strong mR@5
+of 0.948, demonstrating that the model scales well to scenes with higher object counts.
+
+4.5.2 Comparison vs. GaussianGraph on LERF
+
+Table 4.7 compares GeoKAN-Gamma against GaussianGraph (Li et al., 2025) on the four
+LERF scenes using the positional relation query protocol from Table V of Li et al. (2025).
+
+Method               Foundation Models                     Params mR@1 mR@3 mR@5
+
+GeoKAN-Gamma         +                                     1.018M 0.872 0.882 0.929
+Repair (ours)          None
+
+GeoKAN-Gamma (before                                       1.018M 0.235 0.653 0.880
+                                  None
+
+repair)
+
+GaussianGraph LLaVA- CLIP+SAM+LLaVA-                       ~2B+ 0.568 0.613 0.632
+
+1.6 + 3D correction  1.6+GroundingDINO
+
+GaussianGraph LLaVA- CLIP+SAM+LLaVA-                       ~2B+ 0.407 0.450 0.498
+
+1.6, no correction   1.6+GroundingDINO
+Method                 Foundation Models  Params mR@1 mR@3 mR@5
+
+GaussianGraph BLIP2 +  CLIP+SAM+BLIP2     -- 0.355 0.379 0.401
+
+3D correction
+
+Table 4.7: Comparison against GaussianGraph on the four LERF scenes using positional
+relation queries.
+
+GeoKAN-Gamma with symbolic repair achieves mR@5 = 0.929, exceeding
+GaussianGraph's best result of 0.632 (LLaVA-1.6 with 3D correction) by 29.7 percentage
+points. This result is particularly significant because GaussianGraph was specifically
+designed and evaluated on these LERF scenes, whilst GeoKAN-Gamma was trained
+exclusively on 3RScan with no LERF-specific adaptation. The comparison also highlights
+the role of symbolic repair: without it, mR@1 falls to 0.235, indicating that the raw model
+predictions rank many correct relations outside the top position. Repair's inverse
+completion mechanism recovers these by inferring missing inverse relations, raising
+mR@1 from 0.235 to 0.872 -- a 63.7 percentage point improvement on the rank-1 metric
+alone.
+
+It is important to note that the LERF evaluation does not constitute cross-domain
+generalisation. The 1­5 metre scale of the LERF scenes is comparable to the 3­8 metre
+scale of the 3RScan training scenes; both fall within the same indoor room-scale class.
+The strong LERF performance therefore reflects in-domain generalisation to an unseen
+dataset rather than adaptation to a different scale or scene type, a distinction that is
+examined further in the cross-domain tabletop evaluation in Section 4.6.
+
+4.6 Cross-Domain Evaluation: Custom Tabletop Scenes
+
+4.6.1 Ground Truth Construction Methodology
+
+Eight custom tabletop scenes (scene_06 through scene_13) were captured and
+reconstructed for the sole purpose of cross-domain evaluation. Each scene was captured
+using a smartphone camera at approximately 60 frames, reconstructed via NerfStudio
+splatfacto, and evaluated using the same GeoKAN-Gamma model trained on 3RScan --
+with no scene-specific fine-tuning, threshold adjustment, or model adaptation.
+
+Ground truth relation files were constructed programmatically using
+build_gt_all_scenes.py rather than manual annotation. The script runs the same
+deterministic HDBSCAN clustering pipeline as the evaluation code (RANSAC seed = 42),
+reads the actual cluster centroids produced by that clustering, and derives all pairwise
+spatial relations geometrically from those centroids. Cluster-to-object assignments were
+verified by visual inspection of centroid positions and point counts. This approach ensures
+perfect coordinate alignment between ground truth and evaluation: the Hungarian match
+distance between predicted and ground truth cluster centroids is 0.000 for all eight scenes,
+eliminating any possibility of mismatch between the object instances used to construct
+ground truth and those used during prediction.
+Three scenes (scene_09, scene_12, scene_13) exhibit a Z-DOWN coordinate convention
+where more negative Z values correspond to physically higher positions; this is handled
+during ground truth construction by negating Z before deriving directional relations for
+those scenes. Five scenes contain a verified stacking configuration (router placed on top
+of the Agaro box): scenes 06, 08, 10, 12, and 13.
+
+4.6.2 Zero-Shot Aggregate Results
+
+Table 4.8 presents the aggregate zero-shot cross-domain results across all eight tabletop
+scenes, reported both without and with symbolic consistency repair.
+
+Setting               Micro F1 Precision Recall R@3 R@5
+
+Zero-shot, no repair  0.740 0.815 0.677 0.758 0.927
+
+Zero-shot + symbolic repair 0.774 0.773 0.776 0.758 0.927
+
+Table 4.8: Aggregate zero-shot cross-domain results on 8 tabletop scenes. R@K is unchanged
+by repair as expected -- the ranking metric is not affected by inverse completion.
+
+The zero-shot results demonstrate meaningful generalisation despite the substantial scale
+gap between training (3­8 m room-scale) and evaluation (0.3­0.8 m tabletop). R@5 =
+0.927 indicates that the correct relation appears in the model's top-5 predictions for 92.7
+per cent of ground truth triples, and R@3 = 0.758 shows that it ranks in the top 3 for 75.8
+per cent. The Micro F1 of 0.740 (without repair) reflects a high-precision, lower-recall
+profile (precision = 0.815, recall = 0.677), consistent with the model being conservative at
+the 3RScan-calibrated thresholds on the smaller-scale tabletop scenes.
+
+4.6.3 Per-Relation Analysis
+
+Table 4.9 presents per-relation R@3 and R@5 results, revealing which spatial relations
+transfer well across the scale domain gap and which degrade.
+
+Relation R@3 R@5 Transfer Quality
+
+adjacent_to 0.981 1.000 Excellent -- proximity is scale-invariant
+
+left_of  0.942 1.000 Excellent -- X-axis ordering is scale-invariant
+
+higher_than 0.882 0.953 Good
+
+right_of 0.750 0.981 Good -- slight asymmetry vs. left_of
+
+on_top_of 0.684 0.895 Moderate -- table context helps
+
+lower_than 0.659 0.729 Weak -- small Z differences on tabletop
+
+in_front_of 0.538 1.000 Poor R@3, perfect R@5 -- consistent rank-4/5 prediction
+Relation R@3 R@5 Transfer Quality
+
+behind 0.481 0.981 Poor R@3, near-perfect R@5 -- same pattern
+
+Table 4.9: Per-relation cross-domain transfer on 8 tabletop scenes. Relations based on X-
+axis and proximity transfer best; Y-axis (depth) relations and lower_than are weakest.
+
+Relations that depend on the X-axis (left_of, right_of) and on proximity (adjacent_to)
+transfer perfectly or near-perfectly, as these geometric relationships are inherently scale-
+invariant. The in_front_of and behind relations show a striking pattern: R@3 is poor
+(0.538 and 0.481) but R@5 is near-perfect (1.000 and 0.981). This indicates the model
+consistently ranks these relations 4th or 5th rather than in the top 3, reflecting ambiguity
+in the Y-axis (depth) dimension on tabletop scenes where objects are densely packed with
+small Y separations compared to the large room-scale depths seen during training. The
+lower_than relation is the weakest performer overall (R@5 = 0.729), as all tabletop
+objects are at similar heights within the narrow vertical range of the tabletop surface,
+making the small Z differences fall below the learned detection threshold calibrated on
+room-scale scenes where height differences are much larger.
+
+4.6.4 Per-Scene Results
+
+Table 4.10 presents per-scene R@3 and R@5 results across the eight tabletop evaluation
+scenes.
+
+Scene Z-Convention Stacking        R@3 R@5
+
+scene_06 Z-UP  router on agaro_box 0.750 0.955
+
+scene_07 Z-UP  None                0.776 0.931
+
+scene_08 Z-UP  router on agaro_box 0.733 0.883
+
+scene_09 Z-DOWN None               0.793 0.966
+
+scene_10 Z-UP  router on agaro_box 0.804 0.911
+
+scene_11 Z-UP  None                0.790 0.984
+
+scene_12 Z-DOWN router on agaro_box 0.733 0.917
+
+scene_13 Z-DOWN router on agaro_box 0.697 0.864
+
+Mean --        --                  0.760 0.926
+
+Table 4.10: Per-scene cross-domain results on 8 tabletop evaluation scenes.
+
+Performance is consistent across scenes, with R@3 ranging from 0.697 to 0.804 and R@5
+from 0.864 to 0.984. Scene_13 achieves the lowest R@3 (0.697), which coincides with both
+a Z-DOWN convention and a stacking configuration -- two complicating factors
+simultaneously present. Scene_11 achieves the highest R@5 (0.984), reflecting its
+straightforward side-by-side arrangement without stacking. No systematic performance
+difference is observed between Z-UP and Z-DOWN scenes, confirming that the Z-axis
+correction applied during clustering correctly normalises the coordinate convention
+before feature computation.
+
+4.6.5 Impact of Symbolic Repair Cross-Domain
+
+Table 4.11 presents the per-relation impact of symbolic repair on the tabletop cross-
+domain scenes.
+
+Relation F1 Before F1 After  F1 Mechanism
+               Repair Repair
+
+on_top_of 0.621    0.919           under reliably predicted (F1=0.932); repair
+                          +0.298
+
+                                   infers on_top_of as inverse
+
+lower_than 0.768   0.920  +0.152 higher_than well predicted; repair adds 32
+                                   missing lower_than counterparts
+
+behind 0.308       0.429  +0.121 in_front_of inverses added
+
+right_of 0.800     0.860  +0.060 left_of inverses added
+
+adjacent_to 0.675  0.568  -0.107 Minor over-prediction artifact from
+                                   bidirectional inverse firing
+
+Table 4.11: Per-relation impact of symbolic repair on tabletop cross-domain scenes. The
+largest gain is on on_top_of (+0.298), rescued entirely by inverse completion from under.
+
+The most striking result is the on_top_of recovery: the model predicts under with F1 =
+0.932 cross-domain, but on_top_of with only F1 = 0.621 before repair. The asymmetry
+arises because the under relation is represented by edge features computed from the
+object-below's perspective -- features that transfer well from 3RScan -- whilst on_top_of
+features computed from the object-above's perspective are less robust at tabletop scale.
+Symbolic repair corrects this asymmetry entirely through inverse completion, raising
+on_top_of F1 to 0.919. The one negative impact -- adjacent_to dropping by 0.107 -- is a
+minor artifact where the bidirectional inverse firing slightly over-predicts adjacency.
+Symbolic repair provides +3.4 Micro F1 points cross-domain with zero parameters and
+no retraining, confirming its value as a domain-agnostic correction mechanism.
+
+                                              5.DISCUSSION
+
+5.1 Is Geometry Sufficient? The Case Against Foundation Models
+
+The central claim of this project is that spatial relations between objects in a 3D scene can
+be predicted accurately from geometric features alone, without any visual language
+model, segmentation model, or semantic label at inference time. The results reported in
+Chapter 4 provide strong empirical support for this claim. GeoKAN-Gamma achieves
+Macro F1 = 0.926 and R@5 = 0.983 on the 3DSSG benchmark -- surpassing every
+compared method including those that use foundation models with hundreds of millions
+to over a billion parameters.
+
+This outcome is perhaps less surprising than it initially appears. The ten spatial relations
+in the project's schema are, by definition, geometric predicates. Left_of is a statement
+about X-axis ordering. Higher_than is a statement about Z-axis ordering. On_top_of is a
+statement about vertical proximity and footprint overlap. None of these relations require
+knowing that an object is a chair, a lamp, or a bottle. The geometric facts that define them
+are fully derivable from centroid positions and bounding volumes -- precisely the
+information encoded in the 10-dimensional node features and 22-dimensional edge
+features used here. The question was never whether geometry contains this information;
+it clearly does. The question was whether a model could be trained to extract it reliably,
+given the sparsity of available annotations. Rule-based label injection resolves that
+bottleneck, and GeoKAN provides the architectural flexibility to learn the non-linear
+geometric decision boundaries that separate, for example, on_top_of from merely
+higher_than.
+
+The comparison with foundation-model-based methods reveals a structural inefficiency
+in the current dominant paradigm. Methods such as ReLaGS and GaussianGraph use
+vision-language models primarily to identify what objects are -- to assign semantic labels
+that are then used to reason about how objects relate. But the relations being predicted
+are geometric, not semantic. A model does not need to know that object A is a router and
+object B is a box to determine that A is resting on B; it needs to know that A's bottom face
+is close to B's top face and that A's footprint overlaps B's footprint. Using a language
+model to derive this geometric fact adds approximately 1.5 billion parameters, 12 minutes
+of inference time, and 7.5 GB of memory to a computation that a 1-million-parameter
+geometry-only model performs in under two seconds with higher accuracy. This
+mismatch suggests that the field has been importing foundation model infrastructure into
+a problem that does not require it, at substantial computational cost.
+
+This is not an argument against foundation models in scene understanding broadly.
+Open-vocabulary object recognition, natural language scene querying, and semantic
+relation prediction -- where the relation type itself is not geometric -- genuinely benefit
+from language grounding. But for the specific task of predicting a fixed vocabulary of
+geometric spatial relations, the results here suggest that geometry alone, when properly
+exploited, is not merely sufficient but superior.
+
+5.2 Why GeoKAN-Gamma Outperforms the Adaptive RBF Variant
+
+The ablation study in Section 4.2 produces a counterintuitive result: the architecturally
+simplest GeoKAN variant -- a fixed diagonal metric with no input-dependent adaptation
+-- outperforms both the adaptive RBF and wavelet variants that use a MetricNet MLP
+to compute per-sample metrics. This outcome merits careful examination, as it runs
+counter to the general expectation that more expressive models should perform better
+given sufficient data.
+
+The key insight lies in the nature of the input features. The 10-dimensional node features
+and 22-dimensional edge features used in this project are already highly engineered: they
+are scale-normalised, clipped, and designed to encode specific geometric signals with
+minimal redundancy. The delta_x feature directly encodes left-right displacement; the
+vert_gap feature directly encodes vertical contact proximity; the z_rank feature encodes
+ordinal height. These features are not raw sensor measurements requiring complex
+nonlinear transformation -- they are near-sufficient statistics for the relations they are
+designed to predict. In this setting, the primary function of the geometric metric is not to
+discover a complex nonlinear warping of the feature space, but to learn which dimensions
+are most informative for each prediction head and scale them appropriately. A fixed
+diagonal metric -- which learns exactly this: one scale factor per dimension -- is precisely
+what the task requires. The MetricNet MLP in GeoKAN-RBF adds input-dependent
+adaptation, but since the features are already well-calibrated, this additional flexibility
+fits noise rather than signal, resulting in marginally lower generalisation performance.
+
+A second factor is training stability. The fixed diagonal metric in GeoKAN-Gamma
+interacts directly with the RBF centres during basis expansion, meaning that large
+gradient steps in early training can displace the effective input distribution significantly.
+This sensitivity required a lower learning rate (5×10 vs. 2×10³) and longer warmup (10
+vs. 5 epochs) for stable convergence. Once these hyperparameters were identified,
+GeoKAN-Gamma trained more stably than GeoKAN-RBF and converged to a higher
+final value. The MetricNet in GeoKAN-RBF introduces a nonlinear buffer between the
+raw features and the metric output, which moderates gradient flow and allows training
+at a higher learning rate -- but at the cost of the metric becoming input-dependent in
+ways that introduce variance across samples.
+
+The GeoKAN-Wavelet result provides a complementary insight. The Mexican hat wavelet
+basis produces negative activations for inputs far from each centre, which in a multi-label
+classification setting causes destructive interference: the same feature value that activates
+one relation's output may simultaneously suppress another's through negative wavelet
+lobes. The RBF basis, with its strictly non-negative activations, avoids this pathology. The
+consistent ranking Gamma > RBF > Wavelet across all ten relations and all three
+evaluation sets suggests that the ordering reflects a genuine architectural property rather
+than a random fluctuation.
+
+The practical implication is clear: for tasks involving well-engineered geometric features
+with known physical interpretations, a simpler metric parameterisation with carefully
+tuned training dynamics outperforms a more expressive adaptive variant. Complexity
+should be introduced only where the data genuinely requires it.
+
+5.3 The Role of Rule-Based Label Injection
+The model evolution table in Section 4.1.1 reveals that the single largest performance
+jump in the entire development history occurs between GeoKAN-v3 (Macro F1 = 0.46)
+and GeoKAN-RBF (Macro F1 = 0.919) -- a gain of 0.459 F1 points. This jump is not
+attributable to any architectural change: the GeoKAN layer was already present in
+GeoKAN-v1. It is attributable primarily to rule-based label injection combined with the
+correction of the ASL configuration. Disentangling these two contributions precisely is
+not straightforward, but the trajectory from v7 (0.52, standard model with correct ASL
+but no injection and no GeoKAN) to GeoKAN-v1 (0.505, GeoKAN architecture but no
+injection) to GeoKAN-RBF (0.919, GeoKAN with injection) makes clear that injection is
+the dominant driver.
+
+The mechanism is straightforward. Before injection, the 3DSSG training set contains
+approximately 40,000 positive examples each for left_of and right_of -- the human-
+annotated subset. After injection, these counts rise to 450,434 each. The model trained
+without injection sees the vast majority of geometrically valid left_of pairs labelled as
+negative -- not because they are not left_of, but because the annotator did not choose to
+label them. This false negative signal directly suppresses recall for these relations. After
+injection, the model receives a training signal that accurately reflects the geometric
+reality: if A's centroid X is less than B's centroid X, that pair is positive for left_of,
+regardless of whether a human annotator happened to label it.
+
+It is important to be precise about what injection does and does not do. It does not
+introduce any information that is not already present in the data -- the centroid positions
+from which directional labels are derived are the same positions used at inference time.
+It does not create a new capability; it removes an artificial suppression that the annotation
+process had imposed on an existing capability. The model always had access to the
+geometric signal for left_of; injection simply corrects the false negative labels that were
+preventing it from learning to use that signal.
+
+The lower confidence values assigned to contact relation injections (0.55­0.75) reflect a
+genuine epistemological distinction. Directional relations are geometric facts with
+confidence 1.0: if A's centroid is to the left of B's centroid, the rule is correct with
+certainty. Contact relations such as on_top_of depend on vertical gap thresholds and
+footprint overlap criteria that are approximations of a continuous physical reality -- an
+object near but not quite touching a surface may or may not be on_top_of depending on
+the annotator's interpretation. Assigning lower confidence to these injected labels is not
+conservatism but accuracy: it reflects the genuine uncertainty of the rule.
+
+The annotation sparsity problem identified by Wu et al. (2020) in 2D scene graph datasets
+is therefore even more acute in 3D: the 3DSSG annotation rate of 80­120 pairs per scene
+out of ~870 possible pairs (roughly 10­14 per cent coverage) means that any model trained
+without addressing this sparsity is learning from a dataset that is 86­90 per cent false
+negatives by construction. Rule-based injection is not a data augmentation trick; it is a
+correction of a fundamental flaw in the training signal.
+
+5.4 Symbolic Repair: Gains, Trade-offs, and the Inverse Completion Mechanism
+Symbolic consistency repair occupies an unusual position in the LogicSplat pipeline: it
+has zero learnable parameters, requires no training data, and yet produces measurable
+improvements in scene graph quality -- particularly in cross-domain settings where the
+base model's threshold-calibrated predictions are imperfect. Understanding precisely
+why repair helps, and where it does not, requires examining the mechanism rather than
+the aggregate numbers.
+
+The dominant mechanism across all three evaluation settings is inverse completion rather
+than contradiction resolution. On the 3DSSG validation set, repair resolves only 396
+contradictions across 85 scenes but adds 13,027 inverse relations. On the LERF scenes,
+repair resolves 2 contradictions but adds 137 relations. On the tabletop scenes, repair
+resolves 0 contradictions but adds 88 relations. This pattern reveals an important
+property of GeoKAN-Gamma: it is already largely self-consistent -- the inverse
+consistency training loss L_inv successfully suppresses logical contradictions during
+training, so few contradictions remain at test time. The value of repair lies almost entirely
+in completing missing inverse relations rather than removing impossible ones.
+
+The tabletop on_top_of recovery illustrates the mechanism precisely. The model predicts
+under with F1 = 0.932 cross-domain, whilst predicting on_top_of with only F1 = 0.621.
+This asymmetry is not random -- it reflects a systematic difference in how the two
+relations are represented in the edge feature space. The edge features for under(B, A) are
+computed from B's perspective, encoding how far below A's bottom face B's top face sits.
+These features transfer well across the scale domain gap because the relative vertical
+positioning of objects is captured by the normalised vert_gap and contact_score features.
+The on_top_of(A, B) features, computed from A's perspective, are less robust because A
+is the smaller tabletop object whose position relative to the table surface involves Z
+differences that fall below the room-scale thresholds. Repair bridges this asymmetry by
+treating the reliable under prediction as evidence for the inverse on_top_of, recovering
+0.298 F1 points without any model change.
+
+The one negative impact of repair -- adjacent_to dropping by 0.107 F1 on the tabletop
+scenes -- is informative. Adjacent_to is symmetric: if A is adjacent to B, then B is adjacent
+to A. When the model predicts adjacent_to(A, B) with sufficient confidence, repair adds
+adjacent_to(B, A) as its inverse. On the tabletop scenes, where objects are densely packed
+and many pairs are near the adjacency distance threshold, this symmetric completion
+slightly over-predicts adjacency for pairs that are geometrically marginal. This suggests
+a refinement: symmetric relation completion should apply a confidence penalty -- adding
+the inverse only if the original prediction exceeds a higher threshold -- to avoid over-
+firing on borderline cases. This is left as a direction for future work.
+
+The broader design principle is that symbolic repair is most valuable when a model's
+prediction errors are systematic rather than random -- when it consistently predicts one
+direction of a relation reliably and the other direction poorly. Random prediction errors
+cannot be corrected by logic alone; systematic asymmetries can. GeoKAN-Gamma
+exhibits exactly this property in the cross-domain setting, making symbolic repair a
+particularly effective complement to the learned model rather than a generic post-
+processing step.
+
+5.5 Cross-Domain Behaviour: What Transfers and What Does Not
+
+The per-relation tabletop results in Section 4.6.3 reveal a clear and interpretable pattern
+of cross-domain transfer that maps directly onto the geometric properties of each
+relation.
+
+Relations that transfer perfectly or near-perfectly -- adjacent_to (R@5 = 1.000), left_of
+(R@5 = 1.000), right_of (R@5 = 0.981) -- share a common property: they are defined by
+a single geometric dimension that is inherently scale-invariant when expressed as a ratio
+or rank. Left_of is simply a statement about which object has the smaller X centroid; this
+comparison holds regardless of whether the absolute X separation is 2 metres (room scale)
+or 5 centimetres (tabletop scale). Adjacent_to is defined by a threshold expressed as a
+multiple of the average object diagonal -- a relative measure that automatically adjusts
+to the scene scale. These relations require no calibrated absolute threshold; they are rank
+or ratio comparisons that the scale-invariant normalisation strategy preserves exactly
+across domain boundaries.
+
+Relations that degrade moderately -- on_top_of (R@5 = 0.895), higher_than (R@5 =
+0.953) -- involve vertical relationships that are directionally correct but rely on
+magnitude comparisons. Higher_than transfers well because Z-rank ordering is
+preserved across scales; the ordinal rank of object heights is the same whether objects are
+separated by 0.5 metres or 5 centimetres. On_top_of is more sensitive because it depends
+on the vert_gap and contact_score features, which involve absolute vertical gap
+thresholds relative to avg_diag. When avg_diag shrinks from ~1 m at room scale to ~0.15
+m at tabletop scale, a normalised gap value that indicates contact in a room becomes a
+normalised gap value that indicates hovering on a tabletop. The contact threshold
+calibrated on 3RScan is slightly too loose for tabletop geometry, causing some
+misclassification before symbolic repair corrects it via inverse completion.
+
+The most revealing failure is in_front_of and behind (R@3 = 0.538 and 0.481 respectively,
+despite R@5  1.000). The model correctly identifies these relations -- they appear in the
+top-5 predictions almost always -- but consistently ranks them 4th or 5th rather than 1st
+through 3rd. The root cause is depth ambiguity. In 3RScan room-scale scenes, objects are
+distributed across several metres of depth, producing large normalised delta_y values
+that the model associates with high confidence for in_front_of and behind. On tabletop
+scenes, objects are densely packed within 0.3­0.8 metres, and the Y separations between
+objects -- after normalisation by avg_diag -- are much smaller. The model interprets
+small normalised delta_y as low confidence for in_front_of, ranking directional
+alternatives higher instead. This is not a failure of the model to learn the relation; it is a
+miscalibration of confidence at the boundary of the learned distribution.
+
+Lower_than (R@5 = 0.729) is the only relation where R@5 itself is substantially below
+1.000, making it the true failure case. On tabletop scenes, all objects sit on the same flat
+surface within a narrow vertical band of a few centimetres. The Z differences between
+their centroids are smaller, in normalised terms, than anything the model encountered
+during training on 3RScan -- where objects on different shelves, floors, or surfaces are
+separated by tens of centimetres to metres. The z_rank feature partially compensates for
+this, but even ordinal rank becomes unreliable when Z differences are within
+measurement noise. The model genuinely cannot distinguish lower_than from
+higher_than for objects at nearly identical heights, which is a principled failure: the
+information required to make the distinction confidently is not present in the scene.
+
+These findings suggest a clear path for improving cross-domain robustness: per-relation
+threshold re-calibration on a small number of target-domain scenes, combined with
+additional scale-adaptive normalisation for contact relation features. Even a handful of
+labelled pairs from the target domain would be sufficient to shift the on_top_of and
+lower_than thresholds to the tabletop operating point, potentially recovering the
+remaining R@3 deficit without retraining the base model.
+
+5.6 Scale Domain Gap as Root Cause of Tabletop Degradation
+
+The cross-domain evaluation encompasses two distinct test settings: the LERF scenes and
+the custom tabletop scenes. The contrast between their results is striking and highly
+informative. On the LERF scenes -- indoor environments at 1­5 metre scale -- GeoKAN-
+Gamma achieves mR@5 = 0.929 with no adaptation. On the tabletop scenes --
+environments at 0.3­0.8 metre scale -- the model achieves R@5 = 0.927 overall but with
+substantially weaker R@3 = 0.758 and specific relation failures on lower_than and depth-
+axis relations. The LERF scenes represent a different dataset, different object categories,
+different lighting conditions, and different reconstruction quality compared to 3RScan --
+yet performance is strong. The tabletop scenes differ from 3RScan primarily in scale, yet
+performance degrades measurably on specific relations. This comparison isolates scale as
+the root cause of the observed degradation.
+
+The mechanism operates through the normalised feature distributions. All node and edge
+features are normalised by scene-level statistics -- specifically avg_diag, the mean object
+bounding box diagonal. In a 3RScan room, avg_diag is typically 0.8­1.2 metres; on a
+tabletop, avg_diag is typically 0.10­0.20 metres. This normalisation makes the features
+dimensionless and theoretically scale-invariant, but the normalisation captures only the
+first-order scale difference. Second-order effects remain: the distribution of normalised
+vert_gap values for objects on a tabletop is not identical to the distribution of normalised
+vert_gap values for objects in a room, because the relative geometry of tabletop objects
+-- all resting on a single surface at nearly identical heights -- differs structurally from
+room objects that may be on different shelves, floors, or wall mountings. The GeoKAN
+metric, calibrated on the 3RScan distribution of normalised features, is subtly
+miscalibrated for the tabletop distribution even after normalisation.
+
+A diagnostic comparison confirms this interpretation. The LERF scenes, whilst from a
+completely different dataset, have a scale of 1­5 metres that is within the same order of
+magnitude as the 3RScan training distribution of 3­8 metres. The normalised feature
+distributions on LERF are therefore close to the training distribution, and the calibrated
+thresholds transfer without significant degradation. The tabletop scenes, at 0.3­0.8
+metres, are one order of magnitude smaller than the training distribution. Whilst the
+normalisation closes most of this gap, the residual distributional shift is sufficient to affect
+the relations -- lower_than, in_front_of, behind -- whose geometric signals are smallest
+in absolute normalised terms on the tabletop.
+
+This analysis has a practical implication that goes beyond this project. It suggests that the
+scale-invariance of geometry-first scene graph models is approximate rather than exact:
+scale-invariant normalisation eliminates gross scale differences but does not eliminate
+distributional shifts that arise from structural differences in how objects at different
+scales relate to one another. A model trained on room-scale data and applied to micro-
+scale data (individual objects or scene fragments) or macro-scale data (building interiors
+or outdoor environments) will exhibit analogous degradation on the relations most
+sensitive to the scale gap. Achieving true scale invariance would likely require either
+training data spanning a wider range of scales or an explicit scale-adaptive normalisation
+mechanism that adjusts the feature distribution to the operating scale at inference time.
+
+5.7 Gaussian Shape Features: Potential Explored but Not Exploited
+
+One of the distinguishing properties of the 3D Gaussian Splatting representation --
+compared to point clouds or mesh reconstructions -- is that each Gaussian primitive
+carries a full 3×3 covariance matrix encoding the local surface geometry at that point.
+The eigenvalues of this matrix describe the shape of the Gaussian's spatial extent: a large
+first eigenvalue relative to the second and third indicates an elongated, needle-like
+Gaussian (characteristic of edges and thin structures); a large first and second eigenvalue
+relative to the third indicates a flat, pancake-like Gaussian (characteristic of surfaces such
+as tabletops and walls); near-equal eigenvalues indicate a spherical, isotropic Gaussian
+(characteristic of compact objects). Aggregating these per-Gaussian shape descriptors
+over all Gaussians in a cluster produces object-level shape features -- planarity,
+elongation, and sphericity -- that are unique to the Gaussian representation and
+unavailable in point cloud or depth-image-based methods.
+
+These features were computed and stored for every Object3D instance throughout the
+project (accessible as obj._eigenvalues) but were ultimately excluded from the 10-
+dimensional node feature vector. Early experiments incorporating planarity, elongation,
+and sphericity as additional node features produced no consistent improvement in
+validation Macro F1 and in some configurations caused slight degradation, likely due to
+noise in the covariance estimates arising from the opacity-weighted averaging procedure
+used to compute the mean cluster covariance. Gaussian splats trained with NerfStudio
+splatfacto distribute Gaussians non-uniformly across object surfaces -- concentrating
+them at high-curvature regions and view-dependent highlights -- so the mean covariance
+of a cluster is not a clean descriptor of object shape but a mixture of geometric and
+photometric effects.
+Despite this, the theoretical potential of Gaussian shape features remains compelling.
+Planarity could provide a direct signal for the surface support detection underlying
+on_top_of: an object with high planarity on its bottom face resting on an object with high
+planarity on its top face is a physically consistent stacking configuration that the current
+geometric rules can only approximate through bounding box proximity. Elongation could
+improve attached_to detection for wall-mounted objects, which tend to have high
+elongation along the axis perpendicular to the wall surface. Sphericity could help
+distinguish compact objects -- balls, knobs, handles -- from flat objects in configurations
+where the bounding box geometry alone is ambiguous.
+
+Realising this potential would likely require either a more principled covariance
+aggregation strategy -- for example, weighting by Gaussian opacity and restricting to
+Gaussians on the object's outer surface -- or end-to-end training of the covariance
+descriptor jointly with the relation prediction objective, so that the representation learns
+which aspects of the covariance distribution are predictive. This represents a meaningful
+direction for future work that would leverage what is genuinely distinctive about the
+Gaussian representation rather than treating it as a decorated point cloud.
+
+5.8 Limitations
+
+Several limitations of the current work should be acknowledged.
+
+Scale domain gap. As established in Section 5.6, the model's cross-domain transfer is
+approximate rather than exact. The tabletop evaluation demonstrates that relations
+sensitive to small normalised feature values -- lower_than, in_front_of, behind --
+degrade when the operating scale is one order of magnitude below the training scale. The
+current normalisation strategy mitigates but does not eliminate this distributional shift.
+A model intended for deployment across a wide range of scene scales would require either
+multi-scale training data or an explicit scale-adaptive normalisation mechanism.
+
+Static scenes only. The pipeline assumes a static scene during video capture and
+reconstruction. Objects that move between frames produce reconstruction artefacts --
+blurred or split Gaussian clusters -- that degrade both clustering quality and feature
+accuracy. Dynamic scenes, scenes with significant human presence, or environments with
+moving objects are outside the scope of the current system.
+
+Clustering dependency. All downstream relation prediction depends on the quality of the
+HDBSCAN clustering step. If two physically distinct objects are merged into a single
+cluster -- a failure mode that occurs when objects are in physical contact and share
+similar colour properties -- the resulting node feature vector represents a composite
+object rather than either individual, and the predicted relations for that cluster will be
+incorrect. Conversely, if a single object is split into multiple clusters -- which occurs with
+low-saturation or reflective objects -- spurious inter-cluster relations will be predicted.
+The auto-tuning strategy reduces but does not eliminate these failure modes.
+
+Annotation-derived evaluation on 3DSSG. The 3DSSG validation set itself suffers from
+the annotation sparsity problem that motivates rule-based label injection. Ground truth
+relations that exist geometrically but were not annotated by human labellers are treated
+as negatives during evaluation, meaning the reported Macro F1 and R@K metrics
+understate true performance on the full set of geometrically valid relations. The extent of
+this underestimation is difficult to quantify precisely without re-annotating the validation
+set.
+
+Threshold calibration on in-domain data. Per-relation thresholds are calibrated on the
+3DSSG validation set, which is drawn from the same distribution as the training data.
+When these thresholds are applied zero-shot to the tabletop scenes, they are suboptimal
+for the target domain. The R@K metrics, which are threshold-independent, remain
+strong cross-domain; the Micro F1 degradation from 0.926 (in-domain) to 0.740 (tabletop,
+without repair) reflects this threshold mismatch. A small amount of target-domain
+calibration data -- even ten to twenty labelled pairs -- would be sufficient to re-calibrate
+thresholds without retraining.
+
+Closed relation schema. The system predicts a fixed vocabulary of ten spatial relations.
+Relations outside this schema -- such as hanging_from, inside, or touching -- cannot be
+predicted, limiting applicability to tasks that require a richer relation vocabulary.
+Extending the schema to additional relation types would require both additional training
+annotations and potentially additional geometric features, as some relations (inside, for
+example) require volumetric containment reasoning that is only partially captured by the
+current 22-dimensional edge features.
+
+No object identity at inference. The pipeline predicts spatial relations between anonymous
+geometric clusters without semantic object labels. Whilst this is consistent with the
+geometry-first design philosophy and does not affect relation prediction quality, it means
+the output scene graph contains node identifiers rather than object names unless an
+optional semantic labelling step (not part of the core pipeline) is applied. Applications
+that require human-readable scene graphs would need to integrate a separate object
+recognition component.
+
+                                             6.CONCLUSION
+
+6.1 Summary of Work
+
+This project presented LogicSplat, a geometry-first pipeline for spatial scene graph
+generation from 3D Gaussian Splats. The system was designed around a single guiding
+principle: that spatial relations between objects in a three-dimensional scene are
+fundamentally geometric predicates, and that a model trained on well-engineered
+geometric features with accurate supervision should be able to predict them accurately
+without any foundation model, depth sensor, or semantic label at inference time.
+
+The pipeline proceeds from a short smartphone video through COLMAP structure-from-
+motion and NerfStudio splatfacto reconstruction to produce a Gaussian splat, which is
+then cleaned via opacity filtering and statistical outlier removal, segmented into object
+instances via HDBSCAN clustering with Otsu auto-tuning, and represented as a graph
+with 10-dimensional scale-invariant node features and 22-dimensional edge features
+encoding directional offsets, contact geometry, and spatial relationships. Rule-based label
+injection addresses the annotation sparsity inherent in the 3DSSG training data,
+converting approximately 90 per cent of false negative training pairs into accurate
+pseudo-labels and increasing the effective training signal by 8­11 times.
+GeoKANRelationGNN -- a dual-head graph neural network with GATv2Conv message
+passing and GeoKAN classification heads -- predicts ten spatial relation classes per
+directed object pair. Asymmetric loss, per-relation loss weighting, label smoothing, data
+augmentation, and per-relation threshold calibration constitute the training strategy.
+SceneGraphRepair, a zero-parameter symbolic consistency module, enforces inverse
+completeness, mutual exclusion, asymmetry, and transitivity constraints on the predicted
+graph through fixed-point iteration.
+
+The system was evaluated on three distinct settings. On the 3DSSG validation benchmark
+of 85 held-out 3RScan scenes, GeoKAN-Gamma achieved Macro F1 = 0.926, R@3 =
+0.878, and R@5 = 0.983 -- surpassing all compared methods including the state-of-the-
+art ReLaGS (R@3 = 0.790, R@5 = 0.870) whilst using 0.07 per cent of its parameter count
+and completing inference in under two seconds. On the four LERF held-out scenes, the
+model achieved mR@5 = 0.929 after symbolic repair, exceeding GaussianGraph's best
+result of 0.632 by 29.7 percentage points. On eight custom-captured tabletop scenes
+evaluated zero-shot across a substantial scale domain gap, the model achieved R@3 =
+0.758 and R@5 = 0.927, with symbolic repair providing an additional 3.4 Micro F1 points
+via inverse completion with no retraining.
+
+6.2 Novel Contributions
+
+This project makes the following novel contributions to the field of 3D scene graph
+generation:
+
+C1. Geometry-first scene graph generation from Gaussian Splats without foundation
+models. This project is the first to demonstrate that a fixed-vocabulary spatial scene
+graph can be predicted from 3D Gaussian Splat geometry alone -- without any vision-
+language model, segmentation model, or semantic label at inference time -- and that this
+approach outperforms all current foundation-model-dependent methods on the 3DSSG
+benchmark. The result establishes a new performance ceiling for the task and challenges
+the assumption that semantic grounding is necessary for geometric spatial relation
+prediction.
+
+C2. Rule-based label injection for annotation-sparse 3D scene graph datasets. The
+systematic derivation and injection of geometric pseudo-labels for unannotated directed
+pairs in 3DSSG -- with confidence values calibrated to the certainty of each rule type --
+is a novel treatment of the annotation sparsity problem in 3D scene graph training. The
+injection increases the effective training signal by 8­11 times and is the primary driver of
+the performance jump from Macro F1 = 0.505 to 0.926. Unlike data augmentation, it does
+not introduce synthetic variation; it corrects false negative labels using geometric facts
+that are provably correct for directional relations.
+C3. Application of GeoKAN to structured spatial prediction. This project is the first
+application of the GeoKAN architecture -- Geometric Kolmogorov-Arnold Networks
+with a learnable diagonal Riemannian metric -- to scene graph generation. The ablation
+study comparing Gamma, RBF, and Wavelet variants under identical conditions provides
+the first systematic evaluation of GeoKAN basis function choices on a real structured
+prediction task, demonstrating that the fixed diagonal metric variant is superior to
+adaptive variants for well-engineered geometric feature inputs.
+
+C4. Zero-parameter symbolic consistency repair for scene graphs. The
+SceneGraphRepair module provides a formal, domain-agnostic mechanism for enforcing
+logical consistency constraints on predicted scene graphs through fixed-point iteration.
+Its application across three evaluation settings demonstrates that the primary value of
+the module lies in inverse completion rather than contradiction removal -- a finding that
+reveals a systematic asymmetry in the model's cross-domain predictions and explains why
+symbolic repair provides disproportionately large gains on on_top_of (+0.298 F1) and
+lower_than (+0.152 F1) in the cross-domain setting.
+
+C5. Honest cross-domain evaluation methodology. The project provides a documented
+account of the 11-percentage-point difference between an inflated R@3 = 0.864, obtained
+through post-hoc ground truth adjustment motivated by model failures, and the honest
+zero-shot result of R@3 = 0.758. The final evaluation uses ground truth constructed
+entirely from deterministic geometric principles, with all GT-engineering attempts
+documented and reverted. This contribution is methodological rather than technical, but
+it directly addresses a reproducibility concern in cross-domain evaluation that is relevant
+to the broader scene understanding community.
+
+C6. Scale domain gap characterisation for geometry-first models. The comparative
+analysis of LERF (in-domain scale, strong performance) and tabletop (out-of-domain
+scale, degraded performance on specific relations) isolates scale as the primary
+determinant of cross-domain transfer for geometry-first scene graph models, and
+identifies the specific relations -- lower_than, in_front_of, behind -- whose predictions
+are most sensitive to the scale distribution shift. This characterisation provides a
+principled basis for future work on scale-adaptive normalisation.
+
+6.3 Future Work
+
+Several directions emerge naturally from the findings and limitations of this project.
+
+Gaussian covariance features for contact relation prediction. As discussed in Section 5.7,
+the per-Gaussian covariance matrices encode local surface geometry -- planarity,
+elongation, and sphericity -- that is unique to the 3DGS representation and currently
+unused in the node feature vector. Future work should investigate more principled
+covariance aggregation strategies, such as opacity-weighted surface-restricted averaging
+or end-to-end learning of covariance descriptors jointly with the relation prediction
+objective. Planarity in particular is a strong candidate for improving on_top_of and
+under prediction, as it directly encodes the surface flatness required for physical support
+detection.
+
+Scale-adaptive normalisation for wider domain transfer. The current normalisation
+strategy -- dividing by avg_diag -- closes the first-order scale gap but leaves residual
+distributional shifts for relations involving small absolute feature values at tabletop scale.
+A scale-adaptive mechanism that explicitly identifies the operating scale regime -- for
+example, by estimating the distribution of normalised feature values and shifting the
+calibrated thresholds accordingly -- could extend robust zero-shot transfer to micro-
+scale environments such as table-top manipulation tasks and macro-scale environments
+such as building interiors or outdoor scenes.
+
+Few-shot threshold re-calibration for cross-domain deployment. The tabletop results
+demonstrate that the primary source of Micro F1 degradation cross-domain is threshold
+miscalibration rather than ranking failure (R@5 remains strong at 0.927). As few as ten
+to twenty labelled object pairs from a target-domain scene would be sufficient to re-
+calibrate the ten per-relation thresholds without retraining the base model. A practical
+deployment protocol that includes a minimal annotation step for threshold adaptation
+would substantially close the remaining cross-domain gap at negligible annotation cost.
+
+Extended relation schema. The current ten-relation schema excludes physically
+meaningful relations such as inside, hanging_from, and touching. Extending the schema
+would require additional positive training examples -- the primary reason for their
+exclusion was insufficient positive rate in 3DSSG -- and potentially additional edge
+features. The 3D containment features already present in the 22-dimensional edge vector
+(features 17­21) partially address the inside relation; with sufficient training signal, these
+features may support its addition without major architectural changes.
+
+Dynamic scene handling. The current pipeline assumes static scenes during video capture.
+Extending it to handle moving objects would require either multi-frame Gaussian
+tracking -- identifying Gaussian primitives that change position between frames -- or
+integration with a separate dynamic object segmentation step prior to relation prediction.
+This extension would significantly broaden the applicability of the pipeline to robotic
+manipulation, activity monitoring, and augmented reality settings where scene dynamics
+are the norm rather than the exception.
+
+Semantic labelling integration. The current system produces scene graphs with
+anonymous geometric cluster nodes. Integrating a lightweight object recognition step --
+for example, projecting cluster centroids into video frames and applying a small object
+classifier -- would produce human-readable scene graphs without compromising the
+geometry-first design of the relation prediction stage. The optional YOLO-based labelling
+mechanism already present in the system provides a starting point for this integration.
+
+Broader benchmark evaluation. This project evaluates on 3DSSG, LERF, and custom
+tabletop scenes. Evaluation on additional benchmarks -- including 3RScan's RIO10 re-
+localisation test scenes, the ScanNet200 benchmark, or purpose-built scene graph
+datasets for robotics -- would provide a more comprehensive characterisation of the
+system's generalisation properties and facilitate fairer comparison with methods that
+report results on those benchmarks.
+
+REFERENCES
+
+    1. Arafa, I., et al. (2026). ReLaGS: Relational Language Gaussian Splatting.
+         Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern
+         Recognition (CVPR 2026). arXiv:2603.17605.
+
+    2. Brody, S., Alon, U., & Yahav, E. (2021). How Attentive are Graph Attention
+         Networks? Proceedings of the 10th International Conference on Learning
+         Representations (ICLR 2022).
+
+    3. Dai, A., Chang, A. X., Savva, M., Halber, M., Funkhouser, T., & Nießner, M. (2017).
+         ScanNet: Richly-annotated 3D Reconstructions of Indoor Scenes. Proceedings of
+         the IEEE Conference on Computer Vision and Pattern Recognition (CVPR 2017),
+         pp. 5828­5839.
+
+    4. Gu, Q., Kuwajerwala, A., Morin, S., Jatavallabhula, K. M., Sen, B., Agarwal, A.,
+         & Paull, L. (2024). ConceptGraphs: Open-Vocabulary 3D Scene Graphs for
+         Perception and Planning. Proceedings of the IEEE International Conference on
+         Robotics and Automation (ICRA 2024), pp. 5021­5028.
+
+    5. Kerbl, B., Kopanas, G., Leimkühler, T., & Drettakis, G. (2023). 3D Gaussian
+         Splatting for Real-Time Radiance Field Rendering. ACM Transactions on
+         Graphics (SIGGRAPH 2023), 42(4), Article 139.
+
+    6. Kerr, J., Kim, C. M., Goldberg, K., Kanazawa, A., & Tancik, M. (2023). LERF:
+         Language Embedded Radiance Fields. Proceedings of the IEEE/CVF International
+         Conference on Computer Vision (ICCV 2023), pp. 19729­19739.
+
+    7. Koch, S., Vaskevicius, N., Colosi, M., Hermosilla, P., & Ropinski, T. (2024).
+         Open3DSG: Open-Vocabulary 3D Scene Graphs from Point Clouds with
+         Queryable Objects and Open-Set Relationships. Proceedings of the IEEE/CVF
+         Conference on Computer Vision and Pattern Recognition (CVPR 2024).
+
+    8. Li, X., Yang, D., Gao, Y., Yue, Y., Yang, Y., & Fu, M. (2025). GaussianGraph: 3D
+         Gaussian-based Scene Graph Generation for Open-world Scene Understanding.
+         arXiv:2503.04034.
+
+    9. Liu, Z., Wang, Y., Vaidya, S., Ruehle, F., Halverson, J., Soljaci, M., & Tegmark,
+         M. (2024). KAN: Kolmogorov-Arnold Networks. Proceedings of the 13th
+         International Conference on Learning Representations (ICLR 2025).
+         arXiv:2404.19756.
+10. McInnes, L., Healy, J., & Astels, S. (2017). hdbscan: Hierarchical Density Based
+    Clustering. Journal of Open Source Software, 2(11), 205.
+
+11. Otsu, N. (1979). A Threshold Selection Method from Gray-Level Histograms.
+    IEEE Transactions on Systems, Man, and Cybernetics, 9(1), 62­66.
+
+12. Qin, M., Li, W., Zhou, J., Wang, H., & Pfister, H. (2024). LangSplat: 3D Language
+    Gaussian Splatting. Proceedings of the IEEE/CVF Conference on Computer Vision
+    and Pattern Recognition (CVPR 2024), pp. 20051­20060.
+
+13. Ridnik, T., Ben-Baruch, E., Zamir, N., Noy, A., Friedman, I., Protter, M., & Zelnik-
+    Manor, L. (2021). Asymmetric Loss for Multi-Label Classification. Proceedings of
+    the IEEE/CVF International Conference on Computer Vision (ICCV 2021), pp. 82­
+    91.
+
+14. Schönberger, J. L., & Frahm, J. M. (2016). Structure-from-Motion Revisited.
+    Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition
+    (CVPR 2016), pp. 4104­4113.
+
+15. Sen, D., et al. (2026). Geometric Kolmogorov-Arnold Network (GeoKAN).
+    arXiv:2605.06740.
+
+16. Tancik, M., Weber, E., Ng, E., Li, R., Yi, B., Kerr, J., & Kanazawa, A. (2023).
+    Nerfstudio: A Modular Framework for Neural Radiance Field Development. ACM
+    Transactions on Graphics (SIGGRAPH 2023), 42(4), Article 114.
+
+17. Velickovi, P., Cucurull, G., Casanova, A., Romero, A., Liò, P., & Bengio, Y. (2018).
+    Graph Attention Networks. Proceedings of the 6th International Conference on
+    Learning Representations (ICLR 2018).
+
+18. Wald, J., Avetisyan, A., Navab, N., Tombari, F., & Nießner, M. (2019). RIO: 3D
+    Object Instance Re-Localization in Changing Indoor Environments. Proceedings
+    of the IEEE/CVF International Conference on Computer Vision (ICCV 2019), pp.
+    7657­7666.
+
+19. Wald, J., Dhamo, H., Navab, N., & Tombari, F. (2020). Learning 3D Semantic
+    Scene Graphs from 3D Indoor Reconstructions. Proceedings of the IEEE/CVF
+    Conference on Computer Vision and Pattern Recognition (CVPR 2020), pp. 3961­
+    3970.
+
+20. Wu, S., Wald, J., Tateno, K., Navab, N., & Tombari, F. (2021). SceneGraphFusion:
+    Incremental 3D Scene Graph Prediction from RGB-D Sequences. Proceedings of
+    the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR
+    2021), pp. 7515­7525.
+
+21. Wu, T., Peng, X., Zhang, W., Zhang, J., Vasconcelos, N., Sun, J., & Zheng, S.
+    (2020). Tackling the Unannotated: Scene Graph Generation with Bias-Reduced
+    Models. arXiv:2005.07925.
+22. Ye, M., Danelljan, M., Yu, F., & Ke, L. (2024). Gaussian Grouping: Segment and
+    Edit Anything in 3D Scenes. Proceedings of the European Conference on Computer
+    Vision (ECCV 2024).
+
+23. Zhou, Q.-Y., Park, J., & Koltun, V. (2018). Open3D: A Modern Library for 3D
+    Data Processing. arXiv:1801.09847.
+

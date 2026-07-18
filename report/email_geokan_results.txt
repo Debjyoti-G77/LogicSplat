@@ -1,0 +1,137 @@
+Subject: GeoKAN Implementation Results — Seeking Guidance on Next Steps
+
+Dear Sir,
+
+Thank you for sharing the GeoKAN paper (Sen et al., 2026). I implemented the
+architecture for our spatial relation prediction task and have results to share.
+
+---
+
+1. WHY GeoKAN FITS OUR PROBLEM
+
+Our core issue was that scene-extent normalization destroys contact-scale
+information — a 2cm vertical gap (critical for on_top_of) becomes 0.004 when
+normalized by a 5m room height, making it indistinguishable from noise. The
+GNN couldn't learn where the decision boundary is because the relevant signal
+was compressed into a tiny range.
+
+GeoKAN solves exactly this: it learns a diagonal Riemannian metric that warps
+the input features before basis expansion. The learned metric automatically
+stretches regions where decisions are hard (near the on_top_of/higher_than
+boundary) and compresses regions where distinctions don't matter (objects far
+apart). This is a principled, learnable alternative to hand-engineering the
+normalization.
+
+---
+
+2. ARCHITECTURE IMPLEMENTED
+
+We designed a GeoKAN-based relation predictor:
+
+  - Node encoder: Linear(10→128) + LayerNorm + GELU
+  - 2× GATv2Conv layers (4 heads, edge-aware) for neighborhood context
+  - Pair representation: [h_src | h_dst | h_src−h_dst | h_src*h_dst] → 64-dim
+  - Dual GeoKAN heads:
+    * Contact head: learns metric over [pair + all 17 edge features] → 6 relations
+    * Directional head: learns metric over [pair + first 10 edge features] → 6 relations
+  - Each GeoKAN head: MetricNet → softplus → warp → RBF basis expansion → linear mix
+  - Total: 665K parameters (vs ReLaGS's ~1.5B with foundation models)
+
+The dual-head design is critical — the contact metric learns to stretch
+vertical gap features near zero, while the directional metric learns to
+stretch delta_x/delta_y near the left/right decision boundary. These are
+fundamentally different geometric adaptations that would fight each other
+in a shared metric.
+
+---
+
+3. RESULTS
+
+A) In-distribution (3DSSG validation, 85 held-out scenes):
+
+  Method                    | Pred R@3 | Pred R@5 | Foundation Models | Params
+  LogicSplat GeoKAN (ours)  |   78.7%  |   96.7%  | None              | 665K
+  ReLaGS (reported)         |   79.0%  |   87.0%  | CLIP+SAM+Jina     | ~1.5B
+  ConceptGraphs (reported)  |   74.0%  |   79.0%  | LLM+CLIP          | ~1B+
+  Open3DSG (reported)       |   58.0%  |   65.0%  | CLIP              | ~400M
+
+  Our R@3 essentially matches ReLaGS (78.7% vs 79.0%) and our R@5 exceeds
+  it (96.7% vs 87.0%) — without any foundation models.
+
+  GeoKAN vs previous GAT (per-relation F1 on same val set):
+    - higher_than: 0.253 → 0.406 (+0.153) — biggest gain
+    - lower_than:  0.258 → 0.398 (+0.140)
+    - inside:      0.124 → 0.265 (+0.141)
+    - All 12 relations improved. Macro F1: 0.447 → 0.505
+
+B) Cross-domain (8 custom tabletop scenes, completely unseen):
+
+  Overall: R@3 = 43.4%, R@5 = 52.7%
+
+  What transfers well:
+    - left_of/right_of: R@5 = 100% (perfect ranking)
+    - in_front_of/behind: R@5 = 100%
+
+  What fails completely:
+    - on_top_of/under: R@5 = 0% (model doesn't rank these in top-5)
+    - higher_than/lower_than: R@5 = 6%
+    - adjacent_to: R@5 = 0%
+
+  This is NOT a threshold issue — even threshold-free Recall@5 is 0% for
+  vertical relations. The learned metric that works for room-scale vertical
+  relationships doesn't transfer to tabletop-scale.
+
+---
+
+4. INTERPRETATION
+
+The GeoKAN architecture is clearly superior to the standard GAT for this task
+(+0.06 Macro F1, improvements on every relation). The in-distribution results
+are competitive with foundation-model-based methods at a fraction of the
+compute.
+
+However, the cross-domain gap for vertical/contact relations reveals that the
+learned metric is scale-specific. The metric learns "stretch vert_gap near
+0.004" (room-scale contact threshold) but at tabletop scale, the contact
+threshold is at a different absolute value. The metric doesn't generalize
+because it learned the specific numeric range, not the abstract concept of
+"objects touching."
+
+---
+
+5. BENCHMARK NOTE
+
+The RIO10 test scene relationship annotations are held private by the 3DSSG
+authors (standard practice — test GT is not publicly distributed). Our
+comparison uses a held-out 3DSSG validation split (85 scenes, same annotation
+quality, never seen during training). We have emailed the 3DSSG authors to
+request the test annotations for a direct RIO10 comparison.
+
+---
+
+6. QUESTIONS FOR YOU
+
+a) Are these results sufficient for a workshop paper submission? The
+   in-distribution numbers (R@3=78.7%, R@5=96.7%) are strong, but the
+   cross-domain gap is a limitation.
+
+b) Should we focus on fixing the cross-domain vertical relation failure?
+   Options include:
+   - Scale-invariant metric learning (normalize features by object size
+     before the metric, so the metric learns relative thresholds)
+   - Fine-tuning on a few tabletop scenes
+   - Adding a scale-conditioning input to the MetricNet
+
+c) For the paper framing, should we:
+   - Report both in-distribution and cross-domain as separate findings?
+   - Focus only on the 3DSSG benchmark comparison?
+   - Frame the cross-domain gap as motivation for future work?
+
+d) Is there anything else from the GeoKAN paper you'd like me to explore?
+   (e.g., the GeoKAN-γ variant with explicit metric-derived features, or
+   the Fourier basis for directional relations)
+
+Happy to discuss in our next meeting.
+
+Best regards,
+Debjyoti Sengupta

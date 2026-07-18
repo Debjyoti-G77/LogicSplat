@@ -1,4 +1,41 @@
-numpy
-scikit-learn
-streamlit
-plotly
+# LogicSplat dependencies
+# Install: pip install -r requirements.txt
+#
+# PyTorch + CUDA — install separately from https://pytorch.org/get-started/locally/
+# The versions below match the development environment (CUDA 12.8, RTX 5060)
+# torch==2.11.0+cu128
+# torchvision==0.26.0+cu128
+# Install with:
+#   pip install torch==2.11.0+cu128 torchvision==0.26.0+cu128 --index-url https://download.pytorch.org/whl/cu128
+
+# Graph Neural Networks
+torch-geometric==2.7.0
+
+# Core ML / data
+numpy==2.4.4
+scikit-learn==1.8.0
+
+# 3D data
+plyfile==1.1.3
+open3d>=0.18.0          # optional but recommended — 10x faster PLY loading
+
+# Computer vision / labeling
+ultralytics==8.4.37     # YOLOv8
+groundingdino-py==0.4.0 # Grounding DINO (open-vocabulary detection)
+transformers==5.6.2     # required by groundingdino-py (patched for 5.x compat)
+Pillow>=10.0.0          # image loading for Grounding DINO
+segment-anything>=1.0   # SAM v1 (fallback for SAM2)
+scipy>=1.11.0           # cKDTree for Gaussian ID back-projection
+
+# Gaussian splatting renderer (for segment_3rscan.py)
+# Install gsplat separately — requires CUDA toolkit:
+#   pip install gsplat
+# If gsplat fails, use --software-render flag in segment_3rscan.py
+
+# App / visualization
+streamlit==1.56.0
+plotly==6.6.0
+
+# Utilities
+tqdm>=4.65.0
+shap>=0.43.0            # SHAP analysis for physical classifiers

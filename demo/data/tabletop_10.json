@@ -1,0 +1,1141 @@
+{
+  "scene_id": "tabletop_10",
+  "display_name": "Tabletop 10 \u2014 router & cream tub",
+  "dataset": "tabletop",
+  "photo": "tabletop_10.jpg",
+  "objects": [
+    {
+      "id": 0,
+      "label": "watch",
+      "box_px": [
+        715,
+        845,
+        730,
+        90
+      ],
+      "anchor_px": [
+        1080,
+        890
+      ]
+    },
+    {
+      "id": 1,
+      "label": "cream tub",
+      "box_px": [
+        855,
+        465,
+        215,
+        185
+      ],
+      "anchor_px": [
+        962,
+        557
+      ]
+    },
+    {
+      "id": 2,
+      "label": "router",
+      "box_px": [
+        815,
+        180,
+        180,
+        100
+      ],
+      "anchor_px": [
+        905,
+        230
+      ]
+    },
+    {
+      "id": 3,
+      "label": "agaro box",
+      "box_px": [
+        810,
+        275,
+        190,
+        190
+      ],
+      "anchor_px": [
+        905,
+        370
+      ]
+    },
+    {
+      "id": 4,
+      "label": "table",
+      "box_px": [
+        0,
+        280,
+        1920,
+        800
+      ],
+      "anchor_px": [
+        960,
+        680
+      ]
+    }
+  ],
+  "relations_before": [
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9987,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "in_front_of",
+      "obj_name": "router",
+      "conf": 0.8625,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "in_front_of",
+      "obj_name": "table",
+      "conf": 0.8431,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "cream_tub",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 0.9064,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "adjacent_to",
+      "obj_name": "watch",
+      "conf": 0.999,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "higher_than",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "left_of",
+      "obj_name": "watch",
+      "conf": 0.991,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "right_of",
+      "obj_name": "table",
+      "conf": 0.8104,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9998,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "agaro_box",
+      "conf": 0.9108,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "agaro_box",
+      "conf": 0.925,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "cream_tub",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.8664,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "cream_tub",
+      "conf": 0.9735,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9342,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "watch",
+      "conf": 0.9413,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "behind",
+      "obj_name": "agaro_box",
+      "conf": 0.7892,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "left_of",
+      "obj_name": "cream_tub",
+      "conf": 0.832,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "left_of",
+      "obj_name": "watch",
+      "conf": 0.9799,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "cream_tub",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "agaro_box",
+      "conf": 0.9957,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "cream_tub",
+      "conf": 0.9855,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.9939,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "watch",
+      "conf": 0.9783,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "adjacent_to",
+      "obj_name": "cream_tub",
+      "conf": 0.9946,
+      "gt": "wrong"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "in_front_of",
+      "obj_name": "cream_tub",
+      "conf": 0.9132,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 0.9993,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "lower_than",
+      "obj_name": "cream_tub",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 0.9999,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "right_of",
+      "obj_name": "cream_tub",
+      "conf": 0.9693,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "right_of",
+      "obj_name": "table",
+      "conf": 0.9946,
+      "gt": "wrong"
+    }
+  ],
+  "relations_after": [
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9987,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "adjacent_to",
+      "obj_name": "table",
+      "conf": 0.0727,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "higher_than",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "in_front_of",
+      "obj_name": "router",
+      "conf": 0.8625,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "in_front_of",
+      "obj_name": "table",
+      "conf": 0.8431,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "cream_tub",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "left_of",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 0.3423,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.3506,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 0.9064,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "adjacent_to",
+      "obj_name": "table",
+      "conf": 0.2042,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "adjacent_to",
+      "obj_name": "watch",
+      "conf": 0.999,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "behind",
+      "obj_name": "watch",
+      "conf": 0.7435,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "higher_than",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "left_of",
+      "obj_name": "watch",
+      "conf": 0.991,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.4527,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "right_of",
+      "obj_name": "table",
+      "conf": 0.8104,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.9998,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "adjacent_to",
+      "obj_name": "table",
+      "conf": 0.1779,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "router",
+      "rel": "behind",
+      "obj_name": "agaro_box",
+      "conf": 0.7401,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "agaro_box",
+      "conf": 0.9108,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "agaro_box",
+      "conf": 0.925,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "cream_tub",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "left_of",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.6278,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "agaro_box",
+      "conf": 0.8664,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "cream_tub",
+      "conf": 0.9735,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "router",
+      "conf": 0.9342,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "adjacent_to",
+      "obj_name": "watch",
+      "conf": 0.9413,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "behind",
+      "obj_name": "agaro_box",
+      "conf": 0.7892,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "left_of",
+      "obj_name": "cream_tub",
+      "conf": 0.832,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "left_of",
+      "obj_name": "watch",
+      "conf": 0.9799,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "cream_tub",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "lower_than",
+      "obj_name": "watch",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "agaro_box",
+      "conf": 0.9957,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "cream_tub",
+      "conf": 0.9855,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.9939,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "table",
+      "rel": "under",
+      "obj_name": "watch",
+      "conf": 0.9783,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "adjacent_to",
+      "obj_name": "cream_tub",
+      "conf": 0.9946,
+      "gt": "wrong",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "adjacent_to",
+      "obj_name": "table",
+      "conf": 0.1912,
+      "gt": "wrong",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "higher_than",
+      "obj_name": "table",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "in_front_of",
+      "obj_name": "cream_tub",
+      "conf": 0.9132,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "lower_than",
+      "obj_name": "agaro_box",
+      "conf": 0.9993,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "lower_than",
+      "obj_name": "cream_tub",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 0.9999,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.406,
+      "gt": "correct",
+      "repair_action": "added"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "right_of",
+      "obj_name": "agaro_box",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "right_of",
+      "obj_name": "cream_tub",
+      "conf": 0.9693,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "right_of",
+      "obj_name": "router",
+      "conf": 1.0,
+      "gt": "correct",
+      "repair_action": "kept"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "right_of",
+      "obj_name": "table",
+      "conf": 0.9946,
+      "gt": "wrong",
+      "repair_action": "kept"
+    }
+  ],
+  "removed_by_repair": [],
+  "missed_before": [
+    {
+      "subj_name": "agaro_box",
+      "rel": "in_front_of",
+      "obj_name": "cream_tub",
+      "conf": 0.5484,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "in_front_of",
+      "obj_name": "watch",
+      "conf": 0.4577,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "lower_than",
+      "obj_name": "cream_tub",
+      "conf": 0.2511,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 0.3423,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.3506,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.1736,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "behind",
+      "obj_name": "agaro_box",
+      "conf": 0.6058,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.4631,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "behind",
+      "obj_name": "watch",
+      "conf": 0.7435,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "higher_than",
+      "obj_name": "agaro_box",
+      "conf": 0.353,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 0.2404,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.4527,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "behind",
+      "obj_name": "agaro_box",
+      "conf": 0.7401,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "cream_tub",
+      "conf": 0.5612,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "cream_tub",
+      "conf": 0.4618,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "watch",
+      "conf": 0.4274,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "agaro_box",
+      "conf": 0.1185,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.6278,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "behind",
+      "obj_name": "agaro_box",
+      "conf": 0.4195,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.459,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "on_top_of",
+      "obj_name": "table",
+      "conf": 0.406,
+      "gt": "missed"
+    }
+  ],
+  "missed_after": [
+    {
+      "subj_name": "agaro_box",
+      "rel": "in_front_of",
+      "obj_name": "cream_tub",
+      "conf": 0.5484,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "in_front_of",
+      "obj_name": "watch",
+      "conf": 0.4577,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "lower_than",
+      "obj_name": "cream_tub",
+      "conf": 0.2511,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "agaro_box",
+      "rel": "under",
+      "obj_name": "router",
+      "conf": 0.1736,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "behind",
+      "obj_name": "agaro_box",
+      "conf": 0.6058,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.4631,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "higher_than",
+      "obj_name": "agaro_box",
+      "conf": 0.353,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "cream_tub",
+      "rel": "lower_than",
+      "obj_name": "router",
+      "conf": 0.2404,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "higher_than",
+      "obj_name": "cream_tub",
+      "conf": 0.5612,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "cream_tub",
+      "conf": 0.4618,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "in_front_of",
+      "obj_name": "watch",
+      "conf": 0.4274,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "router",
+      "rel": "on_top_of",
+      "obj_name": "agaro_box",
+      "conf": 0.1185,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "behind",
+      "obj_name": "agaro_box",
+      "conf": 0.4195,
+      "gt": "missed"
+    },
+    {
+      "subj_name": "watch",
+      "rel": "behind",
+      "obj_name": "router",
+      "conf": 0.459,
+      "gt": "missed"
+    }
+  ],
+  "repair_summary": {
+    "added": 11,
+    "removed": 0,
+    "iterations": 2
+  },
+  "timings_ms": {
+    "inference": 639.68,
+    "repair": 0.53
+  },
+  "model": {
+    "params": 1018414,
+    "name": "GeoKAN-Gamma"
+  },
+  "gt_available": true,
+  "correct_count": 42,
+  "total_count": 58
+}
